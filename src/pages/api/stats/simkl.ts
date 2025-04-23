@@ -14,10 +14,7 @@ export async function getSimklData() {
     });
   }
 
-  console.log(res.status, res.statusText);
-
   const data = await res.json();
-  console.log("aaaaaaaa", data);
   return {
     movies: { hoursWatched: data.movies.total_mins / 60, completedCount: data.movies.completed.count },
     shows: { hoursWatched: data.tv.total_mins / 60, completedCount: data.tv.completed.count },
