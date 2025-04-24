@@ -19,15 +19,15 @@
 @font-face {
   font-family: "Nunito";
   src: url("/fonts/NunitoSans.ttf") format("truetype");
-  font-weight: 400;
+  font-weight: 200 300 400 500 600 700 800 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: "Nunito";
-  src: url("/fonts/NunitoSans-italic.ttf") format("truetype");
-  font-weight: 400;
+  src: url("/fonts/NunitoSans-Italic.ttf") format("truetype");
+  font-weight: 200 300 400 500 600 700 800 900;
   font-style: italic;
   font-display: swap;
 }
