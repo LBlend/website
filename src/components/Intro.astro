@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+import norway from "../assets/icons/norway.svg";
+---
+
+<section>
+  <h2>Morn! 👋</h2>
+  <div class="flex flex-col">
+    <p>I am a <span id="age">?</span> year old software dev from Norway.</p>
+    <p>
+      Welcome to my website! Where I happily share too much information about myself to get that sweet narcissistic fix.
+    </p>
+    <p>
+      I love making stuff, be it software, media or food. Though as for food I prefer eating it :)
+      <br />
+      There's always something new to explore, experience and learn. Join me in trying to balance way too many passions with
+      way too little time.
+    </p>
+    <p>
+      Currently based in Oslo, Norway{" "}
+      <Image src={norway} width={26} height={26} alt="Flag of Norway" class="inline saturate-70" />
+      <br />
+      Though I'm hoping that will change in the future.
+    </p>
+  </div>
+</section>
+
+<script>
+  const yearsOld = () => {
+    const ageInMilliseconds = new Date().getTime() - new Date(2000, 4, 30, 4, 44).getTime();
+    const millisecondsInYear = 1000 * 60 * 60 * 24 * 365.25;
+    return (ageInMilliseconds / millisecondsInYear).toFixed(9);
+  };
+
+  const age = document.getElementById("age");
+  const updateAge = () => {
+    if (age) {
+      age.innerText = yearsOld();
+    }
+  };
+  updateAge();
+  setInterval(updateAge, 500);
+</script>
