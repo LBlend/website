@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+
+import Cv from "@assets/icons/cv.svg";
+import Email from "@assets/icons/email.svg";
+import Github from "@assets/icons/github.svg";
+import Me from "@assets/images/me.jpg";
+---
+
+<style>
+  h1 {
+    background: linear-gradient(90deg, rgb(34, 181, 254) 0%, rgb(255, 186, 214) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>
+
+<section class="flex flex-col items-center justify-center">
+  <div class="flex flex-col items-center justify-center gap-2 justify-self-center">
+    <p class="text-center font-extralight text-gray-400">2000 - 04 - 30</p>
+    <Image
+      src={Me}
+      alt="Leander Furumo"
+      width={256}
+      height={256}
+      loading="eager"
+      class="mb-4 rounded-full border-4 border-white"
+    />
+    <h1>Leander Furumo</h1>
+    <p class="font-nunito text-center font-extralight text-gray-400">59.1918° N, 9.5937° E</p>
+    <div class="flex justify-center gap-4">
+      <a href="mailto:leander@furumo.eu" class="icon-link">
+        <Email class="size-10" />
+      </a>
+      <a href="https://github.com/LBlend" class="icon-link">
+        <Github class="size-10" />
+      </a>
+      <a href="https://cv.furumo.eu" class="icon-link">
+        <Cv class="size-10" />
+      </a>
+    </div>
+  </div>
+</section>
