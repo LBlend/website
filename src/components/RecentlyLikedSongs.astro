@@ -1,0 +1,105 @@
+---
+import { formatDistance } from "date-fns";
+import { Image } from "astro:assets";
+
+export interface Welcome {
+  lovedtracks: Lovedtracks;
+}
+
+export interface Lovedtracks {
+  track: Track[];
+  "@attr": Attr;
+}
+
+export interface Attr {
+  perPage: string;
+  totalPages: string;
+  page: string;
+  total: string;
+  user: string;
+}
+
+export interface Track {
+  artist: Artist;
+  date: DateClass;
+  mbid: string;
+  url: string;
+  name: string;
+  image: Image[];
+  streamable: Streamable;
+}
+
+export interface Artist {
+  url: string;
+  name: string;
+  mbid: string;
+}
+
+export interface DateClass {
+  uts: string;
+  "#text": string;
+}
+
+export interface Image {
+  size: Size;
+  "#text": string;
+}
+
+export enum Size {
+  Extralarge = "extralarge",
+  Large = "large",
+  Medium = "medium",
+  Small = "small",
+}
+
+export interface Streamable {
+  fulltrack: string;
+  "#text": string;
+}
+
+async function getLovedTracks() {
+  const params = new URLSearchParams({
+    method: "user.getlovedtracks",
+    format: "json",
+    api_key: import.meta.env.LASTFM_API_KEY || "",
+    user: "goatcream",
+    limit: "25",
+  });
+
+  const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
+    method: "GET",
+    cache: "force-cache",
+  });
+
+  const lovedTracks = await res.json();
+  return lovedTracks;
+}
+
+const lovedTracks = await getLovedTracks();
+---
+
+<div class="flex flex-col">
+  <h3 class="font-bold">Recently liked songs</h3>
+  {
+    lovedTracks.lovedtracks.track.map((track: Track) => (
+      <article class="liked-song flex flex-col gap-2 pt-4 pr-4 pb-6 pl-6">
+        <time
+          datetime={track.date["#text"]}
+          title={new Date(Number(track.date.uts) * 1000).toLocaleString()}
+          class="font-light"
+        >
+          {formatDistance(new Date(Number(track.date.uts) * 1000), new Date(), {
+            addSuffix: true,
+          })}
+        </time>
+        <div class="flex items-center gap-4">
+          <Image src={track.image[1]["#text"]} alt="Album cover" width={64} height={64} class="min-h-64px min-w-64px" />
+          <div>
+            <p class="font-bold">{track.name}</p>
+            <p class="font-extralight">{track.artist.name}</p>
+          </div>
+        </div>
+      </article>
+    ))
+  }
+</div>
