@@ -1,0 +1,61 @@
+<script is:inline>
+  var visitedplaces_config = {
+    map: "world",
+    projection: "geoNaturalEarth1",
+    theme: "dark-yellow",
+    water: 1,
+    graticule: 0,
+    names: 0,
+    duration: 0,
+    slider: 1,
+    autoplay: 0,
+    autozoom: "none",
+    data: [
+      {
+        places: [
+          "DK",
+          "SE",
+          "ES",
+          "GI",
+          "FR",
+          "TH",
+          "IE",
+          "US",
+          "CO",
+          "MX",
+          "GB",
+          "HU",
+          "IT",
+          "JP",
+          "PL",
+          "PT",
+          "HR",
+          "GR",
+          "VA",
+          "KR",
+          "TW",
+          "HK",
+          "VN",
+          "FI",
+          "NL",
+        ],
+        colors: {
+          NO: "2555bb",
+        },
+      },
+    ],
+    home: "NO",
+  };
+</script>
+
+<div class="flex flex-col gap-4">
+  <h2>Visited Places</h2>
+  <p>
+    Like everyone else, I like traveling (shocking I know). I have far-fetched dream of visitng every country. Here is a
+    map to track my progress.
+  </p>
+  <div id="chartdiv" style={{ width: "100%", height: "550px" }}></div>
+</div>
+
+<script is:inline src="https://www.visitedplaces.com/js/common.js"></script>
+<script is:inline src="https://www.visitedplaces.com/js/viewer.js"></script>
