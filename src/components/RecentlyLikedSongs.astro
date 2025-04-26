@@ -1,6 +1,7 @@
 ---
 import { formatDistance } from "date-fns";
 import { Image } from "astro:assets";
+import SongImage from "./SongImage.astro";
 
 export interface Welcome {
   lovedtracks: Lovedtracks;
@@ -63,7 +64,7 @@ async function getLovedTracks() {
     format: "json",
     api_key: import.meta.env.LASTFM_API_KEY || "",
     user: "goatcream",
-    limit: "25",
+    limit: "15",
   });
 
   const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
@@ -93,7 +94,7 @@ const lovedTracks = await getLovedTracks();
           })}
         </time>
         <div class="flex items-center gap-4">
-          <Image src={track.image[1]["#text"]} alt="Album cover" width={64} height={64} class="min-h-64px min-w-64px" />
+          <SongImage artist={track.artist.name} track={track.name} />
           <div>
             <p class="font-bold">{track.name}</p>
             <p class="font-extralight">{track.artist.name}</p>
