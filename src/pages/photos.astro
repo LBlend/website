@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import PhotoAlbum from "@components/PhotoAlbum.astro";
+type Props = CollectionEntry<"blog">["data"];
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title="Photos" description="My photo albums" />
+  </head>
+
+  <body>
+    <Header />
+    <main class="flex flex-col items-center justify-center gap-4">
+      <h1>Photos</h1>
+      <p>Here are some of my photo albums</p>
+      <article class="flex flex-wrap items-center justify-center gap-12">
+        <PhotoAlbum albumId="4b553c45-c802-431c-b0bf-1e29df40c3c6" />
+        <PhotoAlbum albumId="73b640af-1f75-47a8-91cf-6e744b405b7d" />
+        <PhotoAlbum albumId="4c3774a9-e053-47d0-be94-77829e5bb6f0" />
+        <PhotoAlbum albumId="956fd011-9dde-4f09-b6b0-6ee45126dd0a" />
+      </article>
+    </main>
+    <Footer />
+  </body>
+</html>
