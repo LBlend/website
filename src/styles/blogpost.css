@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+main {
+  width: calc(100% - 2em);
+  max-width: 100%;
+  margin: 0;
+}
+.prose {
+  width: 720px;
+  max-width: calc(100% - 2em);
+  margin: auto;
+  padding: 1em;
+  color: rgb(var(--gray-dark));
+}
+.title {
+  margin-bottom: 1em;
+  padding: 1em 0;
+  text-align: center;
+  line-height: 1;
+}
+.title h1 {
+  margin: 0 0 0.5em 0;
+}
+.date {
+  margin-bottom: 0.5em;
+  color: rgb(var(--gray));
+}
+.last-updated-on {
+  font-style: italic;
+}
+
+h1 {
+  @apply text-5xl;
+  @apply font-bold;
+  @apply mt-10;
+  @apply mb-6;
+}
+
+h2 {
+  @apply text-4xl;
+  @apply font-bold;
+  @apply mt-8;
+  @apply mb-4;
+}
+
+h3 {
+  @apply text-2xl;
+  @apply font-bold;
+  @apply mt-6;
+  @apply mb-2;
+}
+
+h4 {
+  @apply text-xl;
+  @apply font-bold;
+  @apply mt-4;
+  @apply mb-2;
+}
+
+h5 {
+  @apply text-lg;
+  @apply font-bold;
+  @apply mt-2;
+  @apply mb-1;
+}
+
+h6 {
+  @apply text-base;
+  @apply font-bold;
+  @apply mt-1;
+  @apply mb-1;
+}
+
+p {
+  @apply text-lg;
+  @apply leading-relaxed;
+  @apply mb-4;
+}
+
+ul {
+  @apply list-disc;
+  @apply pl-5;
+  @apply mb-4;
+}
+
+ol {
+  @apply list-decimal;
+  @apply pl-5;
+  @apply mb-4;
+}
+
+li {
+  @apply mb-2;
+}
