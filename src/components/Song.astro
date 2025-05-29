@@ -1,0 +1,17 @@
+---
+import SongImage from "./SongImage.astro";
+
+const { track } = Astro.props;
+---
+
+<article class="liked-song flex flex-col gap-2">
+  <div class="flex items-center gap-4">
+    <SongImage artist={track.artist.name} track={track.name} />
+    <div class="overflow-hidden">
+      <!-- <p class="overflow-hidden leading-6 font-bold text-ellipsis whitespace-nowrap">{track.name}</p>
+      <p class="overflow-hidden leading-6 text-ellipsis whitespace-nowrap">{track.artist.name}</p> -->
+      <p class="truncate font-bold">{track.name}</p>
+      <p class="truncate font-light">{track.artist.name}</p>
+    </div>
+  </div>
+</article>

@@ -1,9 +1,10 @@
 ---
 import { formatDistance } from "date-fns";
 import { Image } from "astro:assets";
-import SongImage from "./SongImage.astro";
 
-export interface Welcome {
+import Song from "./Song.astro";
+
+export interface LastFMResponse {
   lovedtracks: Lovedtracks;
 }
 
@@ -58,13 +59,12 @@ export interface Streamable {
   "#text": string;
 }
 
-async function getLovedTracks() {
+async function getLovedTracks(): Promise<LastFMResponse> {
   const params = new URLSearchParams({
     method: "user.getlovedtracks",
     format: "json",
     api_key: import.meta.env.LASTFM_API_KEY || "",
     user: "goatcream",
-    limit: "15",
   });
 
   const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
@@ -72,35 +72,39 @@ async function getLovedTracks() {
     cache: "force-cache",
   });
 
-  const lovedTracks = await res.json();
-  return lovedTracks;
+  return await res.json();
 }
 
-const lovedTracks = await getLovedTracks();
+const data = await getLovedTracks();
+
+const groupedTracks = data.lovedtracks.track.reduce((acc, track: Track) => {
+  const date = new Date(Number(track.date.uts) * 1000);
+  const distance = formatDistance(date, new Date(), { addSuffix: true });
+
+  if (!acc[distance]) {
+    acc[distance] = [];
+  }
+
+  acc[distance].push(track);
+
+  return acc;
+}, {});
 ---
 
-<div class="flex flex-col">
-  <h3 class="font-bold">Recently liked songs</h3>
-  {
-    lovedTracks.lovedtracks.track.map((track: Track) => (
-      <article class="liked-song flex flex-col gap-2 pt-4 pr-4 pb-6 pl-6">
-        <time
-          datetime={track.date["#text"]}
-          title={new Date(Number(track.date.uts) * 1000).toLocaleString()}
-          class="font-light"
-        >
-          {formatDistance(new Date(Number(track.date.uts) * 1000), new Date(), {
-            addSuffix: true,
-          })}
-        </time>
-        <div class="flex items-center gap-4">
-          <SongImage artist={track.artist.name} track={track.name} />
-          <div>
-            <p class="font-bold">{track.name}</p>
-            <p class="font-extralight">{track.artist.name}</p>
+<div class="flex w-full flex-col gap-8">
+  <h3 class="text-2xl font-bold">Recently liked songs</h3>
+  <div class="flex flex-col gap-8 pr-4">
+    {
+      Object.entries(groupedTracks).map(([time, tracks]) => (
+        <div class="flex flex-col gap-4">
+          <h4 class="border-b-1 border-gray-700 text-center font-semibold">{time}</h4>
+          <div class="flex flex-col gap-6">
+            {tracks.map((track: Track) => (
+              <Song track={track} />
+            ))}
           </div>
         </div>
-      </article>
-    ))
-  }
+      ))
+    }
+  </div>
 </div>

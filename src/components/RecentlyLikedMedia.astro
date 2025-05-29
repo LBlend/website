@@ -1,0 +1,74 @@
+---
+import { formatDistance } from "date-fns";
+import { Image } from "astro:assets";
+
+let simklToken: string | null = null;
+
+async function getSimklToken() {
+  const res = await fetch(`${import.meta.env.SIMKL_URL}oauth/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
+    },
+    body: new URLSearchParams({
+      client_id: import.meta.env.OSU_CLIENT_ID || "",
+      client_secret: import.meta.env.OSU_CLIENT_SECRET || "",
+      grant_type: "client_credentials",
+      scope: "public",
+    }),
+  });
+
+  if (!res.ok) {
+    console.error("Failed to fetch osu! token", res.status, res.statusText);
+    return null;
+  }
+
+  const data = await res.json();
+  return data.access_token;
+}
+
+const params = new URLSearchParams({
+  rating: "9,10",
+  format: "json",
+  api_key: import.meta.env.LASTFM_API_KEY || "",
+});
+
+const res = await fetch(`${import.meta.env.SIMKL_URL}sync/ratings?` + params, {
+  method: "GET",
+  cache: "force-cache",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${import.meta.env.SIMKL_API_KEY}`,
+    "simkl-api-key": import.meta.env.SIMKL_CLIENT_ID,
+  },
+});
+
+const likedMedia = await res.json();
+console.log(likedMedia);
+---
+
+<div class="flex flex-col">
+  <h3 class="font-bold">Recently liked movies & shows</h3>
+  {
+    likedMedia.lovedtracks.track.map((track) => (
+      <article class="liked-song flex flex-col gap-2 pt-4 pr-4 pb-6 pl-6">
+        <time
+          datetime={track.date["#text"]}
+          title={new Date(Number(track.date.uts) * 1000).toLocaleString()}
+          class="font-light"
+        >
+          {formatDistance(new Date(Number(track.date.uts) * 1000), new Date(), {
+            addSuffix: true,
+          })}
+        </time>
+        <div class="flex items-center gap-4">
+          <div>
+            <p class="font-bold">{track.name}</p>
+            <p class="font-extralight">{track.artist.name}</p>
+          </div>
+        </div>
+      </article>
+    ))
+  }
+</div>

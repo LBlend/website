@@ -24,4 +24,10 @@ const mediumImage = images.find((img: { size: string }) => img.size === "medium"
 const imageSrc = mediumImage || PlaceholderSongImage;
 ---
 
-<Image src={imageSrc} alt={`Cover for ${trackData.track.name}`} width={64} height={64} class="min-h-64px min-w-64px" />
+<Image
+  src={imageSrc}
+  alt={`Cover for ${trackData.track.name}`}
+  width={64}
+  height={64}
+  class="min-h-64px min-w-64px rounded-sm"
+/>
