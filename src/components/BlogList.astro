@@ -1,4 +1,6 @@
 ---
+import readingTime from "reading-time";
+
 import { getCollection } from "astro:content";
 
 import Rss from "@assets/icons/rss.svg";
@@ -10,26 +12,36 @@ posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const latestPosts = posts.slice(0, 5);
 ---
 
-<section class="blog-list">
+<section class="blog-list flex flex-col gap-4">
   <div class="flex items-center justify-between">
-    <h2>Latest Posts</h2>
-    <a href="/rss.xml" class="flex items-center justify-center gap-2 rounded-md text-xl">
-      <Rss class="size-4" />
-      Subscribe
+    <h2 class="text-4xl font-bold">Latest Posts</h2>
+    <a href="/rss.xml" target="_blank" class="non-styled-link link-button text-white">
+      <button
+        class="hover:bg-accent flex cursor-pointer items-center justify-center gap-2 rounded-lg border-1 border-gray-700 px-4 py-2 text-white hover:border-none"
+      >
+        <Rss class="size-4" />
+        Subscribe
+      </button>
     </a>
   </div>
 
   {
     latestPosts.map((post) => (
       <article>
-        <span class="font-light">
-          <FormattedDate date={post.data.pubDate} />
-        </span>
-        <h3>
-          <a href={`/blog/${post.id}`}>{post.data.title}</a>
+        <div class="align-center flex items-center gap-2 text-xs font-light">
+          <span>
+            <FormattedDate date={post.data.pubDate} />
+          </span>
+          <span class="inline-block h-1 w-1 rounded bg-gray-500 opacity-75" />
+          <p>{readingTime(post.body ?? "").text}</p>
+        </div>
+        <h3 class="text-xl font-extrabold">
+          <a class="non-styled-link" href={`/blog/${post.id}`}>
+            {post.data.title}
+          </a>
         </h3>
       </article>
     ))
   }
-  <a href="/blog"> View all posts </a>
+  <a href="/blog" class="mt-4 w-fit"> View all posts </a>
 </section>
