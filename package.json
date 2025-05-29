@@ -17,6 +17,7 @@
     "@tailwindcss/vite": "^4.1.4",
     "astro": "^5.7.4",
     "date-fns": "^4.1.0",
+    "reading-time": "^1.5.0",
     "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
