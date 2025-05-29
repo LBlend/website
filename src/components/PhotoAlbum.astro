@@ -50,6 +50,7 @@ const sharedLink = sharedLinkData.find((link: { album: { id: string } }) => link
 
 <a
   href={`${import.meta.env.IMMICH_URL}share/${sharedLink.key}`}
+  target="_blank"
   class="flex items-center justify-center gap-4 rounded-lg transition-all duration-300 hover:scale-105"
 >
   <article class="flex flex-col items-center justify-center gap-2">
