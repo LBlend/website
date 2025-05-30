@@ -1,12 +1,20 @@
 ---
-import Layout from "@layouts/BlogPost.astro";
+import BaseHead from "@components/BaseHead.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
 ---
 
-<Layout
-  title="About Me"
-  description="Lorem ipsum dolor sit amet"
-  pubDate={new Date("August 08 2021")}
-  heroImage="/blog-placeholder-about.jpg"
->
-  <p>Coming soon</p>
-</Layout>
+<html lang="en">
+  <head>
+    <BaseHead title="About me - Leander Furumo" description="An overview about me and my projects" />
+  </head>
+
+  <body>
+    <Header />
+    <main class="flex flex-col items-center justify-center gap-8">
+      <h1 class="text-6xl font-bold">About</h1>
+      <p>Coming soon</p>
+    </main>
+    <Footer />
+  </body>
+</html>
