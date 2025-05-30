@@ -9,6 +9,7 @@ import Intro from "@components/Intro.astro";
 import Microblog from "@components/Microblog.astro";
 import Stats from "@components/Stats.astro";
 import RecentlyLikedSongs from "@components/RecentlyLikedSongs.astro";
+import RecentlyLikedMedia from "@components/RecentlyLikedMedia.astro";
 import VisitedPlaces from "@components/VisitedPlaces.astro";
 
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
@@ -25,18 +26,19 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
       <Hero />
       <ArrowDown />
     </div>
-    <div id="main" class="grid grid-cols-3 flex-wrap gap-8 pt-8">
+    <div id="main" class="grid grid-cols-3 flex-wrap gap-8 px-2 pt-8">
       <main class="col-span-3 flex flex-col flex-wrap gap-18 lg:col-span-2">
         <Intro />
         <BlogList />
         <VisitedPlaces />
         <Microblog />
+        <!-- <RecentlyLikedMedia /> -->
       </main>
-      <aside class="col-span-3 flex flex-wrap gap-6 lg:col-span-1">
+      <aside class="col-span-3 mt-18 mb-18 flex flex-wrap gap-6 lg:col-span-1 lg:mt-0 lg:mb-0">
         <RecentlyLikedSongs />
       </aside>
     </div>
-    <section class="col-span-3 mt-12 flex flex-wrap justify-center gap-6">
+    <section class="col-span-3 mt-18 flex flex-wrap justify-center gap-6">
       <Stats />
     </section>
     <Footer />
