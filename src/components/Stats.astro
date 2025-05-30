@@ -3,43 +3,51 @@ const response = await fetch(new URL("/api/stats", Astro.url));
 const data = await response.json();
 ---
 
-<section class="flex flex-col items-center justify-center gap-4">
-  <h2 class="text-center">Stats</h2>
+<section class="flex flex-col items-center justify-center gap-8">
+  <h2 class="text-center text-4xl font-bold">Stats</h2>
   <div class="flex flex-col place-self-center">
     <blockquote>
       <p>I love consoooooming (consuming)</p>
     </blockquote>
     <p class="pl-2 font-light">- <span class="italic">Me, insert year here</span></p>
   </div>
-  <div class="mt-8 flex flex-wrap items-center justify-center gap-12">
-    <article class="flex flex-col items-center justify-center gap-1">
-      <count-up data-duration={3}>{data.simkl.movies.completedCount}</count-up>
-      <p class="text-center text-lg font-light">Movies Watched</p>
-    </article>
-    <article class="flex flex-col items-center justify-center gap-1">
-      <count-up data-duration={3}>{data.simkl.shows.completedCount}</count-up>
-      <p class="text-center text-lg font-light">Series Watched</p>
-    </article>
-    <article class="flex flex-col items-center justify-center gap-1">
-      <count-up data-duration={3} data-decimal-places={1} data-suffix=" days">{data.anilist.animeDaysWatched}</count-up>
-      <p class="text-center text-lg font-light">Watching weeb trash</p>
-    </article>
-  </div>
-  <div class="mt-8 flex flex-wrap items-center justify-center gap-12">
-    <article class="flex flex-col items-center justify-center gap-1">
-      <count-up data-duration={3} data-decimal-places={0} data-suffix=" hours">{data.steam.gamingHours}</count-up>
-      <p class="text-center text-lg font-light">Playing games on Steam</p>
-    </article>
-    <article class="flex flex-col items-center justify-center gap-1">
-      <count-up data-duration={3} data-decimal-places={0} data-suffix=" hours">{data.osu.playTime}</count-up>
-      <p class="text-center text-lg font-light">Clicking circles in osu!</p>
-    </article>
-    <article class="flex flex-col items-center justify-center gap-1">
-      <count-up data-duration={3} data-decimal-places={0} data-suffix=" hours"
-        >{data.wakatime.programmingHours}</count-up
-      >
-      <p class="text-center text-lg font-light">Programming</p>
-    </article>
+  <div class="flex flex-col items-center justify-center gap-2">
+    <div class="flex flex-wrap items-center justify-center gap-12">
+      <article class="flex flex-col items-center justify-center gap-1">
+        <count-up data-duration={3} class="text-center text-2xl font-bold">{data.simkl.movies.completedCount}</count-up>
+        <p class="text-center text-lg font-light">Movies Watched</p>
+      </article>
+      <article class="flex flex-col items-center justify-center gap-1">
+        <count-up data-duration={3} class="text-center text-2xl font-bold">{data.simkl.shows.completedCount}</count-up>
+        <p class="text-center text-lg font-light">Series Watched</p>
+      </article>
+      <article class="flex flex-col items-center justify-center gap-1">
+        <count-up data-duration={3} data-decimal-places={1} data-suffix=" days" class="text-center text-2xl font-bold"
+          >{data.anilist.animeDaysWatched}</count-up
+        >
+        <p class="text-center text-lg font-light">Watching weeb trash</p>
+      </article>
+    </div>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-12">
+      <article class="flex flex-col items-center justify-center gap-1">
+        <count-up data-duration={3} data-decimal-places={0} data-suffix=" hours" class="text-center text-2xl font-bold"
+          >{data.steam.gamingHours}</count-up
+        >
+        <p class="text-center text-lg font-light">Playing games on Steam</p>
+      </article>
+      <article class="flex flex-col items-center justify-center gap-1">
+        <count-up data-duration={3} data-decimal-places={0} data-suffix=" hours" class="text-center text-2xl font-bold"
+          >{data.osu.playTime}</count-up
+        >
+        <p class="text-center text-lg font-light">Clicking circles in osu!</p>
+      </article>
+      <article class="flex flex-col items-center justify-center gap-1">
+        <count-up data-duration={3} data-decimal-places={0} data-suffix=" hours" class="text-center text-2xl font-bold"
+          >{data.wakatime.programmingHours}</count-up
+        >
+        <p class="text-center text-lg font-light">Programming</p>
+      </article>
+    </div>
   </div>
   <div>
     <p class="text-center font-light italic">
