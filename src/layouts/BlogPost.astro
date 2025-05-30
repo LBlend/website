@@ -4,6 +4,7 @@ import readingTime from "reading-time";
 import "@styles/blogpost.css";
 
 import type { CollectionEntry } from "astro:content";
+import BlogTag from "@components/BlogTag.astro";
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -11,7 +12,7 @@ import FormattedDate from "../components/FormattedDate.astro";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate } = Astro.props;
+const { title, description, pubDate, updatedDate, tags } = Astro.props;
 ---
 
 <html lang="en">
@@ -39,6 +40,15 @@ const { title, description, pubDate, updatedDate } = Astro.props;
             <hr />
           </div>
           <slot />
+          {
+            tags && (
+              <div class="mt-12 flex flex-wrap gap-4">
+                {tags.map((tag) => (
+                  <BlogTag tag={tag} />
+                ))}
+              </div>
+            )
+          }
         </div>
       </article>
     </main>
