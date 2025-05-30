@@ -17,6 +17,9 @@ const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
   cache: "force-cache",
 });
 
+if (!res.ok) {
+  throw new Error(`Failed to fetch track info for ${artist} - ${track}`);
+}
 const trackData = await res.json();
 
 const images = trackData?.track?.album?.image || [];

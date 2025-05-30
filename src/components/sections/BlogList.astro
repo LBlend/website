@@ -3,8 +3,8 @@ import readingTime from "reading-time";
 
 import { getCollection } from "astro:content";
 
-import FormattedDate from "@components/FormattedDate.astro";
-import RssSubscribe from "./RssSubscribe.astro";
+import FormattedDate from "@elements/FormattedDate.astro";
+import RssSubscribe from "@elements/RssSubscribe.astro";
 
 const posts = await getCollection("blog");
 posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());

@@ -2,9 +2,9 @@
 import type { CollectionEntry } from "astro:content";
 
 import BaseHead from "@components/BaseHead.astro";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
-import PhotoAlbum from "@components/PhotoAlbum.astro";
+import Header from "@sections/Header.astro";
+import Footer from "@sections/Footer.astro";
+import PhotoAlbum from "@elements/PhotoAlbum.astro";
 
 type Props = CollectionEntry<"blog">["data"];
 ---
