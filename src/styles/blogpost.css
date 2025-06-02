@@ -2,31 +2,35 @@
 
 main {
   width: calc(100% - 2em);
-  max-width: 100%;
-  margin: 0;
+  @apply max-w-full;
 }
+
 .prose {
-  width: 720px;
   max-width: calc(100% - 2em);
-  margin: auto;
-  padding: 1em;
-  color: rgb(var(--gray-dark));
+  @apply w-[720px];
+  @apply m-auto;
+  @apply p-2;
 }
+
 .title {
-  margin-bottom: 1em;
-  padding: 1em 0;
-  text-align: center;
-  line-height: 1;
+  @apply mb-1;
+  @apply py-2;
+  @apply text-center;
+  @apply leading-[1];
 }
+
 .title h1 {
-  margin: 0 0 0.5em 0;
+  @apply m-0;
+  @apply mb-2;
 }
+
 .date {
-  margin-bottom: 0.5em;
-  color: rgb(var(--gray));
+  @apply mb-2;
+  @apply text-gray-400;
 }
+
 .last-updated-on {
-  font-style: italic;
+  @apply italic;
 }
 
 h1 {
