@@ -1,9 +1,9 @@
 ---
+import Copy from "@assets/icons/copy.svg";
 import Cv from "@assets/icons/cv.svg";
 import Discord from "@assets/icons/discord.svg";
 import Email from "@assets/icons/email.svg";
 import Github from "@assets/icons/github.svg";
-import Instagram from "@assets/icons/instagram.svg";
 import Linkedin from "@assets/icons/linkedin.svg";
 import Osu from "@assets/icons/osu.svg";
 import Steam from "@assets/icons/steam.svg";
@@ -38,7 +38,42 @@ import Steam from "@assets/icons/steam.svg";
     <a href="https://jaxtam.dev/">Jax Tam</a> &{" "}
     <a href="https://xetera.dev/">Xetera</a>
   </p>
-  <p class="hidden text-center text-xs break-words text-gray-400 lg:block">
-    XMR: 44U8wJkHjjqQqkucxKMght52TPXotUgQBLMDx9HYtWiYExKmW55bAwMX7FEmVr5KHQfSs7heZibzQDovXAFFUDFNJpNYyAi
-  </p>
+  <div class="flex items-center justify-stretch gap-6">
+    <a href="/pgp.asc" class="text-xs">PGP Key</a>
+    <span class="h-4 border-1 border-gray-600"></span>
+    <div class="flex items-center justify-center gap-1 text-xs text-gray-400 opacity-70">
+      <button id="xmr-button">
+        <Copy class="size-4 cursor-pointer" id="xmr-copy" />
+      </button>
+      <p id="xmr-address">
+        Please enable Javascript. We are living in CURRENT YEAR. I won't use it to steal your data :)
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const XMR_ADDRESS =
+      "44U8wJkHjjqQqkucxKMght52TPXotUgQBLMDx9HYtWiYExKmW55bAwMX7FEmVr5KHQfSs7heZibzQDovXAFFUDFNJpNYyAi";
+
+    const button = document.getElementById("xmr-button");
+    if (button) {
+      const addressElement = document.getElementById("xmr-address");
+      if (addressElement) {
+        addressElement.textContent = `XMR: ${XMR_ADDRESS.slice(0, 4)}...`;
+      }
+
+      const copyIcon = document.getElementById("xmr-copy");
+      if (copyIcon) {
+        copyIcon.addEventListener("click", () => {
+          navigator.clipboard.writeText(XMR_ADDRESS);
+          if (addressElement) {
+            addressElement.textContent = "Copied XMR!";
+            setTimeout(() => {
+              addressElement.textContent = `XMR: ${XMR_ADDRESS.slice(0, 4)}...`;
+            }, 2000);
+          }
+        });
+      }
+    }
+  </script>
 </footer>
