@@ -6,6 +6,7 @@
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
+      "@api/*": ["src/pages/api/*"],
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@elements/*": ["src/components/elements/*"],
