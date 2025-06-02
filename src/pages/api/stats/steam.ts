@@ -1,4 +1,8 @@
-export async function getSteamData() {
+interface SteamData {
+  gamingHours: number; // in hours
+}
+
+export async function getSteamData(): Promise<SteamData> {
   const queryParams = new URLSearchParams({
     key: import.meta.env.STEAM_API_KEY || "",
     steamid: import.meta.env.STEAM_USER_ID || "",
@@ -11,7 +15,7 @@ export async function getSteamData() {
   });
 
   if (!res.ok) {
-    return JSON.stringify({ programmingHours: null });
+    return { gamingHours: 0 };
   }
 
   const data = await res.json();
@@ -23,4 +27,15 @@ export async function getSteamData() {
   }, 0);
 
   return { gamingHours: totalGamingHours / 60 };
+}
+
+export async function GET() {
+  const steamData = await getSteamData();
+
+  return new Response(JSON.stringify(steamData), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }

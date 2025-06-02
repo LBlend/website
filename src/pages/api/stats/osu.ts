@@ -1,6 +1,10 @@
+interface OsuData {
+  playTime: number; // in hours
+}
+
 let osuToken: string | null = null;
 
-async function getOsuToken() {
+async function getOsuToken(): Promise<string | null> {
   const res = await fetch(`${import.meta.env.OSU_URL}oauth/token`, {
     method: "POST",
     headers: {
@@ -24,7 +28,7 @@ async function getOsuToken() {
   return data.access_token;
 }
 
-export async function getOsuData() {
+export async function getOsuData(): Promise<OsuData> {
   if (!osuToken) {
     osuToken = await getOsuToken();
   }
@@ -40,12 +44,20 @@ export async function getOsuData() {
   });
 
   if (!res.ok) {
-    return JSON.stringify({
-      error: "Failed to fetch osu! data",
-      status: res.status,
-    });
+    return { playTime: 0 };
   }
 
   const data = await res.json();
   return { playTime: data.statistics.play_time / 3600 };
+}
+
+export async function GET() {
+  const osuData = await getOsuData();
+
+  return new Response(JSON.stringify(osuData), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }

@@ -1,4 +1,8 @@
-export async function getAnilistData() {
+interface AnilistData {
+  animeDaysWatched: number;
+}
+
+export async function getAnilistData(): Promise<AnilistData> {
   const query = `query($name: String) {
             User(name: $name) {
                 statistics {
@@ -26,9 +30,20 @@ export async function getAnilistData() {
   });
 
   if (!res.ok) {
-    return { animeDaysWatched: null };
+    return { animeDaysWatched: 0 };
   }
 
   const data = await res.json();
   return { animeDaysWatched: data.data.User.statistics.anime.minutesWatched / 1440 };
+}
+
+export async function GET() {
+  const anilistData = await getAnilistData();
+
+  return new Response(JSON.stringify(anilistData), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }
