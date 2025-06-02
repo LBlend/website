@@ -1,0 +1,21 @@
+---
+const { stat, text, decimalPlaces, suffix } = Astro.props;
+---
+
+<article class="flex flex-col items-center justify-center gap-1">
+  {
+    stat > 0 ? (
+      <count-up
+        data-duration={3}
+        data-suffix={suffix}
+        data-decimal-places={decimalPlaces}
+        class="text-center text-2xl font-bold"
+      >
+        {stat}
+      </count-up>
+    ) : (
+      <span class="text-center text-2xl font-bold">?</span>
+    )
+  }
+  <p class="text-center text-lg font-light">{text}</p>
+</article>

@@ -1,4 +1,6 @@
 ---
+import Stat from "@elements/Stat.astro";
+
 const response = await fetch(new URL("/api/stats", Astro.url));
 const data = await response.json();
 ---
@@ -13,40 +15,14 @@ const data = await response.json();
   </div>
   <div class="flex flex-col items-center justify-center gap-2">
     <div class="flex flex-wrap items-center justify-center gap-12">
-      <article class="flex flex-col items-center justify-center gap-1">
-        <count-up data-duration={3} class="text-center text-2xl font-bold">{data.simkl.movies.completedCount}</count-up>
-        <p class="text-center text-lg font-light">Movies Watched</p>
-      </article>
-      <article class="flex flex-col items-center justify-center gap-1">
-        <count-up data-duration={3} class="text-center text-2xl font-bold">{data.simkl.shows.completedCount}</count-up>
-        <p class="text-center text-lg font-light">Series Watched</p>
-      </article>
-      <article class="flex flex-col items-center justify-center gap-1">
-        <count-up data-duration={3} data-decimal-places={1} data-suffix=" days" class="text-center text-2xl font-bold"
-          >{data.anilist.animeDaysWatched}</count-up
-        >
-        <p class="text-center text-lg font-light">Watching weeb trash</p>
-      </article>
+      <Stat stat={data.simkl.movies.completedCount} text="Movies Watched" decimalPlaces={0} />
+      <Stat stat={data.simkl.shows.completedCount} text="Series Watched" decimalPlaces={0} />
+      <Stat stat={data.anilist.animeDaysWatched} text="Watching weeb trash" suffix=" days" decimalPlaces={1} />
     </div>
     <div class="mt-8 flex flex-wrap items-center justify-center gap-12">
-      <article class="flex flex-col items-center justify-center gap-1">
-        <count-up data-duration={3} data-decimal-places={0} data-suffix=" hours" class="text-center text-2xl font-bold"
-          >{data.steam.gamingHours}</count-up
-        >
-        <p class="text-center text-lg font-light">Playing games on Steam</p>
-      </article>
-      <article class="flex flex-col items-center justify-center gap-1">
-        <count-up data-duration={3} data-decimal-places={0} data-suffix=" hours" class="text-center text-2xl font-bold"
-          >{data.osu.playTime}</count-up
-        >
-        <p class="text-center text-lg font-light">Clicking circles in osu!</p>
-      </article>
-      <article class="flex flex-col items-center justify-center gap-1">
-        <count-up data-duration={3} data-decimal-places={0} data-suffix=" hours" class="text-center text-2xl font-bold"
-          >{data.wakatime.programmingHours}</count-up
-        >
-        <p class="text-center text-lg font-light">Programming</p>
-      </article>
+      <Stat stat={data.steam.gamingHours} text="Playing games on Steam" suffix=" hours" decimalPlaces={0} />
+      <Stat stat={data.osu.playTime} text="Clicking circles in osu!" suffix=" hours" decimalPlaces={0} />
+      <Stat stat={data.wakatime.programmingHours} text="Programming" suffix=" hours" decimalPlaces={0} />
     </div>
   </div>
   <div>
