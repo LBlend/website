@@ -92,3 +92,10 @@ ol {
 li {
   @apply mb-2;
 }
+
+.description {
+  @apply opacity-80;
+  @apply text-left;
+  @apply mb-4;
+  @apply mt-8;
+}

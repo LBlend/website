@@ -1,6 +1,4 @@
 ---
-import readingTime from "reading-time";
-
 import "@styles/blogpost.css";
 
 import type { CollectionEntry } from "astro:content";
@@ -38,6 +36,7 @@ const { title, description, pubDate, updatedDate, tags } = Astro.props;
               }
             </div>
             <h1>{title}</h1>
+            <p class="description">{description}</p>
             <hr />
           </div>
           <slot />
