@@ -1,8 +1,9 @@
 ---
+import { getAllStats } from "@api/stats/all";
+
 import Stat from "@elements/Stat.astro";
 
-const response = await fetch(new URL("/api/stats", Astro.url));
-const data = await response.json();
+const data = await getAllStats();
 ---
 
 <section class="flex flex-col items-center justify-center gap-8">

@@ -4,7 +4,7 @@ import { getSimklData } from "./simkl";
 import { getSteamData } from "./steam";
 import { getWakatimeData } from "./wakatime";
 
-export async function GET() {
+export async function getAllStats() {
   const osuData = await getOsuData();
   const wakatimeData = await getWakatimeData();
   const anilistData = await getAnilistData();
@@ -19,7 +19,13 @@ export async function GET() {
     simkl: simklData,
   };
 
-  return new Response(JSON.stringify(finalData), {
+  return finalData;
+}
+
+export async function GET() {
+  const allStats = await getAllStats();
+
+  return new Response(JSON.stringify(allStats), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
