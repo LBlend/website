@@ -1,0 +1,25 @@
+---
+import BaseHead from "@components/BaseHead.astro";
+import Header from "@sections/Header.astro";
+import Footer from "@sections/Footer.astro";
+
+import { Image } from "astro:assets";
+
+import Despair from "@assets/images/despair.png";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title="404: Not found!" description="A dead end" />
+  </head>
+
+  <body class="grid min-h-dvh">
+    <Header />
+    <main class="flex flex-col items-center justify-center gap-8">
+      <h1 class="text-6xl font-bold">404: Not found!</h1>
+      <Image src={Despair} alt="Emoji of despair" width={256} height={256} loading="eager" />
+      <p>You may have reached a dead end, but hopefully our journey doesn't end here :)</p>
+    </main>
+    <Footer />
+  </body>
+</html>
