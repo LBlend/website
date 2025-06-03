@@ -8,6 +8,7 @@ import Hero from "@sections/Hero.astro";
 import Intro from "@sections/Intro.astro";
 import Microblog from "@sections/Microblog.astro";
 import Stats from "@sections/Stats.astro";
+import RecentlyLikedMedia from "@components/sections/RecentlyLikedMedia.astro";
 import RecentlyLikedSongs from "@sections/RecentlyLikedSongs.astro";
 import VisitedPlaces from "@sections/VisitedPlaces.astro";
 
@@ -31,6 +32,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "src/consts";
         <BlogList />
         <VisitedPlaces />
         <Microblog />
+        <RecentlyLikedMedia />
       </main>
       <aside
         class="inner-scrollbar bg-backgroundlight col-span-3 mt-18 mb-18 flex max-h-dvh flex-col flex-wrap gap-6 overflow-y-auto rounded-2xl shadow-lg/40 lg:col-span-1 lg:mt-0 lg:mb-0"
