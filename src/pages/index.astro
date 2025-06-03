@@ -9,7 +9,6 @@ import Intro from "@sections/Intro.astro";
 import Microblog from "@sections/Microblog.astro";
 import Stats from "@sections/Stats.astro";
 import RecentlyLikedSongs from "@sections/RecentlyLikedSongs.astro";
-import RecentlyLikedMedia from "@sections/RecentlyLikedMedia.astro";
 import VisitedPlaces from "@sections/VisitedPlaces.astro";
 
 import { SITE_TITLE, SITE_DESCRIPTION } from "src/consts";
@@ -26,16 +25,15 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "src/consts";
       <Hero />
       <ArrowDown />
     </div>
-    <div id="main" class="grid grid-cols-3 flex-wrap gap-8 px-2 pt-8">
+    <div id="main" class="grid auto-rows-fr grid-cols-3 gap-8 px-2 pt-8">
       <main class="col-span-3 flex flex-col flex-wrap gap-18 lg:col-span-2">
         <Intro />
         <BlogList />
         <VisitedPlaces />
         <Microblog />
-        <!-- <RecentlyLikedMedia /> -->
       </main>
       <aside
-        class="col-span-3 row-span-1 mt-18 mb-18 flex flex-wrap gap-6 overflow-hidden lg:col-span-1 lg:mt-0 lg:mb-0"
+        class="inner-scrollbar bg-backgroundlight col-span-3 mt-18 mb-18 flex max-h-dvh flex-col flex-wrap gap-6 overflow-y-auto rounded-2xl shadow-lg/40 lg:col-span-1 lg:mt-0 lg:mb-0"
       >
         <RecentlyLikedSongs />
       </aside>
@@ -46,3 +44,14 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "src/consts";
     <Footer />
   </body>
 </html>
+
+<script>
+  // set max height of recently liked songs section to same height as main section
+  const mainSection = document.querySelector("main");
+  const recentlyLikedSongsSection = document.querySelector("aside");
+  console.log(recentlyLikedSongsSection);
+  if (mainSection && recentlyLikedSongsSection) {
+    console.log(mainSection.clientHeight, recentlyLikedSongsSection.clientHeight);
+    recentlyLikedSongsSection.style.maxHeight = `${mainSection.clientHeight}px`;
+  }
+</script>

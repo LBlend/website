@@ -2,6 +2,7 @@
 
 :root {
   --background: #11111b;
+  --backgroundlight: #151522;
   --accent: #ff941a;
   --accent-light: #ffb84d;
   --gray: 96, 115, 159;
@@ -29,6 +30,7 @@
 @theme {
   --font-nunito: "Nunito", sans-serif;
   --color-background: var(--background);
+  --color-backgroundlight: var(--backgroundlight);
   --color-text: var(--text);
   --color-accent: var(--accent);
   --color-accentlight: var(--accent-light);
@@ -186,4 +188,16 @@ hr {
   @apply text-white;
   @apply bg-none;
   -webkit-text-fill-color: var(--color-text);
+}
+
+::-webkit-scrollbar {
+  width: 0.5em;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-800;
+  @apply rounded-2xl;
+  border-radius: 999rem;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-600;
 }
