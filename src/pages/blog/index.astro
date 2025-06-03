@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import { SITE_TITLE, SITE_DESCRIPTION } from "src/consts";
 import { getCollection } from "astro:content";
 
@@ -10,7 +12,13 @@ import Footer from "@sections/Footer.astro";
 import FormattedDate from "@elements/FormattedDate.astro";
 import RssSubscribe from "@components/elements/RssSubscribe.astro";
 
+const tags = Astro.url.searchParams.get("tags")?.split(",") || [];
+
 const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const filteredPosts =
+  tags.length > 0
+    ? posts.filter((post) => Array.isArray(post.data.tags) && post.data.tags.some((tag) => tags.includes(tag)))
+    : posts;
 ---
 
 <!doctype html>
@@ -26,7 +34,7 @@ const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueO
 
       <section class="flex max-w-4xl flex-col items-center justify-around gap-12">
         {
-          posts.map((post) => (
+          filteredPosts.map((post) => (
             <article class="flex w-full flex-col">
               <p class="text-accent text-sm">{readingTime(post.body ?? "").text}</p>
               <a href={`/blog/${post.id}/`}>
