@@ -72,12 +72,17 @@ async function getLovedTracks(): Promise<LastFMResponse> {
     cache: "force-cache",
   });
 
+  if (!res.ok) {
+    console.error("Failed to fetch loved tracks", res.status, res.statusText);
+    return { lovedtracks: { track: [], "@attr": { perPage: "0", totalPages: "0", page: "0", total: "0", user: "" } } };
+  }
+
   return await res.json();
 }
 
 const data = await getLovedTracks();
 
-const groupedTracks = data.lovedtracks.track.reduce((acc, track: Track) => {
+const groupedTracks = data.lovedtracks.track.reduce((acc: Record<string, Track[]>, track: Track) => {
   const date = new Date(Number(track.date.uts) * 1000);
   const distance = formatDistance(date, new Date(), { addSuffix: true });
 
