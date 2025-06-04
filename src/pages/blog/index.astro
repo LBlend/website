@@ -4,6 +4,9 @@ export const prerender = false;
 import { SITE_TITLE, SITE_DESCRIPTION } from "src/consts";
 import { getCollection } from "astro:content";
 
+import ArrowSVG from "@assets/icons/arrow_down.svg";
+import CheckmarkSVG from "@assets/icons/checkmark.svg";
+
 import readingTime from "reading-time";
 
 import BaseHead from "@components/BaseHead.astro";
@@ -15,6 +18,8 @@ import RssSubscribe from "@components/elements/RssSubscribe.astro";
 const tags = Astro.url.searchParams.get("tags")?.split(",") || [];
 
 const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const allTags = [...new Set(posts.flatMap((post) => post.data.tags || []))].sort();
+
 const filteredPosts =
   tags.length > 0
     ? posts.filter((post) => Array.isArray(post.data.tags) && post.data.tags.some((tag) => tags.includes(tag)))
@@ -32,6 +37,55 @@ const filteredPosts =
       <h1 class="text-4xl font-bold">Blog</h1>
       <RssSubscribe />
 
+      <div class="flex flex-col items-center gap-4">
+        <div>
+          <button
+            id="dropdown-button"
+            class="focus:border-accent focus:ring-accent flex min-w-[200px] items-center justify-between rounded-md border border-gray-300 bg-gray-700 px-3 py-2 text-sm focus:ring-1 focus:outline-none"
+            onclick="toggleDropdown(event)"
+          >
+            Select tags
+            <ArrowSVG class="size-3 text-gray-300" />
+          </button>
+
+          <div id="dropdown-menu" class="absolute hidden min-w-[200px] rounded-md border border-gray-500 bg-gray-900">
+            {
+              allTags.map((tag) => (
+                <button
+                  class="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-700"
+                  onclick={`toggleTag('${tag}')`}
+                  data-tag={tag}
+                >
+                  {tag}
+                  {tags.includes(tag) && <CheckmarkSVG id="checkmark" class="text-accent h-4 w-4" />}
+                </button>
+              ))
+            }
+          </div>
+        </div>
+
+        <div id="selected-tags" class="flex flex-wrap gap-2">
+          {
+            tags.map((tag) => (
+              <span
+                class="bg-accent flex items-center gap-1 rounded-full px-3 py-1 text-white"
+                onclick={`removeTag('${tag}')`}
+              >
+                {tag}
+              </span>
+            ))
+          }
+        </div>
+      </div>
+
+      <p class="text-center">
+        {
+          filteredPosts.length > 0
+            ? `Showing ${filteredPosts.length} post${filteredPosts.length > 1 ? "s" : ""}`
+            : "No posts found."
+        }
+      </p>
+
       <section class="flex max-w-4xl flex-col items-center justify-around gap-12">
         {
           filteredPosts.map((post) => (
@@ -47,7 +101,97 @@ const filteredPosts =
           ))
         }
       </section>
+
+      <Footer />
     </main>
-    <Footer />
   </body>
 </html>
+
+<script is:inline>
+  // Initialize selected tags from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const tagsParam = urlParams.get("tags");
+  const selectedTags = new Set(tagsParam ? tagsParam.split(",") : []);
+
+  // Update the UI to reflect selected tags
+  function updateSelectedTagsUI() {
+    const selectedTagsContainer = document.getElementById("selected-tags");
+    if (!selectedTagsContainer) return;
+
+    selectedTagsContainer.innerHTML = Array.from(selectedTags)
+      .map(
+        (tag) => `
+            <span
+              class="flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-white"
+            >
+              ${tag}
+              <button
+                class="h-4 w-4 cursor-pointer hover:text-gray-200"
+                onclick="removeTag('${tag}')"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </span>
+          `,
+      )
+      .join("");
+
+    // Update checkmarks in dropdown
+    document.querySelectorAll("#dropdown-menu button").forEach((button) => {
+      const tag = button.getAttribute("data-tag");
+      const checkmark = button.querySelector("#checkmark");
+      if (tag && checkmark) {
+        checkmark.style.display = selectedTags.has(tag) ? "block" : "none";
+      }
+    });
+  }
+
+  function toggleDropdown() {
+    const menu = document.getElementById("dropdown-menu");
+    if (menu) {
+      menu.classList.toggle("hidden");
+    }
+  }
+
+  function toggleTag(tag) {
+    if (selectedTags.has(tag)) {
+      selectedTags.delete(tag);
+    } else {
+      selectedTags.add(tag);
+    }
+    updateSelectedTagsUI();
+    updateTags();
+  }
+
+  function removeTag(tag) {
+    selectedTags.delete(tag);
+    updateSelectedTagsUI();
+    updateTags();
+  }
+
+  function updateTags() {
+    const url = new URL(window.location.href);
+    if (selectedTags.size > 0) {
+      url.searchParams.set("tags", Array.from(selectedTags).join(","));
+    } else {
+      url.searchParams.delete("tags");
+    }
+    window.location.href = url.toString();
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (event) => {
+    const dropdown = document.getElementById("dropdown-menu");
+    const button = document.getElementById("dropdown-button");
+    if (!dropdown?.contains(event.target) && !button?.contains(event.target)) {
+      dropdown?.classList.add("hidden");
+    }
+  });
+
+  // Initialize UI
+  document.addEventListener("DOMContentLoaded", () => {
+    updateSelectedTagsUI();
+  });
+</script>
