@@ -102,7 +102,7 @@ const groupedTracks = data.lovedtracks.track.reduce((acc: Record<string, Track[]
     {
       Object.entries(groupedTracks).map(([time, tracks]) => (
         <div class="flex flex-col gap-4">
-          <h4 class="border-b-1 border-gray-700 text-center font-semibold">{time}</h4>
+          <h2 class="border-b-1 border-gray-700 text-center font-semibold">{time}</h2>
           <div class="flex flex-col gap-6">
             {tracks.map((track: Track) => (
               <Song track={track} />
