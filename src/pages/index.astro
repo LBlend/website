@@ -49,11 +49,30 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "src/consts";
 
 <script>
   // set max height of recently liked songs section to same height as main section
+  // this is probably possible using CSS but I couldn't figure it out
+  // major skill issue
   const mainSection = document.querySelector("main");
   const recentlyLikedSongsSection = document.querySelector("aside");
-  console.log(recentlyLikedSongsSection);
-  if (mainSection && recentlyLikedSongsSection) {
-    console.log(mainSection.clientHeight, recentlyLikedSongsSection.clientHeight);
-    recentlyLikedSongsSection.style.maxHeight = `${mainSection.clientHeight}px`;
+
+  function updateRecentlyLikedSongsHeight() {
+    if (mainSection && recentlyLikedSongsSection) {
+      // check if mobile view
+      if (window.innerWidth > 1024) {
+        recentlyLikedSongsSection.style.maxHeight = `${mainSection.clientHeight}px`;
+      } else {
+        recentlyLikedSongsSection.style.maxHeight = `${window.innerHeight}px`;
+      }
+    }
   }
+
+  // Initial height update
+  updateRecentlyLikedSongsHeight();
+
+  // Add resize event listener
+  window.addEventListener("resize", updateRecentlyLikedSongsHeight);
+
+  // Clean up event listener when component is destroyed
+  document.addEventListener("astro:before-swap", () => {
+    window.removeEventListener("resize", updateRecentlyLikedSongsHeight);
+  });
 </script>
