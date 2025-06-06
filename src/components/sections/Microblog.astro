@@ -1,4 +1,72 @@
-<section>
-  <h2 class="text-4xl font-bold">Microblog</h2>
-  <p>Because nobody likes Twitter. Coming soon™</p>
+---
+import { type MicroblogMessage } from "@api/microblog/discord";
+const discordData = await fetch(new URL("/api/microblog/discord", Astro.url));
+const discordPosts = await discordData.json();
+
+const { numberOfPosts } = Astro.props;
+if (numberOfPosts && discordPosts.length > numberOfPosts) {
+  discordPosts.length = numberOfPosts;
+}
+
+const stylePostConent = (post: MicroblogMessage) => {
+  return post.content;
+};
+---
+
+<section class="grid grid-cols-1 gap-4 rounded-2xl bg-[#323339] py-6 shadow-lg/30">
+  {/* Header */}
+  <div class="border-b border-[#3e3f45] pb-4 pl-4 md:pl-10">
+    <h2 class="text-2xl text-[#dcdddf]"><span class="mr-4 text-[#9b9ca3]">#</span>microblog</h2>
+  </div>
+  {/* Posts */}
+  <div class="flex flex-col gap-8 px-4 py-4 md:px-10">
+    {discordPosts.length === 0 && <p class="text-gray-400">No posts available.</p>}
+
+    {
+      discordPosts.map((post: MicroblogMessage) => (
+        <article class="flex items-start gap-4 md:gap-6">
+          {/* Avatar */}
+          <img src={post.author.avatarUrl} alt={post.author.globalName} class="h-12 w-12 shrink-0 rounded-full" />
+          <div class="min-w-0 flex-1">
+            {/* Author and Timestamp */}
+            <div class="flex items-center gap-2">
+              {/* Tailwind didn't work for some reason so inlinine styling it is */}
+              <author class="font-bold" style={`color: ${post.author.color}`}>
+                {post.author.globalName}
+              </author>
+              <p class="text-sm text-[#96979e]">
+                {new Date(post.timestamp).toLocaleDateString()},{" "}
+                {new Date(post.timestamp).toLocaleTimeString().replace(/:\d{2} /, " ")}
+              </p>
+            </div>
+            {/* Content */}
+            <p class="break-words text-[#dddee0]">{stylePostConent(post)}</p>
+            {/* Attachments */}
+            {post.attachments && post.attachments.length > 0 && (
+              <div class="mt-2 grid grid-cols-2 gap-1 md:grid-cols-3 [&>*:first-child:nth-child(odd)]:col-span-2 md:[&>*:first-child:nth-child(odd)]:col-span-1">
+                {post.attachments.map((attachment) => (
+                  <div class="aspect-square overflow-hidden rounded-lg">
+                    {attachment.contentType?.startsWith("image/") && (
+                      <a href={attachment.url} target="_blank" rel="noopener noreferrer">
+                        <img src={attachment.url} alt={attachment.filename} class="h-full w-full object-cover" />
+                      </a>
+                    )}
+                    {attachment.contentType?.startsWith("video/") && (
+                      <div class="relative aspect-square">
+                        <video src={attachment.url} controls class="absolute inset-0 h-full w-full object-contain" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+  {/* View all link */}
+  <div class="mt-8 text-center">
+    <a href="/microblog">View all</a>
+  </div>
 </section>
