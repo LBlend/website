@@ -4,6 +4,7 @@ const discordData = await fetch(new URL("/api/microblog/discord", Astro.url));
 const discordPosts = await discordData.json();
 
 const { numberOfPosts } = Astro.props;
+const totalNumberOfPosts = discordPosts.length;
 if (numberOfPosts && discordPosts.length > numberOfPosts) {
   discordPosts.length = numberOfPosts;
 }
@@ -67,7 +68,7 @@ const stylePostConent = (post: MicroblogMessage) => {
   </div>
   {/* View all link */}
   {
-    Astro.url.pathname !== "/microblog" && discordPosts.length > 0 ? (
+    Astro.url.pathname !== "/microblog" && discordPosts.length > 0 && totalNumberOfPosts > numberOfPosts ? (
       <div class="mt-8 text-center">
         <a href="/microblog">View all</a>
       </div>
