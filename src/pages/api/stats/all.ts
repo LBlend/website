@@ -1,3 +1,5 @@
+export const prerender = false;
+
 import { getAnilistData } from "./anilist";
 import { getOsuData } from "./osu";
 import { getSimklData } from "./simkl";

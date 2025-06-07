@@ -1,3 +1,5 @@
+export const prerender = false;
+
 interface WakatimeData {
   programmingHours: number; // in hours
 }

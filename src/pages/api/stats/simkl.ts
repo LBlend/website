@@ -1,3 +1,5 @@
+export const prerender = false;
+
 interface SimklData {
   movies: {
     hoursWatched: number;

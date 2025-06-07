@@ -1,3 +1,5 @@
+export const prerender = false;
+
 // This file is purely vibe coded and needs to be cleaned up.
 // It works for now but due to a persisteance issue with the Discord API, it may not work in the future.
 // See issue #3 on GitHub

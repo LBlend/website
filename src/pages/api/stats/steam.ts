@@ -1,3 +1,5 @@
+export const prerender = false;
+
 interface SteamData {
   gamingHours: number; // in hours
 }

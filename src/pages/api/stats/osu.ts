@@ -1,3 +1,5 @@
+export const prerender = false;
+
 interface OsuData {
   playTime: number; // in hours
 }
