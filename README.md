@@ -1,6 +1,9 @@
 # furumo.eu
 
-My personal website. As of writing it features a blog, microblog (twitter clone) and miscellaneous info about me.
+My personal website. As of writing this, it features a blog, microblog (twitter clone) and miscellaneous info about me.
+
+![image](https://github.com/user-attachments/assets/2538d893-acbc-45ae-8fdd-b6404a9eb6cd)
+
 
 The site is based on the blog template provided by AstroJS. You can do so yourself by running the command below:
 
