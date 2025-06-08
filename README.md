@@ -22,6 +22,7 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 | `npm run format`          | Ensure the code follows code style requirements  |
 | `npm run format:check`    | Same as above but without writing any changes    |
+| `npm run check`           | Check for any Astro/TypeScript errors            |
 
 ## Credit
 
