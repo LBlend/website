@@ -14,7 +14,7 @@
     "prettier-plugin-astro",
     "prettier-plugin-multiline-arrays",
     "prettier-plugin-organize-attributes",
-    "prettier-plugin-organize-imports",
-    "prettier-plugin-tailwindcss"
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-astro-organize-imports"
   ]
 }
