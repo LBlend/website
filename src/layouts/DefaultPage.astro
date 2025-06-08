@@ -1,0 +1,24 @@
+---
+import BaseHead from "@components/BaseHead.astro";
+import Header from "@sections/Header.astro";
+import Footer from "@sections/Footer.astro";
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+
+  <body>
+    <div class="grid min-h-dvh">
+      <Header />
+      <div class="flex max-w-7xl flex-col flex-wrap place-items-center place-self-center px-2">
+        <slot />
+      </div>
+      <Footer />
+    </div>
+  </body>
+</html>
