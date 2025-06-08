@@ -1,7 +1,7 @@
 ---
 const { artist, track } = Astro.props;
-import { Image } from "astro:assets";
 import PlaceholderSongImage from "@assets/images/placeholder_song.jpg";
+import { Image } from "astro:assets";
 
 const params = new URLSearchParams({
   method: "track.getInfo",
