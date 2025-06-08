@@ -1,25 +1,17 @@
 ---
-import BaseHead from "@components/BaseHead.astro";
-import Header from "@sections/Header.astro";
-import Footer from "@sections/Footer.astro";
+import DefaultPage from "@layouts/DefaultPage.astro";
+
+import { SITE_TITLE } from "src/consts";
 ---
 
-<html lang="en">
-  <head>
-    <BaseHead title="About me - Leander Furumo" description="An overview about me and my projects" />
-  </head>
-
-  <body>
-    <Header />
-    <main class="flex flex-col items-center justify-center gap-8">
-      <h1 class="text-6xl font-bold">About</h1>
-      <p>Coming soon</p>
-      <img
-        src="https://i.pinimg.com/originals/eb/1b/27/eb1b27863813653543914d222ceb9cd0.gif"
-        alt="Jackhammer GIF"
-        class="h-64 w-64"
-      />
-    </main>
-    <Footer />
-  </body>
-</html>
+<DefaultPage title={`Microblog - ${SITE_TITLE}`} description="An overview about me and my projects">
+  <main class="flex flex-col items-center justify-center gap-8">
+    <h1 class="text-6xl font-bold">About</h1>
+    <p>Coming soon</p>
+    <img
+      src="https://i.pinimg.com/originals/eb/1b/27/eb1b27863813653543914d222ceb9cd0.gif"
+      alt="Jackhammer GIF"
+      class="h-64 w-64"
+    />
+  </main>
+</DefaultPage>

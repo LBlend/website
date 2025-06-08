@@ -4,54 +4,44 @@ import "@styles/blogpost.css";
 import type { CollectionEntry } from "astro:content";
 
 import BlogTag from "@elements/BlogTag.astro";
-import BaseHead from "@components/BaseHead.astro";
-import Header from "@sections/Header.astro";
-import Footer from "@sections/Footer.astro";
 import FormattedDate from "@elements/FormattedDate.astro";
+import DefaultPage from "./DefaultPage.astro";
 
 type Props = CollectionEntry<"blog">["data"];
 
 const { title, description, pubDate, updatedDate, tags } = Astro.props;
 ---
 
-<html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
-  </head>
-
-  <body>
-    <Header />
-    <main>
-      <article>
-        <div class="prose">
-          <div class="title">
-            <div class="date">
-              <FormattedDate date={pubDate} />
-              {
-                updatedDate && (
-                  <div class="last-updated-on">
-                    Last updated on <FormattedDate date={updatedDate} />
-                  </div>
-                )
-              }
-            </div>
-            <h1>{title}</h1>
-            <p class="description">{description}</p>
-            <hr />
+<DefaultPage title={title} description={description}>
+  <main>
+    <article>
+      <div class="prose">
+        <div class="title">
+          <div class="date">
+            <FormattedDate date={pubDate} />
+            {
+              updatedDate && (
+                <div class="last-updated-on">
+                  Last updated on <FormattedDate date={updatedDate} />
+                </div>
+              )
+            }
           </div>
-          <slot />
-          {
-            tags && (
-              <div class="mt-12 flex flex-wrap gap-4">
-                {tags.map((tag) => (
-                  <BlogTag tag={tag} />
-                ))}
-              </div>
-            )
-          }
+          <h1>{title}</h1>
+          <p class="description">{description}</p>
+          <hr />
         </div>
-      </article>
-    </main>
-    <Footer />
-  </body>
-</html>
+        <slot />
+        {
+          tags && (
+            <div class="mt-12 flex flex-wrap gap-4">
+              {tags.map((tag) => (
+                <BlogTag tag={tag} />
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </article>
+  </main>
+</DefaultPage>

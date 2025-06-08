@@ -1,19 +1,18 @@
 ---
 export const prerender = false;
 
-import { SITE_TITLE, SITE_DESCRIPTION } from "src/consts";
-import { getCollection } from "astro:content";
-
 import ArrowSVG from "@assets/icons/arrow_down.svg";
 import CheckmarkSVG from "@assets/icons/checkmark.svg";
 
-import readingTime from "reading-time";
+import DefaultPage from "@layouts/DefaultPage.astro";
 
-import BaseHead from "@components/BaseHead.astro";
-import Header from "@sections/Header.astro";
-import Footer from "@sections/Footer.astro";
 import FormattedDate from "@elements/FormattedDate.astro";
 import RssSubscribe from "@components/elements/RssSubscribe.astro";
+
+import readingTime from "reading-time";
+
+import { SITE_TITLE, SITE_DESCRIPTION } from "src/consts";
+import { getCollection } from "astro:content";
 
 const tags = Astro.url.searchParams.get("tags")?.split(",") || [];
 
@@ -27,85 +26,77 @@ const filteredPosts =
 ---
 
 <!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  </head>
-  <body>
-    <Header />
-    <main class="flex flex-col items-center justify-center gap-16 px-2">
-      <h1 class="text-4xl font-bold">Blog</h1>
-      <RssSubscribe />
+<DefaultPage title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <main class="flex flex-col items-center justify-center gap-16 px-2">
+    <h1 class="text-4xl font-bold">Blog</h1>
+    <RssSubscribe />
 
-      <div class="flex flex-col items-center gap-4">
-        <div>
-          <button
-            id="dropdown-button"
-            class="focus:border-accent focus:ring-accent flex min-w-[200px] items-center justify-between rounded-md border border-gray-300 bg-gray-700 px-3 py-2 text-sm focus:ring-1 focus:outline-none"
-            onclick="toggleDropdown(event)"
-          >
-            Select tags
-            <ArrowSVG class="size-3 text-gray-300" />
-          </button>
+    <div class="flex flex-col items-center gap-4">
+      <div>
+        <button
+          id="dropdown-button"
+          class="focus:border-accent focus:ring-accent flex min-w-[200px] items-center justify-between rounded-md border border-gray-300 bg-gray-700 px-3 py-2 text-sm focus:ring-1 focus:outline-none"
+          onclick="toggleDropdown(event)"
+        >
+          Select tags
+          <ArrowSVG class="size-3 text-gray-300" />
+        </button>
 
-          <div id="dropdown-menu" class="absolute hidden min-w-[200px] rounded-md border border-gray-500 bg-gray-900">
-            {
-              allTags.map((tag) => (
-                <button
-                  class="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-700"
-                  onclick={`toggleTag('${tag}')`}
-                  data-tag={tag}
-                >
-                  {tag}
-                  {tags.includes(tag) && <CheckmarkSVG id="checkmark" class="text-accent h-4 w-4" />}
-                </button>
-              ))
-            }
-          </div>
-        </div>
-
-        <div id="selected-tags" class="flex flex-wrap gap-2">
+        <div id="dropdown-menu" class="absolute hidden min-w-[200px] rounded-md border border-gray-500 bg-gray-900">
           {
-            tags.map((tag) => (
-              <span
-                class="bg-accent flex items-center gap-1 rounded-full px-3 py-1 text-white"
-                onclick={`removeTag('${tag}')`}
+            allTags.map((tag) => (
+              <button
+                class="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-700"
+                onclick={`toggleTag('${tag}')`}
+                data-tag={tag}
               >
                 {tag}
-              </span>
+                {tags.includes(tag) && <CheckmarkSVG id="checkmark" class="text-accent h-4 w-4" />}
+              </button>
             ))
           }
         </div>
       </div>
 
-      <p class="text-center">
+      <div id="selected-tags" class="flex flex-wrap gap-2">
         {
-          filteredPosts.length > 0
-            ? `Showing ${filteredPosts.length} post${filteredPosts.length > 1 ? "s" : ""}`
-            : "No posts found."
-        }
-      </p>
-
-      <section class="flex max-w-4xl flex-col items-center justify-around gap-12">
-        {
-          filteredPosts.map((post) => (
-            <article class="flex w-full flex-col">
-              <p class="text-accent text-sm">{readingTime(post.body ?? "").text}</p>
-              <a href={`/blog/${post.id}/`}>
-                <h2 class="text-2xl font-bold">{post.data.title}</h2>
-              </a>
-              <p class="pt-2 text-sm">
-                <FormattedDate date={post.data.pubDate} />
-              </p>
-            </article>
+          tags.map((tag) => (
+            <span
+              class="bg-accent flex items-center gap-1 rounded-full px-3 py-1 text-white"
+              onclick={`removeTag('${tag}')`}
+            >
+              {tag}
+            </span>
           ))
         }
-      </section>
+      </div>
+    </div>
 
-      <Footer />
-    </main>
-  </body>
-</html>
+    <p class="text-center">
+      {
+        filteredPosts.length > 0
+          ? `Showing ${filteredPosts.length} post${filteredPosts.length > 1 ? "s" : ""}`
+          : "No posts found."
+      }
+    </p>
+
+    <section class="flex max-w-4xl flex-col items-center justify-around gap-12">
+      {
+        filteredPosts.map((post) => (
+          <article class="flex w-full flex-col">
+            <p class="text-accent text-sm">{readingTime(post.body ?? "").text}</p>
+            <a href={`/blog/${post.id}/`}>
+              <h2 class="text-2xl font-bold">{post.data.title}</h2>
+            </a>
+            <p class="pt-2 text-sm">
+              <FormattedDate date={post.data.pubDate} />
+            </p>
+          </article>
+        ))
+      }
+    </section>
+  </main>
+</DefaultPage>
 
 <script is:inline>
   // Initialize selected tags from URL

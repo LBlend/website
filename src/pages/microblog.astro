@@ -1,27 +1,18 @@
 ---
 export const prerender = false;
 
-import BaseHead from "@components/BaseHead.astro";
-import Header from "@sections/Header.astro";
-import Footer from "@sections/Footer.astro";
+import DefaultPage from "@layouts/DefaultPage.astro";
+
 import MicroblogComponent from "@sections/Microblog.astro";
 
 import { SITE_TITLE } from "src/consts";
 ---
 
-<html lang="en">
-  <head>
-    <BaseHead
-      title=`Microblog - ${SITE_TITLE}`
-      description="Short posts. Nobody likes Twitter, so I made my own version of it."
-    />
-  </head>
-
-  <body>
-    <Header />
-    <main class="flex flex-col items-center justify-center">
-      <MicroblogComponent />
-    </main>
-    <Footer />
-  </body>
-</html>
+<DefaultPage
+  title={`Microblog - ${SITE_TITLE}`}
+  description="Short posts. Nobody likes Twitter, so I made my own version of it."
+>
+  <main>
+    <MicroblogComponent />
+  </main>
+</DefaultPage>
