@@ -47,7 +47,7 @@ const filteredPosts =
             allTags.map((tag) => (
               <button
                 class="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-700"
-                onclick={`toggleTag('${tag}')`}
+                id="tag-button"
                 data-tag={tag}
               >
                 {tag}
@@ -63,7 +63,8 @@ const filteredPosts =
           tags.map((tag) => (
             <span
               class="bg-accent flex items-center gap-1 rounded-full px-3 py-1 text-white"
-              onclick={`removeTag('${tag}')`}
+              id="selected-tag"
+              data-tag={tag}
             >
               {tag}
             </span>
@@ -184,5 +185,19 @@ const filteredPosts =
   // Initialize UI
   document.addEventListener("DOMContentLoaded", () => {
     updateSelectedTagsUI();
+
+    document.querySelectorAll("#tag-button").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        const tag = e.currentTarget.getAttribute("data-tag");
+        if (tag) toggleTag(tag);
+      });
+    });
+
+    document.querySelectorAll("#selected-tag").forEach((span) => {
+      span.addEventListener("click", (e) => {
+        const tag = e.currentTarget.getAttribute("data-tag");
+        if (tag) removeTag(tag);
+      });
+    });
   });
 </script>
