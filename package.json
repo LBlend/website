@@ -11,6 +11,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.2.4",
     "@astrojs/node": "^9.2.2",
     "@astrojs/rss": "^4.0.11",
@@ -19,7 +20,8 @@
     "astro": "^5.7.4",
     "date-fns": "^4.1.0",
     "reading-time": "^1.5.0",
-    "tailwindcss": "^4.1.4"
+    "tailwindcss": "^4.1.4",
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
