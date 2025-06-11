@@ -54,9 +54,9 @@ const discordMdToHtml = (post: MicroblogMessage) => {
       case "blockQuote":
         return `<blockquote>${node.content.map((c: any) => processNode(c)).join("")}</blockquote>`;
       case "inlineCode":
-        return `<code class="inline-code">${node.content}</code>`;
+        return `<code>${node.content}</code>`;
       case "codeBlock":
-        return `<pre class="code-block"><code>${node.content}</code></pre>`;
+        return `<pre><code>${node.content}</code></pre>`;
       default:
         return "";
     }

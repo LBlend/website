@@ -3,19 +3,19 @@
 .discord h1 {
   @apply text-3xl;
   @apply font-bold;
-  @apply mb-2;
+  @apply mb-4;
 }
 
 .discord h2 {
   @apply text-2xl;
   @apply font-bold;
-  @apply mb-2;
+  @apply mb-3;
 }
 
 .discord h3 {
   @apply text-xl;
   @apply font-bold;
-  @apply mb-2;
+  @apply mb-1;
 }
 
 .discord p {
@@ -59,8 +59,8 @@
   @apply px-1;
 }
 
-.discord .inline-code,
-.discord .code-block {
+.discord code,
+.discord pre {
   @apply bg-[#383844];
   @apply rounded;
   @apply font-mono;
@@ -69,7 +69,13 @@
   @apply border-[#4A4B56];
 }
 
-.discord .code-block {
+.discord pre code {
+  @apply bg-transparent;
+  @apply border-0;
+  @apply p-0;
+}
+
+.discord pre {
   @apply p-2;
 }
 
