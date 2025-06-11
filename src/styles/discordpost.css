@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+h1 {
+  @apply text-3xl;
+  @apply font-bold;
+  @apply mb-2;
+}
+
+h2 {
+  @apply text-2xl;
+  @apply font-bold;
+  @apply mb-2;
+}
+
+h3 {
+  @apply text-xl;
+  @apply font-bold;
+  @apply mb-2;
+}
+
+p {
+  @apply text-lg;
+  @apply leading-relaxed;
+  @apply mb-1;
+  @apply leading-8;
+}
+
+a {
+  @apply text-[#6A92C7];
+}
+a:hover {
+  @apply text-[#4A6FA5];
+}
+
+ul {
+  @apply list-disc;
+  @apply pl-5;
+  @apply mb-4;
+}
+
+ol {
+  @apply list-decimal;
+  @apply pl-5;
+  @apply mb-4;
+}
+
+li {
+  @apply mb-2;
+}
+
+blockquote {
+  @apply border-l-4;
+  @apply border-[#605F64];
+  @apply pl-4;
+  @apply not-italic;
+  @apply text-lg;
+}
+
+.spoiler {
+  @apply bg-[#7b7c84];
+  @apply text-transparent;
+  @apply cursor-pointer;
+  @apply rounded;
+}
+
+.spoiler:hover {
+  @apply bg-[#414249];
+  @apply text-inherit;
+}
+
+.channel,
+.user {
+  @apply bg-[#41446C];
+  @apply font-bold;
+  @apply px-1;
+}
+
+.inline-code,
+.code-block {
+  @apply bg-[#383844];
+  @apply rounded;
+  @apply font-mono;
+  @apply text-base;
+  @apply border-1;
+  @apply border-[#4A4B56];
+}
+
+.code-block {
+  @apply p-2;
+}
+
+.subtext {
+  @apply text-[#7b7c84];
+  @apply text-sm;
+  @apply mb-2;
+}

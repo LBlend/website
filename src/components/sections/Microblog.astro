@@ -1,5 +1,9 @@
 ---
 import { type MicroblogMessage } from "@api/microblog/discord";
+import { parse } from "discord-markdown-parser";
+
+import "@styles/discordpost.css";
+
 const discordData = await fetch(new URL("/api/microblog/discord", Astro.url));
 const discordPosts = await discordData.json();
 
@@ -9,8 +13,56 @@ if (numberOfPosts && discordPosts.length > numberOfPosts) {
   discordPosts.length = numberOfPosts;
 }
 
-const stylePostConent = (post: MicroblogMessage) => {
-  return post.content;
+// TODO: Add list support
+const discordMdToHtml = (post: MicroblogMessage) => {
+  const ast = parse(post.content, "extended");
+
+  const processNode = (node: any): string => {
+    switch (node.type) {
+      case "text":
+        return node.content;
+      case "strong":
+        return `<strong>${node.content.map((c: any) => processNode(c)).join("")}</strong>`;
+      case "em":
+        return `<em>${node.content.map((c: any) => processNode(c)).join("")}</em>`;
+      case "strikethrough":
+        return `<del>${node.content.map((c: any) => processNode(c)).join("")}</del>`;
+      case "spoiler":
+        return `<span class="spoiler">${node.content.map((c: any) => processNode(c)).join("")}</span>`;
+      case "channel":
+        return `<span class="channel">#${node.id}</span>`;
+      case "user":
+        return `<span class="user">@${node.id}</span>`;
+      case "url":
+        return `<a href="${node.target}" target="_blank" rel="noopener noreferrer">${node.content.map((c: any) => processNode(c)).join("")}</a>`;
+      case "link":
+        return `<a href="${node.target}" target="_blank" rel="noopener noreferrer">${node.content.map((c: any) => processNode(c)).join("")}</a>`;
+      case "br":
+        return "<br>";
+      case "twemoji":
+        return node.name;
+      case "emoji":
+        const emoji = post.emojis?.find((e) => e.id === node.id);
+        if (emoji) {
+          return `<img src="${emoji.url}" alt="${emoji.name}" class="inline-block h-5 w-5" />`;
+        }
+        return `:${node.name}:`;
+      case "heading":
+        return `<h${node.level}>${node.content.map((c: any) => processNode(c)).join("")}</h${node.level}>`;
+      case "subtext":
+        return `<span class="subtext">${node.content.map((c: any) => processNode(c)).join("")}</span>`;
+      case "blockQuote":
+        return `<blockquote>${node.content.map((c: any) => processNode(c)).join("")}</blockquote>`;
+      case "inlineCode":
+        return `<code class="inline-code">${node.content}</code>`;
+      case "codeBlock":
+        return `<pre class="code-block"><code>${node.content}</code></pre>`;
+      default:
+        return "";
+    }
+  };
+
+  return ast.map((node) => processNode(node)).join("");
 };
 ---
 
@@ -35,13 +87,13 @@ const stylePostConent = (post: MicroblogMessage) => {
               <author class="font-bold" style={`color: ${post.author.color}`}>
                 {post.author.globalName}
               </author>
-              <p class="text-sm text-[#96979e]">
+              <time class="text-sm text-[#96979e]">
                 {new Date(post.timestamp).toLocaleDateString()},{" "}
                 {new Date(post.timestamp).toLocaleTimeString().replace(/:\d{2} /, " ")}
-              </p>
+              </time>
             </div>
             {/* Content */}
-            <p class="break-words text-[#dddee0]">{stylePostConent(post)}</p>
+            <p class="break-words text-[#dddee0]" set:html={discordMdToHtml(post)} />
             {/* Attachments */}
             {post.attachments && post.attachments.length > 0 && (
               <div class="mt-2 grid grid-cols-2 gap-1 md:grid-cols-3 [&>*:first-child:nth-child(odd)]:col-span-2 md:[&>*:first-child:nth-child(odd)]:col-span-1">
