@@ -98,7 +98,7 @@ export const GET: APIRoute = async () => {
     const channelId = import.meta.env.DISCORD_BLOG_CHANNEL_ID;
 
     // Fetch messages
-    const messagesResponse = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages?limit=50`, {
+    const messagesResponse = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
       headers: {
         Authorization: `Bot ${discordToken}`,
       },
