@@ -1,54 +1,38 @@
 @import "tailwindcss";
 
-h1 {
+.discord h1 {
   @apply text-3xl;
   @apply font-bold;
   @apply mb-2;
 }
 
-h2 {
+.discord h2 {
   @apply text-2xl;
   @apply font-bold;
   @apply mb-2;
 }
 
-h3 {
+.discord h3 {
   @apply text-xl;
   @apply font-bold;
   @apply mb-2;
 }
 
-p {
+.discord p {
   @apply text-lg;
   @apply leading-relaxed;
   @apply mb-1;
   @apply leading-8;
 }
 
-a {
+.discord a {
   @apply text-[#6A92C7];
 }
-a:hover {
+.discord a:hover {
   @apply text-[#4A6FA5];
 }
 
-ul {
-  @apply list-disc;
-  @apply pl-5;
-  @apply mb-4;
-}
-
-ol {
-  @apply list-decimal;
-  @apply pl-5;
-  @apply mb-4;
-}
-
-li {
-  @apply mb-2;
-}
-
-blockquote {
+.discord blockquote {
   @apply border-l-4;
   @apply border-[#605F64];
   @apply pl-4;
@@ -56,27 +40,27 @@ blockquote {
   @apply text-lg;
 }
 
-.spoiler {
+.discord .spoiler {
   @apply bg-[#7b7c84];
   @apply text-transparent;
   @apply cursor-pointer;
   @apply rounded;
 }
 
-.spoiler:hover {
+.discord .spoiler:hover {
   @apply bg-[#414249];
   @apply text-inherit;
 }
 
-.channel,
-.user {
+.discord .channel,
+.discord .user {
   @apply bg-[#41446C];
   @apply font-bold;
   @apply px-1;
 }
 
-.inline-code,
-.code-block {
+.discord .inline-code,
+.discord .code-block {
   @apply bg-[#383844];
   @apply rounded;
   @apply font-mono;
@@ -85,11 +69,11 @@ blockquote {
   @apply border-[#4A4B56];
 }
 
-.code-block {
+.discord .code-block {
   @apply p-2;
 }
 
-.subtext {
+.discord .subtext {
   @apply text-[#7b7c84];
   @apply text-sm;
   @apply mb-2;

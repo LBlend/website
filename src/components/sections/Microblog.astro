@@ -77,7 +77,7 @@ const discordMdToHtml = (post: MicroblogMessage) => {
 
     {
       discordPosts.map((post: MicroblogMessage) => (
-        <article class="flex items-start gap-4 md:gap-6">
+        <article class="discord flex items-start gap-4 md:gap-6">
           {/* Avatar */}
           <img src={post.author.avatarUrl} alt={post.author.globalName} class="h-12 w-12 shrink-0 rounded-full" />
           <div class="min-w-0 flex-1">
