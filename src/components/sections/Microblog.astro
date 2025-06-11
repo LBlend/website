@@ -1,5 +1,6 @@
 ---
 import { type MicroblogMessage } from "@api/microblog/discord";
+import { Image } from "astro:assets";
 import { parse } from "discord-markdown-parser";
 
 import "@styles/discordpost.css";
@@ -79,7 +80,14 @@ const discordMdToHtml = (post: MicroblogMessage) => {
       discordPosts.map((post: MicroblogMessage) => (
         <article class="discord flex items-start gap-4 md:gap-6">
           {/* Avatar */}
-          <img src={post.author.avatarUrl} alt={post.author.globalName} class="h-12 w-12 shrink-0 rounded-full" />
+          <Image
+            src={post.author.avatarUrl}
+            alt={post.author.globalName}
+            loading="lazy"
+            width={48}
+            height={48}
+            class="h-12 w-12 shrink-0 rounded-full"
+          />
           <div class="min-w-0 flex-1">
             {/* Author and Timestamp */}
             <div class="flex items-center gap-2">
@@ -101,7 +109,13 @@ const discordMdToHtml = (post: MicroblogMessage) => {
                   <div class="aspect-square overflow-hidden rounded-lg">
                     {attachment.contentType?.startsWith("image/") && (
                       <a href={attachment.url} target="_blank" rel="noopener noreferrer">
-                        <img src={attachment.url} alt={attachment.filename} class="h-full w-full object-cover" />
+                        <Image
+                          src={attachment.url}
+                          alt={attachment.filename}
+                          width={256}
+                          height={256}
+                          class="h-full w-full object-cover"
+                        />
                       </a>
                     )}
                     {attachment.contentType?.startsWith("video/") && (
