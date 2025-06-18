@@ -26,12 +26,9 @@ const data = await getAllStats();
       <Stat stat={data.wakatime.programmingHours} text="Programming" suffix=" hours" decimalPlaces={0} />
     </div>
   </div>
-  <div>
-    <p class="text-center font-light italic">
-      This is only what I've been able to track.
-      <br />
-      Take it with a grain of salt.
-    </p>
+  <div class="text-center font-light italic">
+    <p>This is only what I've been able to track.</p>
+    <p>Take the numbers with a grain of salt.</p>
   </div>
 </section>
 
