@@ -4,6 +4,5 @@ services:
     container_name: furumo-website
     ports:
       - "4321:4321"
-    environment:
-      - NODE_ENV=production
-      - PORT=4321
+    env_file:
+      - .env
