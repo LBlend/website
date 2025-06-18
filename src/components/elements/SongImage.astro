@@ -3,34 +3,40 @@ const { artist, track } = Astro.props;
 import PlaceholderSongImage from "@assets/images/placeholder_song.jpg";
 import { Image } from "astro:assets";
 
-const params = new URLSearchParams({
-  method: "track.getInfo",
-  format: "json",
-  api_key: import.meta.env.LASTFM_API_KEY || "",
-  artist: artist,
-  track: track,
-  username: import.meta.env.LASTFM_USERNAME || "",
-});
+let imageSrc = PlaceholderSongImage;
+let altText = `Cover for ${track}`;
 
-const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
-  method: "GET",
-  cache: "force-cache",
-});
+try {
+  const params = new URLSearchParams({
+    method: "track.getInfo",
+    format: "json",
+    api_key: import.meta.env.LASTFM_API_KEY || "",
+    artist: artist,
+    track: track,
+    username: import.meta.env.LASTFM_USERNAME || "",
+  });
 
-if (!res.ok) {
-  throw new Error(`Failed to fetch track info for ${artist} - ${track}`);
+  const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
+    method: "GET",
+    cache: "force-cache",
+  });
+
+  if (res.ok) {
+    const trackData = await res.json();
+    const images = trackData?.track?.album?.image || [];
+    const mediumImage = images.find((img: { size: string }) => img.size === "medium")?.["#text"];
+    if (mediumImage) {
+      imageSrc = mediumImage;
+    }
+    if (trackData?.track?.name) {
+      altText = `Cover for ${trackData.track.name}`;
+    }
+  } else {
+    console.warn(`Failed to fetch track info for ${artist} - ${track}: ${res.status} ${res.statusText}`);
+  }
+} catch (error) {
+  console.warn(`Error fetching track info for ${artist} - ${track}:`, error);
 }
-const trackData = await res.json();
-
-const images = trackData?.track?.album?.image || [];
-const mediumImage = images.find((img: { size: string }) => img.size === "medium")?.["#text"];
-const imageSrc = mediumImage || PlaceholderSongImage;
 ---
 
-<Image
-  src={imageSrc}
-  alt={`Cover for ${trackData.track.name}`}
-  width={64}
-  height={64}
-  class="min-h-64px min-w-64px rounded-sm"
-/>
+<Image src={imageSrc} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
