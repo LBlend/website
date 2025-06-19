@@ -1,12 +1,11 @@
 ---
-import { type MicroblogMessage } from "@api/microblog/discord";
+import { type MicroblogMessage, getDiscordMessages } from "@api/microblog/discord";
 import { Image } from "astro:assets";
 import { parse } from "discord-markdown-parser";
 
 import "@styles/discordpost.css";
 
-const discordData = await fetch(new URL("/api/microblog/discord", Astro.url));
-const discordPosts = await discordData.json();
+const discordPosts = await getDiscordMessages();
 
 const { numberOfPosts } = Astro.props;
 const totalNumberOfPosts = discordPosts.length;

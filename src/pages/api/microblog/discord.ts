@@ -82,16 +82,11 @@ function isDiscordRole(role: unknown): role is DiscordRole {
   );
 }
 
-export const GET: APIRoute = async () => {
+export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
   try {
     const discordToken = import.meta.env.DISCORD_BOT_TOKEN;
     if (!discordToken) {
-      return new Response(JSON.stringify({ error: "Discord bot token not configured" }), {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      throw new Error("Discord bot token not configured");
     }
 
     const guildId = import.meta.env.DISCORD_GUILD_ID;
@@ -144,7 +139,7 @@ export const GET: APIRoute = async () => {
     const members = await membersResponse.json();
     const memberMap = new Map(members.map((member: DiscordMember) => [member.user.id, member]));
 
-    const formattedMessages: DiscordMessage[] = messages.map((msg: DiscordMessage) => {
+    const formattedMessages: MicroblogMessage[] = messages.map((msg: DiscordMessage) => {
       const avatarUrl = msg.author.avatar
         ? `https://cdn.discordapp.com/avatars/${msg.author.id}/${msg.author.avatar}.png`
         : `https://cdn.discordapp.com/embed/avatars/0.png`;
@@ -205,6 +200,17 @@ export const GET: APIRoute = async () => {
       };
     });
 
+    return formattedMessages;
+  } catch (error) {
+    console.error("Error fetching Discord messages:", error);
+    throw error;
+  }
+}
+
+export const GET: APIRoute = async () => {
+  try {
+    const formattedMessages = await getDiscordMessages();
+
     return new Response(JSON.stringify(formattedMessages), {
       status: 200,
       headers: {
@@ -212,7 +218,6 @@ export const GET: APIRoute = async () => {
       },
     });
   } catch (error) {
-    console.error("Error fetching Discord messages:", error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Failed to fetch Discord messages" }),
       {
