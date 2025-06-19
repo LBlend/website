@@ -1,15 +1,10 @@
 @import "tailwindcss";
 
-main {
-  width: calc(100% - 2em);
-  @apply max-w-full;
-}
-
 .prose {
-  max-width: calc(100% - 2em);
-  @apply w-[720px];
+  @apply max-w-[60ch];
   @apply m-auto;
   @apply p-2;
+  word-break: break-word;
 }
 
 .title {
