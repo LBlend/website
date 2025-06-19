@@ -4,7 +4,6 @@ My personal website. As of writing this, it features a blog, microblog (twitter 
 
 ![image](https://github.com/user-attachments/assets/2538d893-acbc-45ae-8fdd-b6404a9eb6cd)
 
-
 The site is based on the blog template provided by AstroJS. You can do so yourself by running the command below:
 
 ```sh
@@ -26,6 +25,8 @@ All commands are run from the root of the project, from a terminal:
 | `npm run format`          | Ensure the code follows code style requirements  |
 | `npm run format:check`    | Same as above but without writing any changes    |
 | `npm run check`           | Check for any Astro/TypeScript errors            |
+
+Make sure to create a `.env` file based on the [env.example](env.example) provided. If not set some parts of the website may fail.
 
 ## Credit
 
