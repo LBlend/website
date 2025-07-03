@@ -5,8 +5,9 @@ interface OsuData {
 }
 
 let osuToken: string | null = null;
+let osuTokenExpiry: number | null = null; // Unix timestamp in ms
 
-async function getOsuToken(): Promise<string | null> {
+async function getOsuToken(): Promise<{ token: string | null; expiry: number | null }> {
   const res = await fetch(`${import.meta.env.OSU_URL}oauth/token`, {
     method: "POST",
     headers: {
@@ -23,17 +24,24 @@ async function getOsuToken(): Promise<string | null> {
 
   if (!res.ok) {
     console.error("Failed to fetch osu! token", res.status, res.statusText);
-    return null;
+    return { token: null, expiry: null };
   }
 
   const data = await res.json();
-  return data.access_token;
+  const expiry = Date.now() + data.expires_in * 1000 - 60000; // 1 min early to be safe
+  return { token: data.access_token, expiry };
+}
+
+async function ensureValidToken() {
+  if (!osuToken || !osuTokenExpiry || Date.now() >= osuTokenExpiry) {
+    const { token, expiry } = await getOsuToken();
+    osuToken = token;
+    osuTokenExpiry = expiry;
+  }
 }
 
 export async function getOsuData(): Promise<OsuData> {
-  if (!osuToken) {
-    osuToken = await getOsuToken();
-  }
+  await ensureValidToken();
 
   const res = await fetch(`${import.meta.env.OSU_URL}api/v2/users/${import.meta.env.OSU_USER_ID}/osu?key=id`, {
     method: "GET",
