@@ -6,6 +6,7 @@ export const prerender = false;
 // I just want to commit this for now
 
 import type { APIRoute } from "astro";
+import cache from "@api/_cache";
 
 interface DiscordAttachment {
   filename: string | null;
@@ -83,6 +84,9 @@ function isDiscordRole(role: unknown): role is DiscordRole {
 }
 
 export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
+  const cacheKey = "discordMessages";
+  const cached = cache.get<MicroblogMessage[]>(cacheKey);
+  if (cached) return cached;
   try {
     const discordToken = import.meta.env.DISCORD_BOT_TOKEN;
     if (!discordToken) {
@@ -200,6 +204,7 @@ export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
       };
     });
 
+    cache.set(cacheKey, formattedMessages, 2 * 60 * 1000); // 2 minutes
     return formattedMessages;
   } catch (error) {
     console.error("Error fetching Discord messages:", error);

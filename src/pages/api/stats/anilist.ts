@@ -1,10 +1,16 @@
 export const prerender = false;
 
+import cache from "@api/_cache";
+
 interface AnilistData {
   animeDaysWatched: number;
 }
 
 export async function getAnilistData(): Promise<AnilistData> {
+  const cacheKey = "anilistData";
+  const cached = cache.get<AnilistData>(cacheKey);
+  if (cached) return cached;
+
   const query = `query($name: String) {
             User(name: $name) {
                 statistics {
@@ -36,7 +42,9 @@ export async function getAnilistData(): Promise<AnilistData> {
   }
 
   const data = await res.json();
-  return { animeDaysWatched: data.data.User.statistics.anime.minutesWatched / 1440 };
+  const result = { animeDaysWatched: data.data.User.statistics.anime.minutesWatched / 1440 };
+  cache.set(cacheKey, result, 12 * 60 * 60 * 1000); // 12 hours
+  return result;
 }
 
 export async function GET() {

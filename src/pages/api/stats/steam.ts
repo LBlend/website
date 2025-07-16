@@ -1,10 +1,16 @@
 export const prerender = false;
 
+import cache from "@api/_cache";
+
 interface SteamData {
   gamingHours: number; // in hours
 }
 
 export async function getSteamData(): Promise<SteamData> {
+  const cacheKey = "steamData";
+  const cached = cache.get<SteamData>(cacheKey);
+  if (cached) return cached;
+
   const queryParams = new URLSearchParams({
     key: import.meta.env.STEAM_API_KEY || "",
     steamid: import.meta.env.STEAM_USER_ID || "",
@@ -28,7 +34,9 @@ export async function getSteamData(): Promise<SteamData> {
     return acc;
   }, 0);
 
-  return { gamingHours: totalGamingHours / 60 };
+  const result = { gamingHours: totalGamingHours / 60 };
+  cache.set(cacheKey, result, 12 * 60 * 60 * 1000); // 12 hours
+  return result;
 }
 
 export async function GET() {

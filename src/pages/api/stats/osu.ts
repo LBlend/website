@@ -7,6 +7,8 @@ interface OsuData {
 let osuToken: string | null = null;
 let osuTokenExpiry: number | null = null; // Unix timestamp in ms
 
+import cache from "@api/_cache";
+
 async function getOsuToken(): Promise<{ token: string | null; expiry: number | null }> {
   const res = await fetch(`${import.meta.env.OSU_URL}oauth/token`, {
     method: "POST",
@@ -41,6 +43,9 @@ async function ensureValidToken() {
 }
 
 export async function getOsuData(): Promise<OsuData> {
+  const cacheKey = "osuData";
+  const cached = cache.get<OsuData>(cacheKey);
+  if (cached) return cached;
   await ensureValidToken();
 
   const res = await fetch(`${import.meta.env.OSU_URL}api/v2/users/${import.meta.env.OSU_USER_ID}/osu?key=id`, {
@@ -58,7 +63,9 @@ export async function getOsuData(): Promise<OsuData> {
   }
 
   const data = await res.json();
-  return { playTime: data.statistics.play_time / 3600 };
+  const result = { playTime: data.statistics.play_time / 3600 };
+  cache.set(cacheKey, result, 12 * 60 * 60 * 1000); // 12 hours
+  return result;
 }
 
 export async function GET() {

@@ -1,10 +1,16 @@
 export const prerender = false;
 
+import cache from "@api/_cache";
+
 interface WakatimeData {
   programmingHours: number; // in hours
 }
 
 export async function getWakatimeData(): Promise<WakatimeData> {
+  const cacheKey = "wakatimeData";
+  const cached = cache.get<WakatimeData>(cacheKey);
+  if (cached) return cached;
+
   const res = await fetch(
     `${import.meta.env.WAKATIME_URL}users/@${import.meta.env.WAKATIME_USERNAME}/all_time_since_today`,
     {
@@ -21,7 +27,9 @@ export async function getWakatimeData(): Promise<WakatimeData> {
   }
 
   const data = await res.json();
-  return { programmingHours: data.data.total_seconds / 3600 };
+  const result = { programmingHours: data.data.total_seconds / 3600 };
+  cache.set(cacheKey, result, 12 * 60 * 60 * 1000); // 12 hours
+  return result;
 }
 
 export async function GET() {
