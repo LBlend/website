@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import { formatDistance } from "date-fns";
 
+import cache from "@api/_cache";
 import Song from "@elements/Song.astro";
 
 export interface LastFMResponse {
@@ -60,24 +61,57 @@ export interface Streamable {
 }
 
 async function getLovedTracks(): Promise<LastFMResponse> {
-  const params = new URLSearchParams({
-    method: "user.getlovedtracks",
-    format: "json",
-    api_key: import.meta.env.LASTFM_API_KEY || "",
-    user: "goatcream",
-  });
+  const cacheKey = "lastfmTracks";
+  const cached = cache.get<LastFMResponse>(cacheKey);
+  if (cached) return cached;
 
-  const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
-    method: "GET",
-    cache: "force-cache",
-  });
+  const emptyResponse = {
+    lovedtracks: {
+      track: [],
+      "@attr": { perPage: "0", totalPages: "0", page: "0", total: "0", user: "" },
+    },
+  };
 
-  if (!res.ok) {
-    console.error("Failed to fetch loved tracks", res.status, res.statusText);
-    return { lovedtracks: { track: [], "@attr": { perPage: "0", totalPages: "0", page: "0", total: "0", user: "" } } };
+  try {
+    const apiKey = import.meta.env.LASTFM_API_KEY;
+    if (!apiKey) {
+      console.warn("LastFM API key not configured");
+      return emptyResponse;
+    }
+
+    const params = new URLSearchParams({
+      method: "user.getlovedtracks",
+      format: "json",
+      api_key: apiKey,
+      user: "goatcream",
+    });
+
+    // Add timeout to the fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+    const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
+      method: "GET",
+      cache: "force-cache",
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      console.warn("Failed to fetch loved tracks", res.status, res.statusText);
+      return emptyResponse;
+    }
+
+    const data = await res.json();
+
+    // Cache for 10 minutes
+    cache.set(cacheKey, data, 10 * 60 * 1000);
+    return data;
+  } catch (error) {
+    console.warn("LastFM API error:", error);
+    return emptyResponse;
   }
-
-  return await res.json();
 }
 
 const data = await getLovedTracks();
