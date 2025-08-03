@@ -28,7 +28,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "src/consts";
       <Hero />
       <ArrowDown />
     </div>
-    <div id="main" class="grid grid-cols-3 gap-8 px-2 pt-8 lg:auto-rows-fr">
+    <div id="main" class="grid grid-cols-3 gap-8 px-2 pt-8 lg:auto-rows-fr lg:items-start">
       <main class="col-span-3 flex flex-col flex-wrap gap-18 lg:col-span-2">
         <Intro />
         <BlogList />
@@ -37,7 +37,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "src/consts";
         <RecentlyLikedMedia />
       </main>
       <aside
-        class="inner-scrollbar bg-backgroundlight max-h-vh col-span-3 mx-4 my-18 flex flex-col flex-wrap gap-6 overflow-y-auto rounded-2xl shadow-lg/40 lg:col-span-1 lg:mx-0 lg:my-0"
+        class="inner-scrollbar bg-backgroundlight col-span-3 mx-4 my-18 flex flex-col flex-wrap gap-6 overflow-y-auto rounded-2xl shadow-lg/40 lg:sticky lg:top-8 lg:col-span-1 lg:mx-0 lg:my-0 lg:max-h-full lg:self-start"
       >
         <RecentlyLikedSongs />
       </aside>
@@ -50,31 +50,54 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "src/consts";
 </html>
 
 <script>
-  // set max height of recently liked songs section to same height as main section
-  // this is probably possible using CSS but I couldn't figure it out
-  // major skill issue
+  // Set max height of recently liked songs section to match main section height
   const mainSection = document.querySelector("main");
   const recentlyLikedSongsSection = document.querySelector("aside");
 
   function updateRecentlyLikedSongsHeight() {
     if (mainSection && recentlyLikedSongsSection) {
-      // check if mobile view
       if (window.innerWidth > 1024) {
-        recentlyLikedSongsSection.style.maxHeight = `${mainSection.clientHeight}px`;
+        const mainHeight = mainSection.offsetHeight;
+        recentlyLikedSongsSection.style.maxHeight = `${mainHeight}px`;
       } else {
         recentlyLikedSongsSection.style.maxHeight = `${window.innerHeight * 0.9}px`;
       }
     }
   }
 
-  // Initial height update
-  updateRecentlyLikedSongsHeight();
+  // Wait for all content to load, then set height
+  function initializeHeight() {
+    setTimeout(() => {
+      updateRecentlyLikedSongsHeight();
+      // Try again in case of slow loading content
+      setTimeout(updateRecentlyLikedSongsHeight, 1000);
+    }, 100);
+  }
 
-  // Add resize event listener
+  // Use Intersection Observer to detect when main content is visible and settled
+  if (mainSection) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setTimeout(updateRecentlyLikedSongsHeight, 100);
+        }
+      });
+    });
+    observer.observe(mainSection);
+  }
+
+  // Initial setup
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeHeight);
+  } else {
+    initializeHeight();
+  }
+
+  // Handle window resize
   window.addEventListener("resize", updateRecentlyLikedSongsHeight);
 
-  // Clean up event listener when component is destroyed
-  document.addEventListener("astro:before-swap", () => {
-    window.removeEventListener("resize", updateRecentlyLikedSongsHeight);
+  // Also try after page load
+  window.addEventListener("load", () => {
+    setTimeout(updateRecentlyLikedSongsHeight, 100);
   });
 </script>
