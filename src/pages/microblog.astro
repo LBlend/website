@@ -4,14 +4,9 @@ export const prerender = false;
 import DefaultPage from "@layouts/DefaultPage.astro";
 
 import MicroblogComponent from "@sections/Microblog.astro";
-
-import { SITE_TITLE } from "src/consts";
 ---
 
-<DefaultPage
-  title={`Microblog - ${SITE_TITLE}`}
-  description="Short posts. Nobody likes Twitter, so I made my own version of it."
->
+<DefaultPage title="Microblog" description="Short posts. Nobody likes Twitter, so I made my own version of it.">
   <main>
     <MicroblogComponent />
   </main>
