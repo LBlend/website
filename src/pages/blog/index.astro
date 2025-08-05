@@ -12,7 +12,6 @@ import RssSubscribe from "@elements/RssSubscribe.astro";
 import readingTime from "reading-time";
 
 import { getCollection } from "astro:content";
-import { SITE_DESCRIPTION, SITE_TITLE } from "src/consts";
 
 const tags = Astro.url.searchParams.get("tags")?.split(",") || [];
 
@@ -26,7 +25,10 @@ const filteredPosts =
 ---
 
 <!doctype html>
-<DefaultPage title={SITE_TITLE} description={SITE_DESCRIPTION}>
+<DefaultPage
+  title="Blog"
+  description="A random collection of thoughts and ramblings. Probably sharing things I shouldn't be sharing."
+>
   <main class="flex flex-col items-center justify-center gap-16 px-2">
     <h1 class="text-4xl font-bold">Blog</h1>
     <RssSubscribe />
