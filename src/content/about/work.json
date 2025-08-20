@@ -1,0 +1,85 @@
+[
+  {
+    "company": "University of Oslo",
+    "url": "https://uio.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Teaching Assistant",
+        "description": "Lectured students and graded homework in the course IN2040 – Functional programming",
+        "type": "Part-time",
+        "isRelevant": true,
+        "start": "2022-08-15",
+        "end": "2022-12-30"
+      },
+      {
+        "name": "Head Engineer, IAM & Integrations",
+        "description": "",
+        "type": "Full-time",
+        "isRelevant": true,
+        "start": "2024-08-12",
+        "end": "2025-11-18"
+      }
+    ]
+  },
+  {
+    "company": "The Norwegian Tax Administration",
+    "url": "https://skatteetaten.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Engineer, Backend Developer",
+        "description": "Our team worked on making an internal search engine for advisors and support staff to aid their work. The project focused on using AI and various NLP techniques to achieve said goal. I mainly did development work on the backend but was also assigned to manage some of our Azure infrastructure and helping out my fellow summer interns getting their development environments set up",
+        "type": "Summer Internship, Full-time",
+        "isRelevant": true,
+        "start": "2022-06-13",
+        "end": "2022-08-07"
+      }
+    ]
+  },
+  {
+    "company": "Disputas",
+    "url": "https://disputas.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Software Engineer, Full Stack",
+        "description": "Full-time during summer followed by part-time work.\n\nWorked on Ponder - An application for logical analysis. I was responsible for modelling the database as well as developing an API for reading and writing analyses.\n\nIn addition to this I did some work on the frontend. I mostly worked on \"my page\"; A Google Drive-like interface enabling users to access, share and create analyses.",
+        "type": "Part-time",
+        "isRelevant": true,
+        "start": "2021-06-01",
+        "end": "2021-10-01"
+      }
+    ]
+  },
+  {
+    "company": "Meny Rasta",
+    "url": "https://meny.no/Finn-butikk/MENY-Rasta",
+    "image": "",
+    "roles": [
+      {
+        "name": "Grocery Store Worker",
+        "description": "",
+        "type": "Part-time",
+        "isRelevant": false,
+        "start": "2020-10-19",
+        "end": "2022-04-22"
+      }
+    ]
+  },
+  {
+    "company": "Skien Fritidspark",
+    "url": "https://skienfritidspark.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Lifeguard",
+        "description": "",
+        "type": "Summer job, Part-time",
+        "isRelevant": false,
+        "start": "2018-05-14",
+        "end": "2018-08-01"
+      }
+    ]
+  }
+]
