@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Driver's License AM & B",
+    "issuer": "Norwegian Public Roads Administration",
+    "date": "2018-09-27",
+    "image": "",
+    "proof": "",
+    "isRelevant": false
+  },
+  {
+    "name": "Drone Pilot License A1 & A3",
+    "issuer": "Civil Aviation Authority Norway",
+    "date": "2025-06-12",
+    "image": "",
+    "proof": "",
+    "isRelevant": false
+  }
+]
