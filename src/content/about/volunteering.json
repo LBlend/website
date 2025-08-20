@@ -1,0 +1,218 @@
+[
+  {
+    "org": "UiO Gaming",
+    "url": "https://uiogaming.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Board Member & Technical Manager",
+        "description": "In addition to serving as board member, I was as a technical manager I was responsible for development and maintainence of the associations' software and servers",
+        "start": "2021-02-19",
+        "end": "2021-09-21"
+      },
+      {
+        "name": "Deputy Leader & Technical Manager",
+        "description": "The deputy leader executes the role of leader in cases of absence. They are the secretary at board meetings and are responsible for organizing the general assembly. As a technical manager I was responsible for development and maintainence of the associations' software and servers",
+        "start": "2021-09-21",
+        "end": "2022-02-23"
+      },
+      {
+        "name": "Board Member & Technical Manager",
+        "description": "In addition to serving as a board member, I was as a technical manager I was responsible for development and maintainence of the associations' software and servers",
+        "start": "2022-02-23",
+        "end": "2022-09-21"
+      },
+      {
+        "name": "Helper (non-official)",
+        "description": "Helping out with maintainence and development of IT systems as well as other miscellaneous tasks",
+        "start": "2022-09-21",
+        "end": ""
+      }
+    ]
+  },
+  {
+    "org": "The Nowegian Student Society",
+    "url": "https://neuf.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Ledelsen",
+        "description": "Ledelsen ensures that all day-to-day operations at The Norwegian Student Society are run smoothly and decides how tasks are to be completed.",
+        "start": "2025-01-01",
+        "end": ""
+      },
+      {
+        "name": "Intergruppa",
+        "description": "Intergruppa is responsible for the social life across associations at The Norwegian Student Society",
+        "start": "2025-02-05",
+        "end": ""
+      }
+    ]
+  },
+  {
+    "org": "EDB-gjengen",
+    "url": "https://edb.neuf.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Leader",
+        "description": "EDB-gjengen is responsible for IT at The Norwegian Students' Society. Tasks include development of new systems, managing and maintaining networks and servers as well as miscellaneous other IT-related matters.",
+        "start": "2025-01-17",
+        "end": ""
+      }
+    ]
+  },
+  {
+    "org": "Cybernetisk Selskab",
+    "url": "https://cyb.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Bartender",
+        "description": "",
+        "start": "2022-02-01",
+        "end": "2022-08-01"
+      },
+      {
+        "name": "Barista",
+        "description": "",
+        "start": "2022-02-01",
+        "end": "2022-12-01"
+      },
+      {
+        "name": "Lead Bartender",
+        "description": "Managed the other bartenders during the shift, and was responsible for conflict resolution as well as upholding national alcohol laws",
+        "start": "2022-09-01",
+        "end": "2022-12-01"
+      },
+      {
+        "name": "Barista",
+        "description": "",
+        "start": "2023-09-01",
+        "end": "2023-12-01"
+      }
+    ]
+  },
+  {
+    "org": "IFI Navet",
+    "url": "https://ifinavet.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Volunteer",
+        "description": "Helped out in the web department, which included assessing what to",
+        "start": "2022-02-01",
+        "end": "2022-08-01"
+      }
+    ]
+  },
+  {
+    "org": "Fagultvaget ved Institutt for Informatikk",
+    "url": "https://ififui.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Representative - Tilsettingsutvalget",
+        "description": "Reviewed hiring reports at the Department of Informatics (University of Oslo)",
+        "start": "2022-03-01",
+        "end": "2023-03-01"
+      },
+      {
+        "name": "Representative - Utdanningsutvalget (Deputy)",
+        "description": "Represented students at the Department of Informatics' (University of Oslo) monthly strategy meetings",
+        "start": "2022-03-01",
+        "end": "2023-03-01"
+      }
+    ]
+  },
+  {
+    "org": "SIFI: Sikkerhet på IFI",
+    "url": "https://sifi.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Board Member",
+        "description": "",
+        "start": "2023-09-01",
+        "end": "2024-02-01"
+      }
+    ]
+  },
+  {
+    "org": "IFI-LI:ST",
+    "url": "https://www.mn.uio.no/ifi/livet-rundt-studiene/organisasjoner/list.html",
+    "image": "",
+    "roles": [
+      {
+        "name": "Board Member",
+        "description": "",
+        "start": "2022-09-01",
+        "end": "2022-12-01"
+      }
+    ]
+  },
+  {
+    "org": "Øyafestivalen",
+    "url": "https://www.oyafestivalen.no/",
+    "image": "",
+    "roles": [
+      {
+        "name": "IT, Networking",
+        "description": "Network equipment installation",
+        "start": "2024-08-03",
+        "end": "2022-08-10"
+      }
+    ]
+  },
+  {
+    "org": "JavaZone",
+    "url": "https://javazone.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Volunteer",
+        "description": "",
+        "start": "2022-09-06",
+        "end": "2022-09-08"
+      }
+    ]
+  },
+  {
+    "org": "dagen@ifi",
+    "url": "https://www.dagenatifi.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Volunteer",
+        "description": "",
+        "start": "2022-09-23",
+        "end": "2022-09-23"
+      }
+    ]
+  },
+  {
+    "org": "University of Oslo",
+    "url": "https://uio.no",
+    "image": "",
+    "roles": [
+      {
+        "name": "Buddy, Buddy program",
+        "description": "",
+        "start": "2021-08-16",
+        "end": "2021-08-20"
+      },
+      {
+        "name": "Buddy, Buddy program",
+        "description": "",
+        "start": "2022-08-15",
+        "end": "2022-08-19"
+      },
+      {
+        "name": "Buddy, Buddy program (International students)",
+        "description": "",
+        "start": "2024-01-29",
+        "end": "2024-02-02"
+      }
+    ]
+  }
+]
