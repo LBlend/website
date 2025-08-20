@@ -1,0 +1,170 @@
+[
+  {
+    "school": "University of Oslo",
+    "degree": "Bachelor's Degree",
+    "field": "Informatics (CompSci)",
+    "start": "2020-08-10",
+    "end": "2024-06-04",
+    "description": "Hand-picked bachelor's degree in STEM. I focused on computer science\nhttps://www.mn.uio.no/studier/programmer/fritt-sammensatt-bachelorgrad-realfag.html",
+    "isRelevant": true,
+    "courses": [
+      {
+        "code": "IN1000",
+        "name": "Introduction to Object-oriented Programming",
+        "ects": 10,
+        "semester": 1,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN1000/index-eng.html"
+      },
+      {
+        "code": "IN1020",
+        "name": "Introduction to Computer Technology",
+        "ects": 10,
+        "semester": 1,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN1020/index-eng.html"
+      },
+      {
+        "code": "IN1140",
+        "name": "Introduction to Language Technology",
+        "ects": 10,
+        "semester": 1,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN1140/index-eng.html"
+      },
+      {
+        "code": "IN1010",
+        "name": "Object-oriented Programming",
+        "ects": 10,
+        "semester": 2,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN1010/index-eng.html"
+      },
+      {
+        "code": "IN1030",
+        "name": "Systems, Requirements and Consequences",
+        "ects": 10,
+        "semester": 2,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN1030/index-eng.html"
+      },
+      {
+        "code": "IN2040",
+        "name": "Functional Programming",
+        "ects": 10,
+        "semester": 3,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN2040/index-eng.html"
+      },
+      {
+        "code": "IN2090",
+        "name": "Databases and Data Modelling",
+        "ects": 10,
+        "semester": 3,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN2090/index-eng.html"
+      },
+      {
+        "code": "IN2120",
+        "name": "Information Security",
+        "ects": 10,
+        "semester": 3,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN2120/index-eng.html"
+      },
+      {
+        "code": "EXPHIL03",
+        "name": "Examen Philosophicum",
+        "ects": 10,
+        "semester": 4,
+        "link": "https://www.uio.no/studier/emner/hf/ifikk/EXPHIL03/index-eng.html"
+      },
+      {
+        "code": "AST1010",
+        "name": "Astronomy - a Cosmic Journey",
+        "ects": 10,
+        "semester": 4,
+        "link": "https://www.uio.no/studier/emner/matnat/astro/AST1010/index-eng.html"
+      },
+      {
+        "code": "IN2000",
+        "name": "Software Engineering with Project Work",
+        "ects": 20,
+        "semester": 4,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN2000/index-eng.html"
+      },
+      {
+        "code": "LING1111",
+        "name": "Phonetics & Phonology 1",
+        "ects": 10,
+        "semester": 5,
+        "link": "https://www.uio.no/studier/emner/hf/iln/LING1111/index-eng.html"
+      },
+      {
+        "code": "IN2010",
+        "name": "Algorithms and Data Structures",
+        "ects": 10,
+        "semester": 5,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN2010/index-eng.html"
+      },
+      {
+        "code": "IN3110",
+        "name": "Problem Solving with High-Level Languages",
+        "ects": 10,
+        "semester": 5,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN3110/index-eng.html"
+      },
+      {
+        "code": "IN3240",
+        "name": "Software Testing",
+        "ects": 10,
+        "semester": 7,
+        "link": "https://www.uio.no/studier/emner/matnat/ifi/IN3240/index-eng.html"
+      }
+    ]
+  },
+  {
+    "school": "Yonsei Univeristy",
+    "degree": "Exchange Semester",
+    "field": "",
+    "start": "2023-03-02",
+    "end": "2023-06-21",
+    "description": "",
+    "isRelevant": true,
+    "courses": [
+      {
+        "code": "KLI1001",
+        "name": "Intensive Korean Language Level 1",
+        "ects": 12,
+        "semester": 6,
+        "link": ""
+      },
+      {
+        "code": "ECO1103",
+        "name": "Principles of Microeconomics",
+        "ects": 6,
+        "semester": 6,
+        "link": ""
+      },
+      {
+        "code": "CSI4119",
+        "name": "Multicore and GPU Programming",
+        "ects": 6,
+        "semester": 6,
+        "link": ""
+      }
+    ]
+  },
+  {
+    "school": "Lillestrøm Upper Secondary School",
+    "degree": "",
+    "field": "Specialization in General Studies, Languages, Social Sciences and Economics",
+    "start": "2018-08-01",
+    "end": "2020-06-22",
+    "description": "",
+    "isRelevant": false,
+    "courses": []
+  },
+  {
+    "school": "Mailand Upper Secondary School",
+    "degree": "",
+    "field": "Media and Communication",
+    "start": "2016-08-01",
+    "end": "2018-06-22",
+    "description": "",
+    "isRelevant": false,
+    "courses": []
+  }
+]
