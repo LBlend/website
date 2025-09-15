@@ -1,0 +1,157 @@
+---
+const { data } = Astro.props;
+---
+
+<div>
+  <div class="flex flex-col">
+    <label>
+      <input type="checkbox" id="bestTimesToggle" checked />
+      <span>Only show personal bests</span>
+    </label>
+    <label>
+      <input type="checkbox" id="showPartialsToggle" checked />
+      <span>Show partial distances</span>
+    </label>
+  </div>
+
+  <div class="overflow-x-auto">
+    <div id="wrapper" class="text-xs sm:text-sm md:text-base"></div>
+  </div>
+</div>
+
+<link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+<script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+
+<script define:vars={{ data }}>
+  function initTable() {
+    if (typeof window.gridjs === "undefined") {
+      setTimeout(initTable, 100);
+      return;
+    }
+
+    const { Grid } = window.gridjs;
+    let gridInstance = null;
+
+    function formatTime(seconds) {
+      const totalSeconds = parseFloat(seconds);
+      const minutes = Math.floor(totalSeconds / 60);
+      const remainingSeconds = totalSeconds % 60;
+
+      if (minutes > 0) {
+        return `${minutes}:${remainingSeconds.toFixed(2).padStart(5, "0")}`;
+      }
+
+      return remainingSeconds.toFixed(2);
+    }
+
+    // Convert to data types
+    const processedData = data.map((row) => [
+      parseFloat(row[0]), // Distance
+      row[1], // Stroke
+      parseFloat(row[2]), // Time (keep as number for sorting)
+      row[3], // Date
+      row[4], // City
+      row[5], // Country
+      parseInt(row[6]), // Pool Length
+      parseInt(row[7]), // IsPartialDistance (0 or 1)
+    ]);
+
+    function filterPartials(data, showPartials) {
+      if (showPartials) return data;
+      return data.filter((row) => row[7] === 0);
+    }
+
+    function getBestTimes(data) {
+      const bestTimes = {};
+
+      data.forEach((row) => {
+        const distance = row[0];
+        const stroke = row[1];
+        const time = row[2];
+        const key = `${distance}-${stroke}`;
+
+        if (!bestTimes[key] || time < bestTimes[key].time) {
+          bestTimes[key] = {
+            time: time,
+            row: row,
+          };
+        }
+      });
+
+      return Object.values(bestTimes).map((item) => item.row);
+    }
+
+    function createGrid(showBestOnly = true, showPartials = true) {
+      let dataToShow = processedData;
+
+      dataToShow = filterPartials(dataToShow, showPartials);
+      if (showBestOnly) {
+        dataToShow = getBestTimes(dataToShow);
+      }
+
+      const columns = [
+        {
+          name: "Distance",
+          formatter: (cell) => `${cell}m`,
+        },
+        "Stroke",
+        {
+          name: "Time",
+          formatter: (cell) => formatTime(cell),
+        },
+        "Date",
+        "City",
+        "Country",
+        {
+          name: "Pool Length",
+          formatter: (cell) => `${cell}m`,
+        },
+      ];
+
+      // Only add Partial Distance column if showing partials
+      if (showPartials) {
+        columns.push({
+          name: "Partial Distance?",
+          formatter: (cell) => (cell === 1 ? "Yes" : ""),
+        });
+      }
+      // Adjust data to match columns
+      const adjustedData = showPartials ? dataToShow : dataToShow.map((row) => row.slice(0, 7)); // Remove last column (Partial Distance)
+
+      // Destroy existing grid if it exists
+      if (gridInstance) {
+        gridInstance.destroy();
+      }
+
+      gridInstance = new Grid({
+        columns: columns,
+        data: adjustedData,
+        sort: true,
+        search: true,
+        pagination: { enabled: true, limit: 20 },
+        search: {
+          enabled: true,
+        },
+      });
+
+      gridInstance.render(document.getElementById("wrapper"));
+    }
+
+    // Initial render
+    createGrid(true, true);
+
+    const bestTimesToggle = document.getElementById("bestTimesToggle");
+    const showPartialsToggle = document.getElementById("showPartialsToggle");
+    function updateGrid() {
+      createGrid(bestTimesToggle.checked, showPartialsToggle.checked);
+    }
+    bestTimesToggle.addEventListener("change", updateGrid);
+    showPartialsToggle.addEventListener("change", updateGrid);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTable);
+  } else {
+    initTable();
+  }
+</script>

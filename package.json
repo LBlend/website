@@ -21,6 +21,8 @@
     "astro": "^5.12.9",
     "date-fns": "^4.1.0",
     "discord-markdown-parser": "^1.2.0",
+    "gridjs": "^6.2.0",
+    "papaparse": "^5.5.3",
     "reading-time": "^1.5.0",
     "simple-markdown": "^0.7.3",
     "tailwindcss": "^4.1.4",
