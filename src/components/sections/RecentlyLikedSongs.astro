@@ -84,6 +84,7 @@ async function getLovedTracks(): Promise<LastFMResponse> {
       format: "json",
       api_key: apiKey,
       user: import.meta.env.LASTFM_USERNAME,
+      limit: 1000,
     });
 
     // Add timeout to the fetch request
