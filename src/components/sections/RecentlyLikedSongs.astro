@@ -83,7 +83,7 @@ async function getLovedTracks(): Promise<LastFMResponse> {
       method: "user.getlovedtracks",
       format: "json",
       api_key: apiKey,
-      user: "goatcream",
+      user: import.meta.env.LASTFM_USERNAME,
     });
 
     // Add timeout to the fetch request
@@ -95,6 +95,8 @@ async function getLovedTracks(): Promise<LastFMResponse> {
       cache: "force-cache",
       signal: controller.signal,
     });
+
+    console.log(res.url);
 
     clearTimeout(timeoutId);
 
