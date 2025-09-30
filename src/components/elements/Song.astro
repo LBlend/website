@@ -8,8 +8,8 @@ const { track } = Astro.props;
   <div class="flex items-center gap-4">
     <SongImage artist={track.artist.name} track={track.name} />
     <div class="overflow-hidden">
-      <p class="truncate font-bold">{track.name}</p>
-      <p class="truncate font-light">{track.artist.name}</p>
+      <p class="truncate font-bold" title={track.name}>{track.name}</p>
+      <p class="truncate font-light" title={track.artist.name}>{track.artist.name}</p>
     </div>
   </div>
 </article>
