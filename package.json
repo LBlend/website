@@ -18,7 +18,7 @@
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.3.0",
     "@tailwindcss/vite": "^4.1.4",
-    "astro": "^5.12.9",
+    "astro": "^5.14.3",
     "date-fns": "^4.1.0",
     "discord-markdown-parser": "^1.2.0",
     "gridjs": "^6.2.0",
