@@ -94,9 +94,8 @@ const discordMdToHtml = (post: MicroblogMessage) => {
               <author class="font-bold" style={`color: ${post.author.color}`}>
                 {post.author.globalName}
               </author>
-              <time class="text-sm text-[#96979e]">
-                {new Date(post.timestamp).toLocaleDateString()},{" "}
-                {new Date(post.timestamp).toLocaleTimeString().replace(/:\d{2} /, " ")}
+              <time class="text-sm text-[#96979e]" data-timestamp={post.timestamp}>
+                {new Date(post.timestamp).toISOString()}
               </time>
             </div>
             {/* Content */}
@@ -140,3 +139,21 @@ const discordMdToHtml = (post: MicroblogMessage) => {
     ) : null
   }
 </section>
+
+<script>
+  document.querySelectorAll("time[data-timestamp]").forEach((el) => {
+    const timestamp = el.getAttribute("data-timestamp");
+    if (timestamp) {
+      const date = new Date(timestamp);
+      const formatter = new Intl.DateTimeFormat(undefined, {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      });
+      el.textContent = formatter.format(date);
+    }
+  });
+</script>
