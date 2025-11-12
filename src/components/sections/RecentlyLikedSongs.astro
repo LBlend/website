@@ -97,8 +97,6 @@ async function getLovedTracks(): Promise<LastFMResponse> {
       signal: controller.signal,
     });
 
-    console.log(res.url);
-
     clearTimeout(timeoutId);
 
     if (!res.ok) {
