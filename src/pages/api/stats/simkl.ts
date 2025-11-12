@@ -23,6 +23,8 @@ export async function getSimklData(): Promise<SimklData> {
     cache: "force-cache",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${import.meta.env.SIMKL_CLIENT_SECRET}`,
+      "simkl-api-key": import.meta.env.SIMKL_CLIENT_ID,
     },
   });
 
