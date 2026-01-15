@@ -12,13 +12,13 @@
     "check": "astro check"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.5",
-    "@astrojs/mdx": "^4.3.11",
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/mdx": "^4.3.13",
     "@astrojs/node": "^9.5.1",
-    "@astrojs/rss": "^4.0.13",
-    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/rss": "^4.0.14",
+    "@astrojs/sitemap": "^3.6.1",
     "@tailwindcss/vite": "^4.1.4",
-    "astro": "^5.15.9",
+    "astro": "^5.16.9",
     "date-fns": "^4.1.0",
     "discord-markdown-parser": "^1.2.0",
     "gridjs": "^6.2.0",
