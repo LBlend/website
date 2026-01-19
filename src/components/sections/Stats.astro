@@ -17,7 +17,7 @@ const data = await getAllStats();
   <div class="flex flex-col items-center justify-center gap-2">
     <div class="flex flex-wrap items-center justify-center gap-12">
       <Stat stat={data.simkl.movies.completedCount} text="Movies Watched" decimalPlaces={0} />
-      <Stat stat={data.simkl.shows.completedCount} text="Series Watched" decimalPlaces={0} />
+      <Stat stat={data.simkl.shows.completedCount} text="Shows Watched" decimalPlaces={0} />
       <Stat stat={data.anilist.animeDaysWatched} text="Watching weeb trash" suffix=" days" decimalPlaces={1} />
     </div>
     <div class="mt-8 flex flex-wrap items-center justify-center gap-12">
