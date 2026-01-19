@@ -9,6 +9,7 @@ import node from "@astrojs/node";
 // https://astro.build/config
 export default defineConfig({
   site: "https://furumo.eu",
+  output: "server",
   integrations: [mdx(), sitemap()],
 
   vite: {
