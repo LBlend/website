@@ -22,3 +22,36 @@ const { title, description } = Astro.props;
     </div>
   </body>
 </html>
+
+<script>
+  // Fade-in animation on scroll
+  function initFadeIn() {
+    const fadeInObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -100px 0px",
+      },
+    );
+
+    // Observe all fade-in sections
+    document.querySelectorAll(".fade-in-section").forEach((section) => {
+      fadeInObserver.observe(section);
+    });
+  }
+
+  // Run immediately and after page transitions
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFadeIn);
+  } else {
+    initFadeIn();
+  }
+
+  document.addEventListener("astro:after-swap", initFadeIn);
+</script>

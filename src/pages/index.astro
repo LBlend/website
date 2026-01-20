@@ -30,19 +30,29 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "src/consts";
     </div>
     <div id="main" class="grid grid-cols-3 gap-8 px-2 pt-8 lg:auto-rows-fr lg:items-start">
       <main class="col-span-3 flex flex-col flex-wrap gap-18 lg:col-span-2">
-        <Intro />
-        <BlogList />
-        <VisitedPlaces />
-        <Microblog numberOfPosts={3} />
-        <RecentlyLikedMedia />
+        <div class="fade-in-section">
+          <Intro />
+        </div>
+        <div class="fade-in-section">
+          <BlogList />
+        </div>
+        <div class="fade-in-section">
+          <VisitedPlaces />
+        </div>
+        <div class="fade-in-section">
+          <Microblog numberOfPosts={3} />
+        </div>
+        <div class="fade-in-section">
+          <RecentlyLikedMedia />
+        </div>
       </main>
       <aside
-        class="inner-scrollbar bg-backgroundlight col-span-3 mx-4 my-18 flex flex-col flex-wrap gap-6 overflow-y-auto rounded-2xl shadow-lg/40 lg:sticky lg:top-8 lg:col-span-1 lg:mx-0 lg:my-0 lg:max-h-full lg:self-start"
+        class="fade-in-section inner-scrollbar bg-backgroundlight col-span-3 mx-4 my-18 flex flex-col flex-wrap gap-6 overflow-y-auto rounded-2xl shadow-lg/40 lg:sticky lg:top-8 lg:col-span-1 lg:mx-0 lg:my-0 lg:max-h-full lg:self-start"
       >
         <RecentlyLikedSongs />
       </aside>
     </div>
-    <section class="col-span-3 mt-18 flex flex-wrap justify-center gap-6">
+    <section class="fade-in-section col-span-3 mt-18 flex flex-wrap justify-center gap-6">
       <Stats />
     </section>
     <Footer />
@@ -100,4 +110,29 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "src/consts";
   window.addEventListener("load", () => {
     setTimeout(updateRecentlyLikedSongsHeight, 100);
   });
+
+  // Fade-in animation on scroll
+  function initIndexFadeIn() {
+    const fadeInObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -100px 0px",
+      },
+    );
+
+    // Observe all fade-in sections
+    document.querySelectorAll(".fade-in-section").forEach((section) => {
+      fadeInObserver.observe(section);
+    });
+  }
+
+  // Initialize fade-in
+  initIndexFadeIn();
 </script>

@@ -24,6 +24,8 @@ const data = parsed.data.map((row) => [
 <DefaultPage title="Swimming" description="All records of my competitive swimming participations">
   <main class="flex flex-col items-center justify-center gap-8 px-4">
     <h1 class="text-6xl font-bold">Swimming records</h1>
-    <SwimmingTable data={data} />
+    <div class="fade-in-section">
+      <SwimmingTable data={data} />
+    </div>
   </main>
 </DefaultPage>
