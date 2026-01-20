@@ -40,6 +40,7 @@ h2 {
   @apply font-bold;
   @apply mt-12;
   @apply mb-4;
+  scroll-margin-top: 2rem;
 }
 
 h3 {
@@ -47,6 +48,7 @@ h3 {
   @apply font-bold;
   @apply mt-8;
   @apply mb-2;
+  scroll-margin-top: 2rem;
 }
 
 h4 {
@@ -54,6 +56,7 @@ h4 {
   @apply font-bold;
   @apply mt-4;
   @apply mb-2;
+  scroll-margin-top: 2rem;
 }
 
 h5 {
@@ -61,6 +64,7 @@ h5 {
   @apply font-bold;
   @apply mt-2;
   @apply mb-1;
+  scroll-margin-top: 2rem;
 }
 
 h6 {
@@ -68,6 +72,7 @@ h6 {
   @apply font-bold;
   @apply mt-1;
   @apply mb-1;
+  scroll-margin-top: 2rem;
 }
 
 p {
