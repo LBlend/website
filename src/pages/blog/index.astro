@@ -75,7 +75,7 @@ const filteredPosts =
       </div>
     </div>
 
-    <p class="text-center">
+    <p class="fade-in-section text-center">
       {
         filteredPosts.length > 0
           ? `Showing ${filteredPosts.length} post${filteredPosts.length > 1 ? "s" : ""}`
@@ -86,7 +86,7 @@ const filteredPosts =
     <section class="flex max-w-4xl flex-col items-center justify-around gap-12">
       {
         filteredPosts.map((post) => (
-          <article class="flex w-full flex-col">
+          <article class="fade-in-section flex w-full flex-col">
             <p class="text-accent text-sm">{readingTime(post.body ?? "").text}</p>
             <a href={`/blog/${post.id}/`}>
               <h2 class="text-2xl font-bold">{post.data.title}</h2>
