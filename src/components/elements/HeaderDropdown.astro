@@ -1,0 +1,110 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {
+  label: string;
+}
+
+const { label, class: className, ...props } = Astro.props;
+---
+
+<div class:list={["dropdown relative inline-block", className]} {...props}>
+  <button class="dropdown-button cursor-pointer px-4 py-4" aria-haspopup="true" aria-expanded="false">
+    {label}
+    <svg
+      class="dropdown-icon transition-transform duration-200"
+      width="12"
+      height="12"
+      viewBox="0 0 12 8"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="gradient-pink-orange" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color: var(--gradient-pink-start)"></stop>
+          <stop offset="100%" style="stop-color: var(--gradient-pink-end)"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      ></path>
+    </svg>
+  </button>
+  <div
+    class="dropdown-menu bg-backgroundlight absolute right-0 min-w-48 rounded-lg border border-gray-700/30 text-right opacity-0 shadow-lg transition-all duration-200"
+    role="menu"
+  >
+    <slot />
+  </div>
+</div>
+
+<style>
+  .dropdown-button:hover .dropdown-icon path,
+  .dropdown.open .dropdown-icon path {
+    stroke: url(#gradient-pink-orange);
+  }
+
+  .dropdown.open .dropdown-icon {
+    transform: rotate(180deg);
+  }
+
+  .dropdown.open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .dropdown-menu :global(a) {
+    display: block;
+    padding-inline: 1rem !important;
+    padding-block: 0.75rem !important;
+    border-bottom: none !important;
+  }
+
+  .dropdown-menu :global(a.active) {
+    background-color: rgba(88, 88, 88, 0.1);
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  function setupDropdown() {
+    const dropdowns = document.querySelectorAll(".dropdown");
+
+    dropdowns.forEach((dropdown) => {
+      const button = dropdown.querySelector(".dropdown-button");
+      const menu = dropdown.querySelector(".dropdown-menu");
+
+      if (!button || !menu) return;
+
+      button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.contains("open");
+
+        // Close all other dropdowns
+        document.querySelectorAll(".dropdown.open").forEach((d) => {
+          if (d !== dropdown) {
+            d.classList.remove("open");
+            d.querySelector(".dropdown-button")?.setAttribute("aria-expanded", "false");
+          }
+        });
+
+        // Toggle this dropdown
+        dropdown.classList.toggle("open");
+        button.setAttribute("aria-expanded", isOpen ? "false" : "true");
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", () => {
+      document.querySelectorAll(".dropdown.open").forEach((dropdown) => {
+        dropdown.classList.remove("open");
+        dropdown.querySelector(".dropdown-button")?.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
+
+  // Run on initial load
+  setupDropdown();
+
+  // Re-run after view transitions
+  document.addEventListener("astro:after-swap", setupDropdown);
+</script>

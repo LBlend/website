@@ -3,6 +3,8 @@ import { Image } from "astro:assets";
 
 import meCartoon from "@assets/images/me_cartoon.svg";
 
+import HeaderDropdown from "@elements/HeaderDropdown.astro";
+import HeaderDropdownLink from "@elements/HeaderDropdownLink.astro";
 import HeaderLink from "@elements/HeaderLink.astro";
 ---
 
@@ -16,6 +18,10 @@ import HeaderLink from "@elements/HeaderLink.astro";
       <HeaderLink href="/blog">Blog</HeaderLink>
       <HeaderLink href="/photos">Photos</HeaderLink>
       <HeaderLink href="/about">About</HeaderLink>
+      <HeaderDropdown label="">
+        <HeaderDropdownLink href="/microblog">Microblog</HeaderDropdownLink>
+        <HeaderDropdownLink href="/swimming">Swimming Records</HeaderDropdownLink>
+      </HeaderDropdown>
     </div>
   </nav>
 </header>
