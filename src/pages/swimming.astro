@@ -1,13 +1,12 @@
 ---
-import fs from "fs";
 import Papa from "papaparse";
-import path from "path";
 
 import DefaultPage from "@layouts/DefaultPage.astro";
 
 import SwimmingTable from "@sections/SwimmingTable.astro";
 
-const csvFile = fs.readFileSync(path.resolve("./src/assets/swimming.csv"), "utf-8");
+import csvFile from "../assets/swimming.csv?raw";
+
 const parsed = Papa.parse(csvFile, { header: true, skipEmptyLines: true });
 const data = parsed.data.map((row) => [
   row.Distance,
