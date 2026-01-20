@@ -42,6 +42,14 @@ const { title, description } = Astro.props;
 
     // Observe all fade-in sections
     document.querySelectorAll(".fade-in-section").forEach((section) => {
+      // Check if element is already visible in viewport
+      const rect = section.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (isVisible) {
+        section.classList.add("is-visible");
+      }
+
       fadeInObserver.observe(section);
     });
   }
