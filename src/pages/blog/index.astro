@@ -44,7 +44,10 @@ const filteredPosts =
           <ArrowSVG class="size-3 text-gray-300" />
         </button>
 
-        <div id="dropdown-menu" class="absolute hidden min-w-[200px] rounded-md border border-gray-500 bg-gray-900">
+        <div
+          id="dropdown-menu"
+          class="absolute z-50 hidden min-w-[200px] rounded-md border border-gray-500 bg-gray-900"
+        >
           {
             allTags.map((tag) => (
               <button
