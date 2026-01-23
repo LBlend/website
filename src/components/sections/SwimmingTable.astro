@@ -52,6 +52,16 @@ const i18nData = JSON.stringify({
     const wrapper = document.getElementById("wrapper");
     const i18n = JSON.parse(wrapper?.dataset.i18n || "{}");
 
+    // Remove tabindex from th elements to fix accessibility audit warning
+    // Grid.js adds tabindex for sortable headers, but th elements should not have tabindex
+    // Use MutationObserver to catch any additions
+    const observer = new MutationObserver(() => {
+      wrapper.querySelectorAll("th[tabindex]").forEach((th) => {
+        th.removeAttribute("tabindex");
+      });
+    });
+    observer.observe(wrapper, { childList: true, subtree: true, attributes: true, attributeFilter: ["tabindex"] });
+
     function formatTime(seconds) {
       const totalSeconds = parseFloat(seconds);
       const minutes = Math.floor(totalSeconds / 60);
