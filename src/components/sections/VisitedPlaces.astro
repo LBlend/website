@@ -1,3 +1,12 @@
+---
+import { Image } from "astro:assets";
+
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+---
+
 <script is:inline>
   window.visitedplaces_config = {
     map: "world",
@@ -58,14 +67,18 @@
 </script>
 
 <section class="flex flex-col gap-4">
-  <h2 class="text-4xl font-bold">Visited Places</h2>
+  <h2 class="text-4xl font-bold">{t("visitedPlaces.title")}</h2>
   <p>
-    Like everyone else, I like traveling (shocking, I know). I have a far-fetched dream of visiting every country. Here
-    is a map to track my progress.
+    {t("visitedPlaces.description")}
   </p>
   <article id="chartdiv" class="h-[550px] w-full"></article>
   <a href="https://my.flightradar24.com/LBlend" class="mx-auto w-fit lg:mx-0"
-    ><img src="https://banners-my.flightradar24.com/LBlend.png" alt="My Flightdiary.net profile" /></a
+    ><Image
+      src="https://banners-my.flightradar24.com/LBlend.png"
+      alt="My Flightdiary.net profile"
+      width="320"
+      height="70"
+    /></a
   >
 </section>
 

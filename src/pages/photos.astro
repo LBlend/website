@@ -6,14 +6,20 @@ import type { CollectionEntry } from "astro:content";
 import DefaultPage from "@layouts/DefaultPage.astro";
 
 import PhotoAlbum from "@elements/PhotoAlbum.astro";
+import { useTranslations } from "@i18n/index";
 
 type Props = CollectionEntry<"blog">["data"];
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
+const subtitleLines = t("photos.subtitle").split("\n");
 ---
 
-<DefaultPage title="Photos" description="My photo albums">
+<DefaultPage title={t("photos.title")} description={t("photos.description")}>
   <main class="flex flex-col items-center justify-center gap-8 px-4">
-    <h1 class="text-6xl font-bold">Photos</h1>
-    <p class="text-center">Here are some of my photo albums<br />Because I'm too shy to post on Instagram</p>
+    <h1 class="text-6xl font-bold">{t("photos.title")}</h1>
+    <p class="text-center">{subtitleLines[0]}<br />{subtitleLines[1]}</p>
     <article class="fade-in-section flex flex-wrap items-center justify-center gap-12">
       <PhotoAlbum albumId="4b553c45-c802-431c-b0bf-1e29df40c3c6" />
       <PhotoAlbum albumId="73b640af-1f75-47a8-91cf-6e744b405b7d" />

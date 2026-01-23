@@ -1,21 +1,38 @@
 ---
+import { useTranslations } from "@i18n/index";
+
 const { data } = Astro.props;
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
+const i18nData = JSON.stringify({
+  distance: t("swimming.distance"),
+  stroke: t("swimming.stroke"),
+  time: t("swimming.time"),
+  date: t("swimming.date"),
+  city: t("swimming.city"),
+  country: t("swimming.country"),
+  poolLength: t("swimming.poolLength"),
+  partialDistance: t("swimming.partialDistance"),
+  yes: t("swimming.yes"),
+});
 ---
 
 <div>
   <div class="flex flex-col">
     <label>
       <input type="checkbox" id="bestTimesToggle" checked />
-      <span>Only show personal bests</span>
+      <span>{t("swimming.onlyBestTimes")}</span>
     </label>
     <label>
       <input type="checkbox" id="showPartialsToggle" checked />
-      <span>Show partial distances</span>
+      <span>{t("swimming.showPartials")}</span>
     </label>
   </div>
 
   <div class="overflow-x-auto">
-    <div id="wrapper" class="text-xs sm:text-sm md:text-base"></div>
+    <div id="wrapper" class="text-xs sm:text-sm md:text-base" data-i18n={i18nData}></div>
   </div>
 </div>
 
@@ -31,6 +48,9 @@ const { data } = Astro.props;
 
     const { Grid } = window.gridjs;
     let gridInstance = null;
+
+    const wrapper = document.getElementById("wrapper");
+    const i18n = JSON.parse(wrapper?.dataset.i18n || "{}");
 
     function formatTime(seconds) {
       const totalSeconds = parseFloat(seconds);
@@ -91,19 +111,19 @@ const { data } = Astro.props;
 
       const columns = [
         {
-          name: "Distance",
+          name: i18n.distance || "Distance",
           formatter: (cell) => `${cell}m`,
         },
-        "Stroke",
+        i18n.stroke || "Stroke",
         {
-          name: "Time",
+          name: i18n.time || "Time",
           formatter: (cell) => formatTime(cell),
         },
-        "Date",
-        "City",
-        "Country",
+        i18n.date || "Date",
+        i18n.city || "City",
+        i18n.country || "Country",
         {
-          name: "Pool Length",
+          name: i18n.poolLength || "Pool Length",
           formatter: (cell) => `${cell}m`,
         },
       ];
@@ -111,8 +131,8 @@ const { data } = Astro.props;
       // Only add Partial Distance column if showing partials
       if (showPartials) {
         columns.push({
-          name: "Partial Distance?",
-          formatter: (cell) => (cell === 1 ? "Yes" : ""),
+          name: i18n.partialDistance || "Partial Distance?",
+          formatter: (cell) => (cell === 1 ? i18n.yes || "Yes" : ""),
         });
       }
       // Adjust data to match columns

@@ -1,5 +1,10 @@
 ---
 import Rss from "@assets/icons/rss.svg";
+
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
 ---
 
 <a href="/rss.xml" target="_blank" class="non-styled-link link-button text-white">
@@ -7,6 +12,6 @@ import Rss from "@assets/icons/rss.svg";
     class="hover:bg-accent flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-white hover:border-transparent"
   >
     <Rss class="size-4" />
-    Subscribe
+    {t("blog.subscribe")}
   </button>
 </a>

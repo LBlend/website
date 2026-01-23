@@ -1,12 +1,17 @@
 ---
 import DefaultPage from "@layouts/DefaultPage.astro";
 import { Image } from "astro:assets";
+
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
 ---
 
-<DefaultPage title="About" description="An overview about me and my projects">
+<DefaultPage title={t("about.title")} description="An overview about me and my projects">
   <main class="fade-in-section flex flex-col items-center justify-center gap-8">
-    <h1 class="text-6xl font-bold">About</h1>
-    <p>Coming soon</p>
+    <h1 class="text-6xl font-bold">{t("about.title")}</h1>
+    <p>{t("about.comingSoon")}</p>
     <Image
       loading="eager"
       width={256}

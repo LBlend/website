@@ -6,6 +6,11 @@ import { parse } from "discord-markdown-parser";
 
 import "@styles/discordpost.css";
 
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
 const discordPosts = await getDiscordMessages();
 
 const { numberOfPosts } = Astro.props;
@@ -67,14 +72,14 @@ const discordMdToHtml = (post: MicroblogMessage) => {
 };
 ---
 
-<section class="grid grid-cols-1 gap-4 rounded-2xl bg-[#323339] py-6 shadow-lg/30">
+<section class="grid grid-cols-1 gap-4 rounded-2xl bg-[#323339] py-6 shadow-lg/30" data-locale={locale}>
   {/* Header */}
   <div class="border-b border-[#3e3f45] pb-4 pl-4 md:pl-10">
-    <h2 class="text-2xl text-[#dcdddf]"><span class="mr-4 text-[#9b9ca3]">#</span>microblog</h2>
+    <h2 class="text-2xl text-[#dcdddf]"><span class="mr-4 text-[#9b9ca3]">#</span>{t("microblog.title")}</h2>
   </div>
   {/* Posts */}
   <div class="flex flex-col gap-8 px-4 py-4 md:px-10">
-    {discordPosts.length === 0 && <p class="text-gray-400">No posts available.</p>}
+    {discordPosts.length === 0 && <p class="text-gray-400">{t("microblog.noPosts")}</p>}
 
     {
       discordPosts.map((post: MicroblogMessage) => (
@@ -135,26 +140,38 @@ const discordMdToHtml = (post: MicroblogMessage) => {
   {
     Astro.url.pathname !== "/microblog" && discordPosts.length > 0 && totalNumberOfPosts > numberOfPosts ? (
       <div class="mt-8 text-center">
-        <a href="/microblog">View all</a>
+        <a href="/microblog">{t("microblog.viewAll")}</a>
       </div>
     ) : null
   }
 </section>
 
 <script>
-  document.querySelectorAll("time[data-timestamp]").forEach((el) => {
-    const timestamp = el.getAttribute("data-timestamp");
-    if (timestamp) {
-      const date = new Date(timestamp);
-      const formatter = new Intl.DateTimeFormat(undefined, {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-      });
-      el.textContent = formatter.format(date);
-    }
-  });
+  function initMicroblogDates() {
+    const section = document.querySelector("section[data-locale]");
+    const siteLocale = section?.getAttribute("data-locale") || "en";
+
+    // Map site locale codes to BCP 47 language tags with region for full localization
+    const localeMap: Record<string, string> = { en: "en-US", no: "nb-NO", ko: "ko-KR" };
+    const locale = localeMap[siteLocale] || siteLocale;
+
+    document.querySelectorAll("time[data-timestamp]").forEach((el) => {
+      const timestamp = el.getAttribute("data-timestamp");
+      if (timestamp) {
+        const date = new Date(timestamp);
+        const formatter = new Intl.DateTimeFormat(locale, {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+        });
+        el.textContent = formatter.format(date);
+      }
+    });
+  }
+
+  initMicroblogDates();
+  document.addEventListener("astro:after-swap", initMicroblogDates);
 </script>

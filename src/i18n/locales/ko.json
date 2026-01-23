@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "home": "홈",
+    "blog": "블로그",
+    "photos": "사진",
+    "about": "소개",
+    "microblog": "마이크로블로그",
+    "swimming": "수영 기록"
+  },
+  "blog": {
+    "title": "블로그",
+    "description": "생각과 잡담의 무작위 모음.",
+    "selectTags": "태그 선택",
+    "showingPosts": "{count}개의 게시물 표시 중",
+    "showingPost": "{count}개의 게시물 표시 중",
+    "noPosts": "게시물 없음.",
+    "latestPosts": "최근 게시물",
+    "viewAllPosts": "모두 보기",
+    "subscribe": "구독"
+  },
+  "footer": {
+    "pgpKey": "PGP 키",
+    "copiedXmr": "XMR 복사 완료!",
+    "enableJs": "Javascript 활성화해 주세요. 지금은 현대예요! 데이터를 훔치는 데 사용하지 않겠어요 :)"
+  },
+  "intro": {
+    "ageText": "저는 노르웨이에서 온 {age}살 코드 몽키예요.",
+    "welcome": "제 웹사이트에 오신 것을 환영합니다! 여기서 저는 너무 많은 개인 정보를 기꺼이 공유해요.",
+    "passions": "저는 소프트웨어, 미디어, 음식 등 무엇이든 만드는 것을 좋아해요. 음식은 먹는 것을 더 좋아하지만요 :)\n항상 경험하고 배울 새로운 것이 있어요. 너무 많은 열정과 너무 적은 시간의 균형을 맞추려는 저와 함께하세요.",
+    "location": "현재 노르웨이 오슬로에 살아요",
+    "hopingChange": "하지만 미래에는 거주지를 바뀌는 것 바라요."
+  },
+  "visitedPlaces": {
+    "title": "방문한 곳",
+    "description": "다른 모든 사람들처럼 저도 여행을 좋아해요 (놀랍죠, 알아요). 모든 나라를 방문하겠다는 원대한 꿈이 있어요. 밑에 지금까지 방문한 곳 지도가 있어요."
+  },
+  "stats": {
+    "title": "통계",
+    "quote": "소비하는 것을 생활이다!",
+    "quoteAttribution": "- 저, 옛날 옛적에",
+    "disclaimer": "이것은 제가 추적할 수 있었던 것만이에요.\n숫자는 완전히 믿지 마세요.",
+    "moviesWatched": "본 영화",
+    "showsWatched": "본 시리즈",
+    "watchingAnime": "오타쿠 쓰레기 시청",
+    "playingGames": "Steam에서 게임 플레이",
+    "clickingCircles": "osu!에서 원 클릭",
+    "programming": "프로그래밍",
+    "days": "일",
+    "hours": "시간"
+  },
+  "microblog": {
+    "title": "마이크로블로그",
+    "noPosts": "게시물 없음",
+    "viewAll": "모두 보기"
+  },
+  "swimming": {
+    "title": "수영 기록",
+    "pageTitle": "수영",
+    "description": "경쟁 수영 참가 기록",
+    "onlyBestTimes": "개인 최고 기록만 표시",
+    "showPartials": "부분 거리 표시",
+    "distance": "거리",
+    "stroke": "영법",
+    "time": "시간",
+    "date": "날짜",
+    "city": "도시",
+    "country": "국가",
+    "poolLength": "수영장 길이",
+    "partialDistance": "부분 거리?",
+    "yes": "예"
+  },
+  "about": {
+    "title": "소개",
+    "comingSoon": "곧 공개"
+  },
+  "notFound": {
+    "title": "404: 찾을 수 없음!",
+    "message": "막다른 길에 도달했을 수도 있지만, 우리의 여정은 여기서 끝나지 않길 바라요 :)"
+  },
+  "common": {
+    "minRead": "{time} 읽기 시간"
+  },
+  "recentlyLikedSongs": {
+    "title": "최근에 좋아한 노래",
+    "fetchError": "노래를 로드하지 못했어요"
+  },
+  "photos": {
+    "title": "사진",
+    "description": "내 사진 앨범",
+    "subtitle": "여기 내 사진 앨범 몇 개가 있어요\n인스타그램에 올리기엔 너무 부끄러워서요"
+  }
+}

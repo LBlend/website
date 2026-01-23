@@ -6,6 +6,11 @@ import { getCollection } from "astro:content";
 import FormattedDate from "@elements/FormattedDate.astro";
 import RssSubscribe from "@elements/RssSubscribe.astro";
 
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
 const posts = await getCollection("blog");
 posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const latestPosts = posts.slice(0, 5);
@@ -13,7 +18,7 @@ const latestPosts = posts.slice(0, 5);
 
 <section class="blog-list flex flex-col gap-4">
   <div class="flex items-center justify-between">
-    <h2 class="text-4xl font-bold">Latest Posts</h2>
+    <h2 class="text-4xl font-bold">{t("blog.latestPosts")}</h2>
     <RssSubscribe />
   </div>
 
@@ -25,7 +30,7 @@ const latestPosts = posts.slice(0, 5);
             <FormattedDate date={post.data.pubDate} />
           </span>
           <span class="inline-block h-1 w-1 rounded bg-gray-500 opacity-75" />
-          <p>{readingTime(post.body ?? "").text}</p>
+          <p>{t("common.minRead", { time: Math.round(readingTime(post.body ?? "").minutes) + " min" })}</p>
         </div>
         <h3 class="text-xl font-extrabold">
           <a class="non-styled-link" href={`/blog/${post.id}`}>
@@ -35,5 +40,5 @@ const latestPosts = posts.slice(0, 5);
       </article>
     ))
   }
-  <a href="/blog" class="mt-4 w-fit"> View all posts </a>
+  <a href="/blog" class="mt-4 w-fit">{t("blog.viewAllPosts")}</a>
 </section>

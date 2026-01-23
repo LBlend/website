@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "home": "Home",
+    "blog": "Blog",
+    "photos": "Photos",
+    "about": "About",
+    "microblog": "Microblog",
+    "swimming": "Swimming Records"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "A random collection of thoughts and ramblings. Probably sharing things I shouldn't be sharing.",
+    "selectTags": "Select tags",
+    "showingPosts": "Showing {count} posts",
+    "showingPost": "Showing {count} post",
+    "noPosts": "No posts found.",
+    "latestPosts": "Latest Posts",
+    "viewAllPosts": "View all posts",
+    "subscribe": "Subscribe"
+  },
+  "footer": {
+    "pgpKey": "PGP Key",
+    "copiedXmr": "Copied XMR!",
+    "enableJs": "Please enable Javascript. We are living in CURRENT YEAR. I won't use it to steal your data :)"
+  },
+  "intro": {
+    "ageText": "I am a {age}-year-old code monkey from Norway.",
+    "welcome": "Welcome to my website, where I happily share too much information about myself for that sweet narcissistic fix.",
+    "passions": "I love making stuff, be it software, media or food. Though as for food I prefer eating it :)\nThere's always something new to explore, experience, and learn. Join me in trying to balance way too many passions with way too little time.",
+    "location": "Currently based in Oslo, Norway",
+    "hopingChange": "Though I'm hoping that will change in the future."
+  },
+  "visitedPlaces": {
+    "title": "Visited Places",
+    "description": "Like everyone else, I like traveling (shocking, I know). I have a far-fetched dream of visiting every country. Here is a map to track my progress."
+  },
+  "stats": {
+    "title": "Stats",
+    "quote": "I love consoooooming (consuming)",
+    "quoteAttribution": "- Me, insert year here",
+    "disclaimer": "This is only what I've been able to track.\nTake the numbers with a grain of salt.",
+    "moviesWatched": "Movies Watched",
+    "showsWatched": "Shows Watched",
+    "watchingAnime": "Watching weeb trash",
+    "playingGames": "Playing games on Steam",
+    "clickingCircles": "Clicking circles in osu!",
+    "programming": "Programming",
+    "days": " days",
+    "hours": " hours"
+  },
+  "microblog": {
+    "title": "microblog",
+    "noPosts": "No posts available.",
+    "viewAll": "View all"
+  },
+  "swimming": {
+    "title": "Swimming records",
+    "pageTitle": "Swimming",
+    "description": "All records of my competitive swimming participations",
+    "onlyBestTimes": "Only show personal bests",
+    "showPartials": "Show partial distances",
+    "distance": "Distance",
+    "stroke": "Stroke",
+    "time": "Time",
+    "date": "Date",
+    "city": "City",
+    "country": "Country",
+    "poolLength": "Pool Length",
+    "partialDistance": "Partial Distance?",
+    "yes": "Yes"
+  },
+  "about": {
+    "title": "About",
+    "comingSoon": "Coming soon"
+  },
+  "notFound": {
+    "title": "404: Not found!",
+    "message": "You may have reached a dead end, but hopefully our journey doesn't end here :)"
+  },
+  "common": {
+    "minRead": "{time} read"
+  },
+  "recentlyLikedSongs": {
+    "title": "Recently liked songs",
+    "fetchError": "Failed fetching songs"
+  },
+  "photos": {
+    "title": "Photos",
+    "description": "My photo albums",
+    "subtitle": "Here are some of my photo albums\nBecause I'm too shy to post on Instagram"
+  }
+}
