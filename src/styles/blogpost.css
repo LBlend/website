@@ -55,8 +55,7 @@
 
 /* Mobile TOC */
 .toc-mobile {
-  @apply mb-8 block rounded-lg border border-gray-700/30;
-  @apply bg-[#151522]; /* var(--backgroundlight) */
+  @apply mb-8 block overflow-hidden rounded-lg border border-gray-700/30;
 }
 
 @media (min-width: 1200px) {
@@ -67,6 +66,7 @@
 
 .toc-mobile summary {
   @apply flex cursor-pointer items-center justify-between px-4 py-4 font-semibold select-none;
+  @apply bg-gray-700/50;
 }
 
 .toc-mobile summary::-webkit-details-marker {
@@ -93,6 +93,7 @@
   transition:
     grid-template-rows 200ms,
     opacity 200ms;
+  @apply bg-[#151522]; /* var(--backgroundlight) */
 }
 
 .toc-mobile nav > ul {
