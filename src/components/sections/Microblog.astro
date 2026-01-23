@@ -1,5 +1,6 @@
 ---
 import { type MicroblogMessage, getDiscordMessages } from "@api/microblog/discord";
+import type { SingleASTNode } from "@khanacademy/simple-markdown";
 import { Image } from "astro:assets";
 import { parse } from "discord-markdown-parser";
 
@@ -17,26 +18,26 @@ if (numberOfPosts && discordPosts.length > numberOfPosts) {
 const discordMdToHtml = (post: MicroblogMessage) => {
   const ast = parse(post.content, "extended");
 
-  const processNode = (node: any): string => {
+  const processNode = (node: SingleASTNode): string => {
     switch (node.type) {
       case "text":
         return node.content;
       case "strong":
-        return `<strong>${node.content.map((c: any) => processNode(c)).join("")}</strong>`;
+        return `<strong>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</strong>`;
       case "em":
-        return `<em>${node.content.map((c: any) => processNode(c)).join("")}</em>`;
+        return `<em>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</em>`;
       case "strikethrough":
-        return `<del>${node.content.map((c: any) => processNode(c)).join("")}</del>`;
+        return `<del>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</del>`;
       case "spoiler":
-        return `<span class="spoiler">${node.content.map((c: any) => processNode(c)).join("")}</span>`;
+        return `<span class="spoiler">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</span>`;
       case "channel":
         return `<span class="channel">#${node.id}</span>`;
       case "user":
         return `<span class="user">@${node.id}</span>`;
       case "url":
-        return `<a href="${node.target}" target="_blank" rel="noopener noreferrer">${node.content.map((c: any) => processNode(c)).join("")}</a>`;
+        return `<a href="${node.target}" target="_blank" rel="noopener noreferrer">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</a>`;
       case "link":
-        return `<a href="${node.target}" target="_blank" rel="noopener noreferrer">${node.content.map((c: any) => processNode(c)).join("")}</a>`;
+        return `<a href="${node.target}" target="_blank" rel="noopener noreferrer">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</a>`;
       case "br":
         return "<br>";
       case "twemoji":
@@ -48,11 +49,11 @@ const discordMdToHtml = (post: MicroblogMessage) => {
         }
         return `:${node.name}:`;
       case "heading":
-        return `<h${node.level}>${node.content.map((c: any) => processNode(c)).join("")}</h${node.level}>`;
+        return `<h${node.level}>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</h${node.level}>`;
       case "subtext":
-        return `<span class="subtext">${node.content.map((c: any) => processNode(c)).join("")}</span>`;
+        return `<span class="subtext">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</span>`;
       case "blockQuote":
-        return `<blockquote>${node.content.map((c: any) => processNode(c)).join("")}</blockquote>`;
+        return `<blockquote>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</blockquote>`;
       case "inlineCode":
         return `<code>${node.content}</code>`;
       case "codeBlock":
