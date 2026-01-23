@@ -1,9 +1,18 @@
 ---
 import { localeNames, locales, type Locale } from "@i18n/index";
 
+import KoreaFlag from "@assets/icons/korea.svg";
 import LanguageIcon from "@assets/icons/language.svg";
+import NorwayFlag from "@assets/icons/norway.svg";
+import UkFlag from "@assets/icons/uk.svg";
 
 const currentLocale = Astro.locals.locale as Locale;
+
+const flagIcons: Record<Locale, ImageMetadata> = {
+  en: UkFlag,
+  no: NorwayFlag,
+  ko: KoreaFlag,
+};
 ---
 
 <style>
@@ -37,24 +46,30 @@ const currentLocale = Astro.locals.locale as Locale;
 
   <div
     id="lang-menu"
-    class="bg-backgroundlight absolute right-0 z-50 mt-1 min-w-32 rounded-lg border border-gray-700/30 shadow-lg transition-all duration-200"
+    class="bg-backgroundlight absolute right-0 z-50 mt-1 min-w-40 rounded-lg border border-gray-700/30 shadow-lg transition-all duration-200"
   >
     {
-      locales.map((locale) => (
-        <button
-          class={`flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left hover:bg-gray-700/20 ${
-            locale === currentLocale ? "bg-gray-700/10 font-bold" : ""
-          }`}
-          data-locale={locale}
-        >
-          {localeNames[locale]}
-          {locale === currentLocale && (
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-          )}
-        </button>
-      ))
+      locales.map((locale) => {
+        const FlagIcon = flagIcons[locale];
+        return (
+          <button
+            class={`flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left hover:bg-gray-700/20 ${
+              locale === currentLocale ? "bg-gray-700/10 font-bold" : ""
+            }`}
+            data-locale={locale}
+          >
+            <span class="flex items-center gap-2">
+              <FlagIcon class="h-4 w-5 rounded-sm" />
+              {localeNames[locale]}
+            </span>
+            {locale === currentLocale && (
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            )}
+          </button>
+        );
+      })
     }
   </div>
 </div>
