@@ -7,7 +7,18 @@ import SwimmingTable from "@sections/SwimmingTable.astro";
 
 import csvFile from "../assets/swimming.csv?raw";
 
-const parsed = Papa.parse(csvFile, { header: true, skipEmptyLines: true });
+interface SwimmingRecord {
+  Distance: number;
+  Stroke: string;
+  Time: number;
+  Date: Date;
+  City: string;
+  Country: string;
+  PoolLength: number;
+  IsPartialDistance: boolean;
+}
+
+const parsed = Papa.parse<SwimmingRecord>(csvFile, { header: true, skipEmptyLines: true });
 const data = parsed.data.map((row) => [
   row.Distance,
   row.Stroke,
