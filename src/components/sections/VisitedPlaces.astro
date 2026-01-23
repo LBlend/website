@@ -71,7 +71,7 @@ const t = useTranslations(locale);
   <p>
     {t("visitedPlaces.description")}
   </p>
-  <article id="chartdiv" class="h-[550px] w-full"></article>
+  <div id="chartdiv" class="h-[550px] w-full"></div>
   <a href="https://my.flightradar24.com/LBlend" class="mx-auto w-fit lg:mx-0"
     ><Image
       src="https://banners-my.flightradar24.com/LBlend.png"
@@ -84,3 +84,11 @@ const t = useTranslations(locale);
 
 <script is:inline src="https://www.visitedplaces.com/js/common.js"></script>
 <script is:inline src="https://www.visitedplaces.com/js/viewer.js"></script>
+<script is:inline>
+  // Clean up invalid ARIA roles added by visitedplaces scripts
+  requestAnimationFrame(() => {
+    document.querySelectorAll("#chartdiv [role]").forEach((el) => {
+      el.removeAttribute("role");
+    });
+  });
+</script>
