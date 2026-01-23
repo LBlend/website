@@ -1,177 +1,254 @@
 ---
-import { type MicroblogMessage, getDiscordMessages } from "@api/microblog/discord";
-import type { SingleASTNode } from "@khanacademy/simple-markdown";
-import { Image } from "astro:assets";
-import { parse } from "discord-markdown-parser";
-
-import "@styles/discordpost.css";
-
 import { useTranslations } from "@i18n/index";
+import "@styles/discordpost.css";
 
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
 
-const discordPosts = await getDiscordMessages();
-
 const { numberOfPosts } = Astro.props;
-const totalNumberOfPosts = discordPosts.length;
-if (numberOfPosts && discordPosts.length > numberOfPosts) {
-  discordPosts.length = numberOfPosts;
-}
-
-// TODO: Add list support
-const discordMdToHtml = (post: MicroblogMessage) => {
-  const ast = parse(post.content, "extended");
-
-  const processNode = (node: SingleASTNode): string => {
-    switch (node.type) {
-      case "text":
-        return node.content;
-      case "strong":
-        return `<strong>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</strong>`;
-      case "em":
-        return `<em>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</em>`;
-      case "strikethrough":
-        return `<del>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</del>`;
-      case "spoiler":
-        return `<span class="spoiler">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</span>`;
-      case "channel":
-        return `<span class="channel">#${node.id}</span>`;
-      case "user":
-        return `<span class="user">@${node.id}</span>`;
-      case "url":
-        return `<a href="${node.target}" target="_blank" rel="noopener noreferrer">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</a>`;
-      case "link":
-        return `<a href="${node.target}" target="_blank" rel="noopener noreferrer">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</a>`;
-      case "br":
-        return "<br>";
-      case "twemoji":
-        return node.name;
-      case "emoji":
-        const emoji = post.emojis?.find((e) => e.id === node.id);
-        if (emoji) {
-          return `<img src="${emoji.url}" alt="${emoji.name}" class="inline-block h-5 w-5" />`;
-        }
-        return `:${node.name}:`;
-      case "heading":
-        return `<h${node.level}>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</h${node.level}>`;
-      case "subtext":
-        return `<span class="subtext">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</span>`;
-      case "blockQuote":
-        return `<blockquote>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</blockquote>`;
-      case "inlineCode":
-        return `<code>${node.content}</code>`;
-      case "codeBlock":
-        return `<pre><code>${node.content}</code></pre>`;
-      default:
-        return "";
-    }
-  };
-
-  return ast.map((node) => processNode(node)).join("");
-};
 ---
 
-<section class="grid grid-cols-1 gap-4 rounded-2xl bg-[#323339] py-6 shadow-lg/30" data-locale={locale}>
-  {/* Header */}
+<section
+  class="grid grid-cols-1 gap-4 rounded-2xl bg-[#323339] py-6 shadow-lg/30"
+  data-locale={locale}
+  data-number-of-posts={numberOfPosts}
+>
+  <!-- Header -->
   <div class="border-b border-[#3e3f45] pb-4 pl-4 md:pl-10">
     <h2 class="text-2xl text-[#dcdddf]"><span class="mr-4 text-[#9b9ca3]">#</span>{t("microblog.title")}</h2>
   </div>
-  {/* Posts */}
-  <div class="flex flex-col gap-8 px-4 py-4 md:px-10">
-    {discordPosts.length === 0 && <p class="text-gray-400">{t("microblog.noPosts")}</p>}
-
+  <!-- Posts -->
+  <div id="microblog-container" class="flex flex-col gap-8 px-4 py-4 md:px-10">
+    <!-- Skeleton loading state -->
     {
-      discordPosts.map((post: MicroblogMessage) => (
+      Array.from({ length: numberOfPosts || 3 }).map(() => (
         <article class="discord flex items-start gap-4 md:gap-6">
-          {/* Avatar */}
-          <Image
-            src={post.author.avatarUrl}
-            alt={post.author.globalName}
-            loading="lazy"
-            width={48}
-            height={48}
-            class="h-12 w-12 shrink-0 rounded-full"
-          />
+          <div class="h-12 w-12 shrink-0 animate-pulse rounded-full bg-gray-600" />
           <div class="min-w-0 flex-1">
-            {/* Author and Timestamp */}
             <div class="flex items-center gap-2">
-              {/* Tailwind didn't work for some reason so inlinine styling it is */}
-              <author class="font-bold" style={`color: ${post.author.color}`}>
-                {post.author.globalName}
-              </author>
-              <time class="text-sm text-[#96979e]" data-timestamp={post.timestamp}>
-                {new Date(post.timestamp).toISOString()}
-              </time>
+              <div class="h-4 w-24 animate-pulse rounded bg-gray-600" />
+              <div class="h-3 w-32 animate-pulse rounded bg-gray-700" />
             </div>
-            {/* Content */}
-            <p class="wrap-break-words text-[#dddee0]" set:html={discordMdToHtml(post)} />
-            {/* Attachments */}
-            {post.attachments && post.attachments.length > 0 && (
-              <div class="mt-2 grid grid-cols-2 gap-1 md:grid-cols-3 [&>*:first-child:nth-child(odd)]:col-span-2 md:[&>*:first-child:nth-child(odd)]:col-span-1">
-                {post.attachments.map((attachment) => (
-                  <div class="aspect-square rounded-lg">
-                    {attachment.contentType?.startsWith("image/") && (
-                      <a href={attachment.url} target="_blank" rel="noopener noreferrer">
-                        <Image
-                          src={attachment.url}
-                          alt={attachment.filename}
-                          width={256}
-                          height={256}
-                          class="h-full w-full object-cover"
-                        />
-                      </a>
-                    )}
-                    {attachment.contentType?.startsWith("video/") && (
-                      <div class="relative aspect-square">
-                        <video src={attachment.url} controls class="absolute inset-0 h-full w-full object-contain" />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
+            <div class="mt-2 space-y-2">
+              <div class="h-4 w-full animate-pulse rounded bg-gray-700" />
+              <div class="h-4 w-3/4 animate-pulse rounded bg-gray-700" />
+            </div>
           </div>
         </article>
       ))
     }
   </div>
-  {/* View all link */}
-  {
-    Astro.url.pathname !== "/microblog" && discordPosts.length > 0 && totalNumberOfPosts > numberOfPosts ? (
-      <div class="mt-8 text-center">
-        <a href="/microblog">{t("microblog.viewAll")}</a>
-      </div>
-    ) : null
-  }
+  <!-- View all link placeholder -->
+  <div id="microblog-view-all" class="mt-8 hidden text-center">
+    <a href="/microblog">{t("microblog.viewAll")}</a>
+  </div>
 </section>
 
 <script>
-  function initMicroblogDates() {
-    const section = document.querySelector("section[data-locale]");
-    const siteLocale = section?.getAttribute("data-locale") || "en";
-
-    // Map site locale codes to BCP 47 language tags with region for full localization
-    const localeMap: Record<string, string> = { en: "en-US", no: "nb-NO", ko: "ko-KR" };
-    const locale = localeMap[siteLocale] || siteLocale;
-
-    document.querySelectorAll("time[data-timestamp]").forEach((el) => {
-      const timestamp = el.getAttribute("data-timestamp");
-      if (timestamp) {
-        const date = new Date(timestamp);
-        const formatter = new Intl.DateTimeFormat(locale, {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-        });
-        el.textContent = formatter.format(date);
-      }
-    });
+  interface MicroblogMessage {
+    id: string;
+    content: string;
+    timestamp: string;
+    author: {
+      username: string;
+      globalName: string;
+      avatarUrl: string;
+      color: string | null;
+    };
+    attachments: {
+      url: string;
+      filename: string;
+      contentType: string;
+    }[];
+    emojis: {
+      id: string | null;
+      name: string;
+      animated: boolean;
+      url: string | null;
+    }[];
   }
 
-  initMicroblogDates();
-  document.addEventListener("astro:after-swap", initMicroblogDates);
+  function parseDiscordMarkdown(content: string, emojis: MicroblogMessage["emojis"]): string {
+    let result = content;
+
+    result = result.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    result = result.replace(/\*(.+?)\*/g, "<em>$1</em>");
+    result = result.replace(/~~(.+?)~~/g, "<del>$1</del>");
+    result = result.replace(/\|\|(.+?)\|\|/g, '<span class="spoiler">$1</span>');
+    result = result.replace(/`([^`]+)`/g, "<code>$1</code>");
+    result = result.replace(/```[\s\S]*?```/g, (match) => {
+      const code = match.slice(3, -3).replace(/^\w+\n/, "");
+      return `<pre><code>${code}</code></pre>`;
+    });
+    result = result.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>',
+    );
+    result = result.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    result = result.replace(/^> (.+)$/gm, "<blockquote>$1</blockquote>");
+    result = result.replace(/^# (.+)$/gm, "<h1>$1</h1>");
+    result = result.replace(/^## (.+)$/gm, "<h2>$1</h2>");
+    result = result.replace(/^### (.+)$/gm, "<h3>$1</h3>");
+
+    result = result.replace(/<a?:([a-zA-Z0-9_]+):(\d+)>/g, (_, name, id) => {
+      const emoji = emojis.find((e) => e.id === id);
+      if (emoji?.url) {
+        return `<img src="${emoji.url}" alt="${emoji.name}" class="inline-block h-5 w-5" />`;
+      }
+      return `:${name}:`;
+    });
+
+    result = result.replace(/\n/g, "<br>");
+
+    return result;
+  }
+
+  function formatTimestamp(timestamp: string, locale: string): string {
+    const localeMap: Record<string, string> = { en: "en-US", no: "nb-NO", ko: "ko-KR" };
+    const dateLocale = localeMap[locale] || locale;
+
+    const date = new Date(timestamp);
+    const formatter = new Intl.DateTimeFormat(dateLocale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    });
+    return formatter.format(date);
+  }
+
+  async function loadMicroblog() {
+    const container = document.getElementById("microblog-container");
+    const viewAllLink = document.getElementById("microblog-view-all");
+    if (!container) return;
+
+    const section = container.closest("section");
+    const locale = section?.getAttribute("data-locale") || "en";
+    const numberOfPosts = parseInt(section?.getAttribute("data-number-of-posts") || "0", 10);
+    const currentPath = window.location.pathname;
+
+    const noPostsMessages: Record<string, string> = {
+      en: "No posts available.",
+      no: "Ingen innlegg :(",
+      ko: "게시물 없음",
+    };
+
+    try {
+      const response = await fetch("/api/microblog/discord");
+      if (!response.ok) throw new Error("Failed to fetch microblog posts");
+
+      let posts: MicroblogMessage[] = await response.json();
+      const totalPosts = posts.length;
+
+      if (numberOfPosts && posts.length > numberOfPosts) {
+        posts = posts.slice(0, numberOfPosts);
+      }
+
+      if (posts.length === 0) {
+        container.innerHTML = `<p class="text-gray-400">${noPostsMessages[locale] || noPostsMessages.en}</p>`;
+        return;
+      }
+
+      container.innerHTML = "";
+
+      for (const post of posts) {
+        const article = document.createElement("article");
+        article.className = "discord flex items-start gap-4 md:gap-6";
+
+        const avatar = document.createElement("img");
+        avatar.src = post.author.avatarUrl;
+        avatar.alt = post.author.globalName;
+        avatar.loading = "lazy";
+        avatar.width = 48;
+        avatar.height = 48;
+        avatar.className = "h-12 w-12 shrink-0 rounded-full";
+        article.appendChild(avatar);
+
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "min-w-0 flex-1";
+
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "flex items-center gap-2";
+
+        const author = document.createElement("span");
+        author.className = "font-bold";
+        if (post.author.color) {
+          author.style.color = post.author.color;
+        }
+        author.textContent = post.author.globalName;
+        headerDiv.appendChild(author);
+
+        const time = document.createElement("time");
+        time.className = "text-sm text-[#96979e]";
+        time.textContent = formatTimestamp(post.timestamp, locale);
+        headerDiv.appendChild(time);
+
+        contentDiv.appendChild(headerDiv);
+
+        const content = document.createElement("p");
+        content.className = "wrap-break-words text-[#dddee0]";
+        content.innerHTML = parseDiscordMarkdown(post.content, post.emojis);
+        contentDiv.appendChild(content);
+
+        if (post.attachments && post.attachments.length > 0) {
+          const attachmentsDiv = document.createElement("div");
+          attachmentsDiv.className =
+            "mt-2 grid grid-cols-2 gap-1 md:grid-cols-3 [&>*:first-child:nth-child(odd)]:col-span-2 md:[&>*:first-child:nth-child(odd)]:col-span-1";
+
+          for (const attachment of post.attachments) {
+            const attachmentDiv = document.createElement("div");
+            attachmentDiv.className = "aspect-square rounded-lg";
+
+            if (attachment.contentType?.startsWith("image/")) {
+              const link = document.createElement("a");
+              link.href = attachment.url;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+
+              const img = document.createElement("img");
+              img.src = attachment.url;
+              img.alt = attachment.filename;
+              img.width = 256;
+              img.height = 256;
+              img.className = "h-full w-full object-cover";
+              img.loading = "lazy";
+
+              link.appendChild(img);
+              attachmentDiv.appendChild(link);
+            } else if (attachment.contentType?.startsWith("video/")) {
+              const videoWrapper = document.createElement("div");
+              videoWrapper.className = "relative aspect-square";
+
+              const video = document.createElement("video");
+              video.src = attachment.url;
+              video.controls = true;
+              video.className = "absolute inset-0 h-full w-full object-contain";
+
+              videoWrapper.appendChild(video);
+              attachmentDiv.appendChild(videoWrapper);
+            }
+
+            attachmentsDiv.appendChild(attachmentDiv);
+          }
+
+          contentDiv.appendChild(attachmentsDiv);
+        }
+
+        article.appendChild(contentDiv);
+        container.appendChild(article);
+      }
+
+      if (viewAllLink && currentPath !== "/microblog" && posts.length > 0 && totalPosts > numberOfPosts) {
+        viewAllLink.classList.remove("hidden");
+      }
+    } catch (error) {
+      console.error("Failed to load microblog:", error);
+      container.innerHTML = `<p class="text-gray-400">${noPostsMessages[locale] || noPostsMessages.en}</p>`;
+    }
+  }
+
+  loadMicroblog();
+  document.addEventListener("astro:after-swap", loadMicroblog);
 </script>

@@ -1,158 +1,29 @@
 ---
-import { formatDistance } from "date-fns";
-import { ko, nb } from "date-fns/locale";
-
-import cache from "@api/_cache";
-import Song from "@elements/Song.astro";
 import { useTranslations } from "@i18n/index";
 
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
-
-const dateFnsLocales = { en: undefined, no: nb, ko: ko };
-const dateFnsLocale = dateFnsLocales[locale];
-
-export interface LastFMResponse {
-  lovedtracks: Lovedtracks;
-}
-
-export interface Lovedtracks {
-  track: Track[];
-  "@attr": Attr;
-}
-
-export interface Attr {
-  perPage: string;
-  totalPages: string;
-  page: string;
-  total: string;
-  user: string;
-}
-
-export interface Track {
-  artist: Artist;
-  date: DateClass;
-  mbid: string;
-  url: string;
-  name: string;
-  image: Image[];
-  streamable: Streamable;
-}
-
-export interface Artist {
-  url: string;
-  name: string;
-  mbid: string;
-}
-
-export interface DateClass {
-  uts: string;
-  "#text": string;
-}
-
-export interface Image {
-  size: Size;
-  "#text": string;
-}
-
-export enum Size {
-  Extralarge = "extralarge",
-  Large = "large",
-  Medium = "medium",
-  Small = "small",
-}
-
-export interface Streamable {
-  fulltrack: string;
-  "#text": string;
-}
-
-async function getLovedTracks(): Promise<LastFMResponse> {
-  const cacheKey = "lastfmTracks";
-  const cached = cache.get<LastFMResponse>(cacheKey);
-  if (cached) return cached;
-
-  const emptyResponse = {
-    lovedtracks: {
-      track: [],
-      "@attr": { perPage: "0", totalPages: "0", page: "0", total: "0", user: "" },
-    },
-  };
-
-  try {
-    const apiKey = import.meta.env.LASTFM_API_KEY;
-    if (!apiKey) {
-      console.warn("LastFM API key not configured");
-      return emptyResponse;
-    }
-
-    const params = new URLSearchParams({
-      method: "user.getlovedtracks",
-      format: "json",
-      api_key: apiKey,
-      user: import.meta.env.LASTFM_USERNAME,
-      limit: "1000",
-    });
-
-    // Add timeout to the fetch request
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
-    const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
-      method: "GET",
-      cache: "force-cache",
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!res.ok) {
-      console.warn("Failed to fetch loved tracks", res.status, res.statusText);
-      return emptyResponse;
-    }
-
-    const data = await res.json();
-
-    // Cache for 10 minutes
-    cache.set(cacheKey, data, 10 * 60 * 1000);
-    return data;
-  } catch (error) {
-    console.warn("LastFM API error:", error);
-    return emptyResponse;
-  }
-}
-
-const data = await getLovedTracks();
-
-const groupedTracks = data.lovedtracks.track.reduce((acc: Record<string, Track[]>, track: Track) => {
-  const date = new Date(Number(track.date.uts) * 1000);
-  const distance = formatDistance(date, new Date(), { addSuffix: true, locale: dateFnsLocale });
-
-  if (!acc[distance]) {
-    acc[distance] = [];
-  }
-
-  acc[distance].push(track);
-
-  return acc;
-}, {});
 ---
 
-<div class="flex w-full flex-col gap-8 p-6">
+<div class="flex w-full flex-col gap-8 p-6" data-locale={locale}>
   <h3 class="text-center text-4xl font-bold lg:text-left lg:text-2xl">{t("recentlyLikedSongs.title")}</h3>
-  <div class="flex flex-col gap-8">
+  <div id="songs-container" class="flex flex-col gap-8">
+    <!-- Skeleton loading state -->
     {
-      groupedTracks && Object.keys(groupedTracks).length === 0 && (
-        <p class="text-center text-gray-500">{t("recentlyLikedSongs.fetchError")}</p>
-      )
-    }
-    {
-      Object.entries(groupedTracks).map(([time, tracks]) => (
+      Array.from({ length: 3 }).map(() => (
         <div class="flex flex-col gap-4">
-          <h2 class="border-b border-gray-700 text-center font-semibold">{time}</h2>
+          <div class="border-b border-gray-700 pb-2">
+            <div class="mx-auto h-4 w-24 animate-pulse rounded bg-gray-700" />
+          </div>
           <div class="flex flex-col gap-6">
-            {tracks.map((track: Track) => (
-              <Song track={track} />
+            {Array.from({ length: 3 }).map(() => (
+              <article class="flex items-center gap-4">
+                <div class="h-16 w-16 shrink-0 animate-pulse rounded-sm bg-gray-700" />
+                <div class="flex flex-col gap-2 overflow-hidden">
+                  <div class="h-4 w-32 animate-pulse rounded bg-gray-700" />
+                  <div class="h-3 w-24 animate-pulse rounded bg-gray-600" />
+                </div>
+              </article>
             ))}
           </div>
         </div>
@@ -160,3 +31,205 @@ const groupedTracks = data.lovedtracks.track.reduce((acc: Record<string, Track[]
     }
   </div>
 </div>
+
+<script>
+  interface Track {
+    artist: { url: string; name: string; mbid: string };
+    date: { uts: string; "#text": string };
+    mbid: string;
+    url: string;
+    name: string;
+    image: { size: string; "#text": string }[];
+    streamable: { fulltrack: string; "#text": string };
+    albumImage?: string;
+  }
+
+  interface LastFMResponse {
+    lovedtracks: {
+      track: Track[];
+      "@attr": { perPage: string; totalPages: string; page: string; total: string; user: string };
+    };
+  }
+
+  interface DateFnsLocaleConfig {
+    formatDistance: (token: string, count: number) => string;
+  }
+
+  const dateLocales: Record<string, DateFnsLocaleConfig> = {
+    en: {
+      formatDistance: (token: string, count: number) => {
+        const units: Record<string, [string, string]> = {
+          xSeconds: ["second", "seconds"],
+          xMinutes: ["minute", "minutes"],
+          xHours: ["hour", "hours"],
+          xDays: ["day", "days"],
+          xWeeks: ["week", "weeks"],
+          xMonths: ["month", "months"],
+          xYears: ["year", "years"],
+        };
+        if (token === "lessThanXSeconds" || token === "lessThanXMinutes") return "less than a minute ago";
+        if (token === "aboutXHours") return count === 1 ? "about 1 hour ago" : `about ${count} hours ago`;
+        const unit = units[token];
+        if (unit) return `${count} ${count === 1 ? unit[0] : unit[1]} ago`;
+        return `${count} ago`;
+      },
+    },
+    no: {
+      formatDistance: (token: string, count: number) => {
+        const units: Record<string, [string, string]> = {
+          xSeconds: ["sekund", "sekunder"],
+          xMinutes: ["minutt", "minutter"],
+          xHours: ["time", "timer"],
+          xDays: ["dag", "dager"],
+          xWeeks: ["uke", "uker"],
+          xMonths: ["maned", "maneder"],
+          xYears: ["ar", "ar"],
+        };
+        if (token === "lessThanXSeconds" || token === "lessThanXMinutes") return "mindre enn ett minutt siden";
+        if (token === "aboutXHours") return count === 1 ? "omtrent 1 time siden" : `omtrent ${count} timer siden`;
+        const unit = units[token];
+        if (unit) return `${count} ${count === 1 ? unit[0] : unit[1]} siden`;
+        return `${count} siden`;
+      },
+    },
+    ko: {
+      formatDistance: (token: string, count: number) => {
+        const units: Record<string, string> = {
+          xSeconds: "초",
+          xMinutes: "분",
+          xHours: "시간",
+          xDays: "일",
+          xWeeks: "주",
+          xMonths: "개월",
+          xYears: "년",
+        };
+        if (token === "lessThanXSeconds" || token === "lessThanXMinutes") return "1분 미만 전";
+        if (token === "aboutXHours") return `약 ${count}시간 전`;
+        const unit = units[token];
+        if (unit) return `${count}${unit} 전`;
+        return `${count} 전`;
+      },
+    },
+  };
+
+  function formatDistance(date: Date, locale: string): string {
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffSecs = Math.floor(diffMs / 1000);
+    const diffMins = Math.floor(diffSecs / 60);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+    const diffWeeks = Math.floor(diffDays / 7);
+    const diffMonths = Math.floor(diffDays / 30);
+    const diffYears = Math.floor(diffDays / 365);
+
+    const localeConfig = dateLocales[locale] || dateLocales.en;
+
+    if (diffSecs < 60) return localeConfig.formatDistance("xSeconds", diffSecs);
+    if (diffMins < 60) return localeConfig.formatDistance("xMinutes", diffMins);
+    if (diffHours < 24) return localeConfig.formatDistance("xHours", diffHours);
+    if (diffDays < 7) return localeConfig.formatDistance("xDays", diffDays);
+    if (diffWeeks < 4) return localeConfig.formatDistance("xWeeks", diffWeeks);
+    if (diffMonths < 12) return localeConfig.formatDistance("xMonths", diffMonths);
+    return localeConfig.formatDistance("xYears", diffYears);
+  }
+
+  async function loadSongs() {
+    const container = document.getElementById("songs-container");
+    if (!container) return;
+
+    const wrapper = container.closest("div[data-locale]");
+    const locale = wrapper?.getAttribute("data-locale") || "en";
+
+    const errorMessages: Record<string, string> = {
+      en: "Failed fetching songs",
+      no: "Kunne ikke hente sangene!",
+      ko: "노래를 로드하지 못했어요",
+    };
+
+    try {
+      const response = await fetch("/api/songs/loved");
+      if (!response.ok) throw new Error("Failed to fetch loved tracks");
+
+      const data: LastFMResponse = await response.json();
+
+      if (!data.lovedtracks.track || data.lovedtracks.track.length === 0) {
+        container.innerHTML = `<p class="text-center text-gray-500">${errorMessages[locale] || errorMessages.en}</p>`;
+        return;
+      }
+
+      const groupedTracks: Record<string, Track[]> = {};
+
+      for (const track of data.lovedtracks.track) {
+        const date = new Date(Number(track.date.uts) * 1000);
+        const distance = formatDistance(date, locale);
+
+        if (!groupedTracks[distance]) {
+          groupedTracks[distance] = [];
+        }
+        groupedTracks[distance].push(track);
+      }
+
+      container.innerHTML = "";
+
+      for (const [time, tracks] of Object.entries(groupedTracks)) {
+        const groupDiv = document.createElement("div");
+        groupDiv.className = "flex flex-col gap-4";
+
+        const timeHeader = document.createElement("h2");
+        timeHeader.className = "border-b border-gray-700 text-center font-semibold";
+        timeHeader.textContent = time;
+        groupDiv.appendChild(timeHeader);
+
+        const tracksDiv = document.createElement("div");
+        tracksDiv.className = "flex flex-col gap-6";
+
+        for (const track of tracks) {
+          const article = document.createElement("article");
+          article.className = "liked-song flex flex-col gap-2";
+
+          const innerDiv = document.createElement("div");
+          innerDiv.className = "flex items-center gap-4";
+
+          const img = document.createElement("img");
+          // Use albumImage from API (fetched via track.getInfo) or fall back to placeholder
+          img.src = track.albumImage || "/placeholder_song.jpg";
+          img.alt = `Cover for ${track.name}`;
+          img.width = 64;
+          img.height = 64;
+          img.className = "min-h-[64px] min-w-[64px] rounded-sm";
+          img.loading = "lazy";
+          innerDiv.appendChild(img);
+
+          const textDiv = document.createElement("div");
+          textDiv.className = "overflow-hidden";
+
+          const trackName = document.createElement("p");
+          trackName.className = "truncate font-bold";
+          trackName.title = track.name;
+          trackName.textContent = track.name;
+          textDiv.appendChild(trackName);
+
+          const artistName = document.createElement("p");
+          artistName.className = "truncate font-light";
+          artistName.title = track.artist.name;
+          artistName.textContent = track.artist.name;
+          textDiv.appendChild(artistName);
+
+          innerDiv.appendChild(textDiv);
+          article.appendChild(innerDiv);
+          tracksDiv.appendChild(article);
+        }
+
+        groupDiv.appendChild(tracksDiv);
+        container.appendChild(groupDiv);
+      }
+    } catch (error) {
+      console.error("Failed to load songs:", error);
+      container.innerHTML = `<p class="text-center text-gray-500">${errorMessages[locale] || errorMessages.en}</p>`;
+    }
+  }
+
+  loadSongs();
+  document.addEventListener("astro:after-swap", loadSongs);
+</script>
