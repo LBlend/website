@@ -1,8 +1,16 @@
 ---
 import { formatDistance } from "date-fns";
+import { ko, nb } from "date-fns/locale";
 
 import cache from "@api/_cache";
 import Song from "@elements/Song.astro";
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
+const dateFnsLocales = { en: undefined, no: nb, ko: ko };
+const dateFnsLocale = dateFnsLocales[locale];
 
 export interface LastFMResponse {
   lovedtracks: Lovedtracks;
@@ -118,7 +126,7 @@ const data = await getLovedTracks();
 
 const groupedTracks = data.lovedtracks.track.reduce((acc: Record<string, Track[]>, track: Track) => {
   const date = new Date(Number(track.date.uts) * 1000);
-  const distance = formatDistance(date, new Date(), { addSuffix: true });
+  const distance = formatDistance(date, new Date(), { addSuffix: true, locale: dateFnsLocale });
 
   if (!acc[distance]) {
     acc[distance] = [];
@@ -131,11 +139,11 @@ const groupedTracks = data.lovedtracks.track.reduce((acc: Record<string, Track[]
 ---
 
 <div class="flex w-full flex-col gap-8 p-6">
-  <h3 class="text-center text-4xl font-bold lg:text-left lg:text-2xl">Recently liked songs</h3>
+  <h3 class="text-center text-4xl font-bold lg:text-left lg:text-2xl">{t("recentlyLikedSongs.title")}</h3>
   <div class="flex flex-col gap-8">
     {
       groupedTracks && Object.keys(groupedTracks).length === 0 && (
-        <p class="text-center text-gray-500">Failed fetching songs</p>
+        <p class="text-center text-gray-500">{t("recentlyLikedSongs.fetchError")}</p>
       )
     }
     {

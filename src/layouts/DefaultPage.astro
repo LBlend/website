@@ -4,10 +4,11 @@ import Footer from "@sections/Footer.astro";
 import Header from "@sections/Header.astro";
 
 const { title, description } = Astro.props;
+const locale = Astro.locals.locale;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <BaseHead title={title} description={description} />
   </head>

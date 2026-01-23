@@ -87,6 +87,14 @@ const { label, class: className, ...props } = Astro.props;
           }
         });
 
+        // Close language switcher if open
+        const langMenu = document.getElementById("lang-menu");
+        const langIcon = document.getElementById("lang-icon");
+        if (langMenu && !langMenu.classList.contains("hidden")) {
+          langMenu.classList.add("hidden");
+          langIcon?.classList.remove("lang-icon-gradient");
+        }
+
         // Toggle this dropdown
         dropdown.classList.toggle("open");
         button.setAttribute("aria-expanded", isOpen ? "false" : "true");

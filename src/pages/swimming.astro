@@ -5,6 +5,8 @@ import DefaultPage from "@layouts/DefaultPage.astro";
 
 import SwimmingTable from "@sections/SwimmingTable.astro";
 
+import { useTranslations } from "@i18n/index";
+
 import csvFile from "../assets/swimming.csv?raw";
 
 interface SwimmingRecord {
@@ -17,6 +19,9 @@ interface SwimmingRecord {
   PoolLength: number;
   IsPartialDistance: boolean;
 }
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
 
 const parsed = Papa.parse<SwimmingRecord>(csvFile, { header: true, skipEmptyLines: true });
 const data = parsed.data.map((row) => [
@@ -31,9 +36,9 @@ const data = parsed.data.map((row) => [
 ]);
 ---
 
-<DefaultPage title="Swimming" description="All records of my competitive swimming participations">
+<DefaultPage title={t("swimming.pageTitle")} description={t("swimming.description")}>
   <main class="flex flex-col items-center justify-center gap-8 px-4">
-    <h1 class="text-6xl font-bold">Swimming records</h1>
+    <h1 class="text-6xl font-bold">{t("swimming.title")}</h1>
     <div class="fade-in-section">
       <SwimmingTable data={data} />
     </div>

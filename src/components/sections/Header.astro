@@ -6,6 +6,12 @@ import meCartoon from "@assets/images/me_cartoon.svg";
 import HeaderDropdown from "@elements/HeaderDropdown.astro";
 import HeaderDropdownLink from "@elements/HeaderDropdownLink.astro";
 import HeaderLink from "@elements/HeaderLink.astro";
+import LanguageSwitcher from "@elements/LanguageSwitcher.astro";
+
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
 ---
 
 <header class="m-0 mb-8 px-4 py-2 lg:px-20">
@@ -13,15 +19,16 @@ import HeaderLink from "@elements/HeaderLink.astro";
     <a href="/" class="hidden sm:block">
       <Image src={meCartoon} alt="Cartoon drawing of Leander Furumo" width={48} class="icon-link" loading="eager" />
     </a>
-    <div>
-      <HeaderLink href="/">Home</HeaderLink>
-      <HeaderLink href="/blog">Blog</HeaderLink>
-      <HeaderLink href="/photos">Photos</HeaderLink>
-      <HeaderLink href="/about">About</HeaderLink>
+    <div class="flex items-center">
+      <HeaderLink href="/">{t("nav.home")}</HeaderLink>
+      <HeaderLink href="/blog">{t("nav.blog")}</HeaderLink>
+      <HeaderLink href="/photos">{t("nav.photos")}</HeaderLink>
+      <HeaderLink href="/about">{t("nav.about")}</HeaderLink>
       <HeaderDropdown label="">
-        <HeaderDropdownLink href="/microblog">Microblog</HeaderDropdownLink>
-        <HeaderDropdownLink href="/swimming">Swimming Records</HeaderDropdownLink>
+        <HeaderDropdownLink href="/microblog">{t("nav.microblog")}</HeaderDropdownLink>
+        <HeaderDropdownLink href="/swimming">{t("nav.swimming")}</HeaderDropdownLink>
       </HeaderDropdown>
+      <LanguageSwitcher />
     </div>
   </nav>
 </header>

@@ -10,6 +10,7 @@
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@elements/*": ["src/components/elements/*"],
+      "@i18n/*": ["src/i18n/*"],
       "@layouts/*": ["src/layouts/*"],
       "@sections/*": ["src/components/sections/*"],
       "@styles/*": ["src/styles/*"]

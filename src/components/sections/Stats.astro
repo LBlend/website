@@ -3,32 +3,57 @@ import { getAllStats } from "@api/stats/all";
 
 import Stat from "@elements/Stat.astro";
 
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
 const data = await getAllStats();
+
+const disclaimerLines = t("stats.disclaimer").split("\n");
 ---
 
 <section class="flex flex-col items-center justify-center gap-8">
-  <h2 class="text-center text-4xl font-bold">Stats</h2>
+  <h2 class="text-center text-4xl font-bold">{t("stats.title")}</h2>
   <div class="flex flex-col place-self-center">
     <blockquote>
-      <p>I love consoooooming (consuming)</p>
+      <p>{t("stats.quote")}</p>
     </blockquote>
-    <p class="pl-2 font-light">- Me, insert year here</p>
+    <p class="pl-2 font-light">{t("stats.quoteAttribution")}</p>
   </div>
   <div class="flex flex-col items-center justify-center gap-2">
     <div class="flex flex-wrap items-center justify-center gap-12">
-      <Stat stat={data.simkl.movies.completedCount} text="Movies Watched" decimalPlaces={0} />
-      <Stat stat={data.simkl.shows.completedCount} text="Shows Watched" decimalPlaces={0} />
-      <Stat stat={data.anilist.animeDaysWatched} text="Watching weeb trash" suffix=" days" decimalPlaces={1} />
+      <Stat stat={data.simkl.movies.completedCount} text={t("stats.moviesWatched")} decimalPlaces={0} />
+      <Stat stat={data.simkl.shows.completedCount} text={t("stats.showsWatched")} decimalPlaces={0} />
+      <Stat
+        stat={data.anilist.animeDaysWatched}
+        text={t("stats.watchingAnime")}
+        suffix={t("stats.days")}
+        decimalPlaces={1}
+      />
     </div>
     <div class="mt-8 flex flex-wrap items-center justify-center gap-12">
-      <Stat stat={data.steam.gamingHours} text="Playing games on Steam" suffix=" hours" decimalPlaces={0} />
-      <Stat stat={data.osu.playTime} text="Clicking circles in osu!" suffix=" hours" decimalPlaces={0} />
-      <Stat stat={data.wakatime.programmingHours} text="Programming" suffix=" hours" decimalPlaces={0} />
+      <Stat stat={data.steam.gamingHours} text={t("stats.playingGames")} suffix={t("stats.hours")} decimalPlaces={0} />
+      <Stat stat={data.osu.playTime} text={t("stats.clickingCircles")} suffix={t("stats.hours")} decimalPlaces={0} />
+      <Stat
+        stat={data.wakatime.programmingHours}
+        text={t("stats.programming")}
+        suffix={t("stats.hours")}
+        decimalPlaces={0}
+      />
     </div>
   </div>
   <div class="text-center font-light italic">
-    <p>This is only what I've been able to track.</p>
-    <p>Take the numbers with a grain of salt.</p>
+    <p>
+      {
+        disclaimerLines.map((line, i) => (
+          <>
+            {line}
+            {i < disclaimerLines.length - 1 && <br />}
+          </>
+        ))
+      }
+    </p>
   </div>
 </section>
 

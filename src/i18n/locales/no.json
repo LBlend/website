@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "home": "Hjem",
+    "blog": "Blogg",
+    "photos": "Bilder",
+    "about": "Om",
+    "microblog": "Mikroblogg",
+    "swimming": "Svømmerekorder"
+  },
+  "blog": {
+    "title": "Blogg",
+    "description": "En tilfeldig samling av tanker og andre ting. Et sted der jeg deler ting jeg sannsynligvis ikke burde dele åpent på nett.",
+    "selectTags": "Velg kategorier",
+    "showingPosts": "Viser {count} innlegg",
+    "showingPost": "Viser {count} innlegg",
+    "noPosts": "Ingen innlegg :(",
+    "latestPosts": "Siste innlegg",
+    "viewAllPosts": "Se alle innlegg",
+    "subscribe": "Abonner"
+  },
+  "footer": {
+    "pgpKey": "PGP-nøkkel",
+    "copiedXmr": "XMR kopiert!",
+    "enableJs": "Vennligst aktiver Javascript. Jeg kommer ikke til å bruke det til å stjele dataene dine :)"
+  },
+  "intro": {
+    "ageText": "Jeg er en {age} år gammel kodeape fra Norge.",
+    "welcome": "Velkommen til nettsiden min! Stedet hvor jeg deler mer enn jeg bør om meg selv, for å tilfredstille egoet mitt.",
+    "passions": "Jeg elsker a lage ting, enten det er programmer, bilder/videoer eller mat. Sistenevnte foretrekker jeg å spise :)\nDet er alltid noe nytt å oppleve, lære og utforske. Bli med meg i å balansere altfor mange hobbyer med altfor lite tid.",
+    "location": "Bor for tiden i Oslo",
+    "hopingChange": "Men jeg håper å komme meg vekk herfra en gang i fremtiden."
+  },
+  "visitedPlaces": {
+    "title": "Besøkte steder",
+    "description": "Som de fleste, liker jeg å reise (ja, skikkelig kontroversielt). Jeg har en fjern drøm om å besøke alle land i verden. Her er et kart over de jeg har besøkt så langt."
+  },
+  "stats": {
+    "title": "Statistikk",
+    "quote": "KONSUMERING er LIVET!",
+    "quoteAttribution": "- Meg, en eller annen gang",
+    "disclaimer": "Dette er kun tallene jeg har klart å registrere.\nIkke stol blindt på de.",
+    "moviesWatched": "Filmer sett",
+    "showsWatched": "Serier sett",
+    "watchingAnime": "Med weeb-faenskap",
+    "playingGames": "Spilt på Steam",
+    "clickingCircles": "Brukt på osu!",
+    "programming": "Programmering",
+    "days": " dager",
+    "hours": " timer"
+  },
+  "microblog": {
+    "title": "mikroblogg",
+    "noPosts": "Ingen innlegg :(",
+    "viewAll": "Se alle"
+  },
+  "swimming": {
+    "title": "Svømmerekorder",
+    "pageTitle": "Svømming",
+    "description": "Alle mine registrerte tider fra svømmestevner",
+    "onlyBestTimes": "Vis kun personlige rekorder",
+    "showPartials": "Vis deldistanser",
+    "distance": "Distanse",
+    "stroke": "Svømmestil",
+    "time": "Tid",
+    "date": "Dato",
+    "city": "By",
+    "country": "Land",
+    "poolLength": "Bassenglengde",
+    "partialDistance": "Deldistanse?",
+    "yes": "Ja"
+  },
+  "about": {
+    "title": "Om meg",
+    "comingSoon": "Kommer snart"
+  },
+  "notFound": {
+    "title": "404: Fant ikke siden!",
+    "message": "Du har dessverre naådd en blindvei, men det er ikke for sent å snu :)"
+  },
+  "common": {
+    "minRead": "{time} lesning"
+  },
+  "recentlyLikedSongs": {
+    "title": "Nylig likte sanger",
+    "fetchError": "Kunne ikke hente sangene!"
+  },
+  "photos": {
+    "title": "Bilder",
+    "description": "Mine fotoalbum",
+    "subtitle": "Her er noen av fotoalbumene mine\nJeg er (muligens) for flau til å legge ting ut på Instagram"
+  }
+}

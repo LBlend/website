@@ -2,26 +2,39 @@
 import { Image } from "astro:assets";
 
 import norway from "@assets/icons/norway.svg";
+
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
+const passionLines = t("intro.passions").split("\n");
 ---
 
 <section>
   <h2 class="mb-3 text-4xl font-bold">Morn! 👋</h2>
   <div class="flex flex-col gap-4">
-    <p>I am a <span id="age">?</span>-year-old code monkey from Norway.</p>
     <p>
-      Welcome to my website, where I happily share too much information about myself for that sweet narcissistic fix.
+      <Fragment set:html={t("intro.ageText", { age: `<span id="age">?</span>` })} />
     </p>
     <p>
-      I love making stuff, be it software, media or food. Though as for food I prefer eating it :)
-      <br />
-      There's always something new to explore, experience, and learn. Join me in trying to balance way too many passions
-      with way too little time.
+      {t("intro.welcome")}
     </p>
     <p>
-      Currently based in Oslo, Norway{" "}
+      {
+        passionLines.map((line, i) => (
+          <>
+            {line}
+            {i < passionLines.length - 1 && <br />}
+          </>
+        ))
+      }
+    </p>
+    <p>
+      {t("intro.location")}{" "}
       <Image src={norway} width={26} height={26} alt="Flag of Norway" class="inline saturate-70" />
       <br />
-      Though I'm hoping that will change in the future.
+      {t("intro.hopingChange")}
     </p>
   </div>
 </section>

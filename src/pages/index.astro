@@ -15,10 +15,12 @@ import Stats from "@sections/Stats.astro";
 import VisitedPlaces from "@sections/VisitedPlaces.astro";
 
 import { SITE_DESCRIPTION, SITE_TITLE } from "src/consts";
+
+const locale = Astro.locals.locale;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
