@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import { formatDistance } from "date-fns";
 
 import cache from "@api/_cache";
@@ -84,7 +83,7 @@ async function getLovedTracks(): Promise<LastFMResponse> {
       format: "json",
       api_key: apiKey,
       user: import.meta.env.LASTFM_USERNAME,
-      limit: 1000,
+      limit: "1000",
     });
 
     // Add timeout to the fetch request
@@ -142,7 +141,7 @@ const groupedTracks = data.lovedtracks.track.reduce((acc: Record<string, Track[]
     {
       Object.entries(groupedTracks).map(([time, tracks]) => (
         <div class="flex flex-col gap-4">
-          <h2 class="border-b-1 border-gray-700 text-center font-semibold">{time}</h2>
+          <h2 class="border-b border-gray-700 text-center font-semibold">{time}</h2>
           <div class="flex flex-col gap-6">
             {tracks.map((track: Track) => (
               <Song track={track} />
