@@ -1,0 +1,62 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{
+  tocHeadings.length > 0 && (
+    <nav class="toc" aria-label="Table of contents">
+      <p class="mb-3 font-semibold text-gray-200">On this page</p>
+      <ul>
+        {tocHeadings.map((heading) => (
+          <li class={`list-none ${heading.depth === 3 ? "toc-depth-3" : ""}`}>
+            <a href={`#${heading.slug}`} class="toc-link">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<script>
+  function initToc() {
+    const tocLinks = document.querySelectorAll(".toc-sidebar .toc-link");
+    const headings = document.querySelectorAll("article h2, article h3");
+
+    if (headings.length === 0 || tocLinks.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute("id");
+            tocLinks.forEach((link) => {
+              link.classList.remove("active");
+              if (link.getAttribute("href") === `#${id}`) {
+                link.classList.add("active");
+              }
+            });
+          }
+        });
+      },
+      {
+        rootMargin: "-80px 0px -80% 0px",
+        threshold: 0,
+      },
+    );
+
+    headings.forEach((heading) => observer.observe(heading));
+  }
+
+  initToc();
+  document.addEventListener("astro:after-swap", initToc);
+</script>

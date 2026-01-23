@@ -1,19 +1,24 @@
 ---
 import "@styles/blogpost.css";
 
+import type { MarkdownHeading } from "astro";
 import type { CollectionEntry } from "astro:content";
 
 import BlogTag from "@elements/BlogTag.astro";
 import FormattedDate from "@elements/FormattedDate.astro";
+import TableOfContents from "@elements/TableOfContents.astro";
+import TableOfContentsMobile from "@elements/TableOfContentsMobile.astro";
 import DefaultPage from "./DefaultPage.astro";
 
-type Props = CollectionEntry<"blog">["data"];
+type Props = CollectionEntry<"blog">["data"] & {
+  headings: MarkdownHeading[];
+};
 
-const { title, description, pubDate, updatedDate, tags } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, headings } = Astro.props;
 ---
 
 <DefaultPage title={title} description={description}>
-  <main>
+  <main class="blog-layout">
     <article>
       <div class="prose">
         <div class="title">
@@ -31,6 +36,7 @@ const { title, description, pubDate, updatedDate, tags } = Astro.props;
           <p class="description">{description}</p>
           <hr />
         </div>
+        <TableOfContentsMobile headings={headings} />
         <slot />
         {
           tags && (
@@ -43,5 +49,8 @@ const { title, description, pubDate, updatedDate, tags } = Astro.props;
         }
       </div>
     </article>
+    <aside class="toc-sidebar">
+      <TableOfContents headings={headings} />
+    </aside>
   </main>
 </DefaultPage>
