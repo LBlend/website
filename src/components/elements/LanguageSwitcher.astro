@@ -8,7 +8,7 @@ import UkFlag from "@assets/icons/uk.svg";
 
 const currentLocale = Astro.locals.locale as Locale;
 
-const flagIcons: Record<Locale, ImageMetadata> = {
+const flagIcons: Record<Locale, typeof UkFlag> = {
   en: UkFlag,
   no: NorwayFlag,
   ko: KoreaFlag,
