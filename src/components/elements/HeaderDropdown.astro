@@ -59,20 +59,13 @@ const { label, class: className, ...props } = Astro.props;
     border-bottom: none !important;
   }
 
-  .dropdown-menu a:hover {
-    background-color: aqua;
-    color: red;
-    border: 3px solid yellow !important;
-  }
-
-  .dropdown-menu :global(a):hover {
-    background-color: aqua !important;
-    color: red !important;
-    border: 3px solid yellow !important;
+  .dropdown-menu :global(a:hover) {
+    background: rgb(55 65 81 / 0.2) !important;
+    -webkit-text-fill-color: inherit;
   }
 
   .dropdown-menu :global(a.active) {
-    background-color: rgba(88, 88, 88, 0.1);
+    background-color: rgb(55 65 81 / 0.1);
     font-weight: bold;
   }
 </style>
