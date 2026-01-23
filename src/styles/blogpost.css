@@ -55,7 +55,8 @@
 
 /* Mobile TOC */
 .toc-mobile {
-  @apply mb-8 block rounded-lg border border-gray-700/30 bg-[--backgroundlight];
+  @apply mb-8 block rounded-lg border border-gray-700/30;
+  @apply bg-[#151522]; /* var(--backgroundlight) */
 }
 
 @media (min-width: 1200px) {
