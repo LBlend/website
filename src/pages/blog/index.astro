@@ -50,12 +50,12 @@ const postCountText =
           onclick="toggleDropdown()"
         >
           {t("blog.selectTags")}
-          <ArrowSVG class="size-3 text-gray-300" />
+          <ArrowSVG id="dropdown-arrow" class="size-3 text-gray-300 transition-transform duration-200" />
         </button>
 
         <div
           id="dropdown-menu"
-          class="bg-backgroundlight absolute z-50 hidden min-w-[200px] rounded-md border border-gray-700/30 shadow-lg"
+          class="bg-backgroundlight absolute z-50 min-w-[200px] rounded-md border border-gray-700/30 shadow-lg transition-all duration-200"
         >
           {
             allTags.map((tag) => (
@@ -111,6 +111,22 @@ const postCountText =
   </main>
 </DefaultPage>
 
+<style>
+  #dropdown-menu {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  #dropdown-menu.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  #dropdown-arrow.open {
+    transform: rotate(180deg);
+  }
+</style>
+
 <script is:inline>
   // Initialize selected tags from URL
   const urlParams = new URLSearchParams(window.location.search);
@@ -154,8 +170,10 @@ const postCountText =
 
   function toggleDropdown() {
     const menu = document.getElementById("dropdown-menu");
+    const arrow = document.getElementById("dropdown-arrow");
     if (menu) {
-      menu.classList.toggle("hidden");
+      menu.classList.toggle("open");
+      arrow?.classList.toggle("open");
     }
   }
 
@@ -189,8 +207,10 @@ const postCountText =
   document.addEventListener("click", (event) => {
     const dropdown = document.getElementById("dropdown-menu");
     const button = document.getElementById("dropdown-button");
+    const arrow = document.getElementById("dropdown-arrow");
     if (!dropdown?.contains(event.target) && !button?.contains(event.target)) {
-      dropdown?.classList.add("hidden");
+      dropdown?.classList.remove("open");
+      arrow?.classList.remove("open");
     }
   });
 

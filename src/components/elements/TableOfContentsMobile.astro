@@ -44,12 +44,33 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
 <script>
   function initMobileToc() {
-    const details = document.querySelector(".toc-mobile");
+    const details = document.querySelector(".toc-mobile") as HTMLDetailsElement | null;
     if (!details) return;
+
+    const nav = details.querySelector("nav");
+
+    const closeWithAnimation = () => {
+      details.classList.add("closing");
+      nav?.classList.add("closing");
+      setTimeout(() => {
+        details.open = false;
+        details.classList.remove("closing");
+        nav?.classList.remove("closing");
+      }, 200);
+    };
+
+    // Handle closing animation
+    details.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("summary") && details.open) {
+        e.preventDefault();
+        closeWithAnimation();
+      }
+    });
 
     details.querySelectorAll(".toc-link").forEach((link) => {
       link.addEventListener("click", () => {
-        (details as HTMLDetailsElement).open = false;
+        closeWithAnimation();
       });
     });
   }
