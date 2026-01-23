@@ -99,7 +99,7 @@ const discordMdToHtml = (post: MicroblogMessage) => {
               </time>
             </div>
             {/* Content */}
-            <p class="break-words text-[#dddee0]" set:html={discordMdToHtml(post)} />
+            <p class="wrap-break-words text-[#dddee0]" set:html={discordMdToHtml(post)} />
             {/* Attachments */}
             {post.attachments && post.attachments.length > 0 && (
               <div class="mt-2 grid grid-cols-2 gap-1 md:grid-cols-3 [&>*:first-child:nth-child(odd)]:col-span-2 md:[&>*:first-child:nth-child(odd)]:col-span-1">

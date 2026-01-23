@@ -152,7 +152,7 @@ blockquote {
 }
 
 hr {
-  @apply border-t-1;
+  @apply border-t;
   @apply border-gray-700;
   @apply my-8;
 }

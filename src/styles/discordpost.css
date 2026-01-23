@@ -65,7 +65,7 @@
   @apply rounded;
   @apply font-mono;
   @apply text-base;
-  @apply border-1;
+  @apply border;
   @apply border-[#4A4B56];
 }
 
