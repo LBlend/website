@@ -86,6 +86,33 @@
   @apply rotate-180;
 }
 
+.toc-mobile nav {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 200ms,
+    opacity 200ms;
+}
+
+.toc-mobile nav > ul {
+  overflow: hidden;
+}
+
+.toc-mobile[open] nav {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.toc-mobile nav.closing {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+.toc-mobile.closing .toc-mobile-icon {
+  @apply rotate-0;
+}
+
 .toc-mobile nav ul {
   @apply m-0 list-none px-4 pt-2 pb-4;
 }

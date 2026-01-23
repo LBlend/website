@@ -59,6 +59,18 @@ const { label, class: className, ...props } = Astro.props;
     border-bottom: none !important;
   }
 
+  .dropdown-menu a:hover {
+    background-color: aqua;
+    color: red;
+    border: 3px solid yellow !important;
+  }
+
+  .dropdown-menu :global(a):hover {
+    background-color: aqua !important;
+    color: red !important;
+    border: 3px solid yellow !important;
+  }
+
   .dropdown-menu :global(a.active) {
     background-color: rgba(88, 88, 88, 0.1);
     font-weight: bold;
@@ -90,8 +102,8 @@ const { label, class: className, ...props } = Astro.props;
         // Close language switcher if open
         const langMenu = document.getElementById("lang-menu");
         const langIcon = document.getElementById("lang-icon");
-        if (langMenu && !langMenu.classList.contains("hidden")) {
-          langMenu.classList.add("hidden");
+        if (langMenu && langMenu.classList.contains("open")) {
+          langMenu.classList.remove("open");
           langIcon?.classList.remove("lang-icon-gradient");
         }
 

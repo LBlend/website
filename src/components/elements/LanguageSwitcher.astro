@@ -10,6 +10,16 @@ const currentLocale = Astro.locals.locale as Locale;
   .lang-icon-gradient {
     fill: url(#lang-gradient);
   }
+
+  #lang-menu {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  #lang-menu.open {
+    opacity: 1;
+    visibility: visible;
+  }
 </style>
 
 <div class="relative">
@@ -27,7 +37,7 @@ const currentLocale = Astro.locals.locale as Locale;
 
   <div
     id="lang-menu"
-    class="bg-backgroundlight absolute right-0 z-50 mt-1 hidden min-w-32 rounded-lg border border-gray-700/30 shadow-lg"
+    class="bg-backgroundlight absolute right-0 z-50 mt-1 min-w-32 rounded-lg border border-gray-700/30 shadow-lg transition-all duration-200"
   >
     {
       locales.map((locale) => (
@@ -58,7 +68,7 @@ const currentLocale = Astro.locals.locale as Locale;
     if (!button || !menu || !icon) return;
 
     const updateIconGradient = () => {
-      const isOpen = !menu.classList.contains("hidden");
+      const isOpen = menu.classList.contains("open");
       if (isOpen) {
         icon.classList.add("lang-icon-gradient");
       } else {
@@ -76,13 +86,13 @@ const currentLocale = Astro.locals.locale as Locale;
         dropdown.querySelector(".dropdown-button")?.setAttribute("aria-expanded", "false");
       });
 
-      menu.classList.toggle("hidden");
+      menu.classList.toggle("open");
       updateIconGradient();
     });
 
     // Close menu when clicking outside
     document.addEventListener("click", () => {
-      menu.classList.add("hidden");
+      menu.classList.remove("open");
       updateIconGradient();
     });
 
