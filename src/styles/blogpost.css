@@ -1,5 +1,94 @@
 @import "tailwindcss";
 
+.toc-sidebar {
+  @apply hidden;
+}
+
+@media (min-width: 1200px) {
+  .blog-layout {
+    @apply grid gap-8;
+    grid-template-columns: 1fr min(60ch, 100%) 1fr;
+  }
+
+  .blog-layout > article {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .toc-sidebar {
+    @apply block;
+    grid-column: 1;
+    grid-row: 1;
+    @apply w-[250px];
+    @apply justify-self-end;
+  }
+}
+
+/* Table of Contents shared styles */
+.toc-link {
+  @apply block py-1.5 text-gray-500 transition-colors duration-200;
+  @apply hover:text-gray-200; /* Link styling takes precedent but leaving it as backup */
+}
+
+.toc-link.active {
+  @apply text-gray-200;
+}
+
+.toc-depth-3 {
+  @apply pl-4;
+  @apply text-sm; /* text-sm is default on desktop. So styling is only applied to mobile in practice */
+}
+
+/* Desktop TOC */
+.toc {
+  @apply sticky top-24 overflow-y-auto text-sm;
+  max-height: calc(100vh - 8rem);
+}
+
+.toc .toc-link {
+  @apply -ml-3 border-l-2 border-transparent pl-3;
+}
+
+.toc .toc-link.active {
+  @apply border-l-gray-200;
+}
+
+/* Mobile TOC */
+.toc-mobile {
+  @apply mb-8 block rounded-lg border border-gray-700/30 bg-[--backgroundlight];
+}
+
+@media (min-width: 1200px) {
+  .toc-mobile {
+    @apply hidden;
+  }
+}
+
+.toc-mobile summary {
+  @apply flex cursor-pointer items-center justify-between px-4 py-4 font-semibold select-none;
+}
+
+.toc-mobile summary::-webkit-details-marker {
+  @apply hidden;
+}
+
+.toc-mobile summary::marker {
+  @apply hidden;
+  content: "";
+}
+
+.toc-mobile-icon {
+  @apply transition-transform duration-200;
+}
+
+.toc-mobile[open] .toc-mobile-icon {
+  @apply rotate-180;
+}
+
+.toc-mobile nav ul {
+  @apply m-0 list-none px-4 pt-2 pb-4;
+}
+
 .prose {
   @apply max-w-[60ch];
   @apply m-auto;

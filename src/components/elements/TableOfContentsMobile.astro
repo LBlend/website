@@ -1,0 +1,59 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{
+  tocHeadings.length > 0 && (
+    <details class="toc-mobile">
+      <summary>
+        <span>On this page</span>
+        <svg
+          class="toc-mobile-icon"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </summary>
+      <nav aria-label="Table of contents">
+        <ul>
+          {tocHeadings.map((heading) => (
+            <li class={heading.depth === 3 ? "toc-depth-3" : ""}>
+              <a href={`#${heading.slug}`} class="toc-link">
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+  )
+}
+
+<script>
+  function initMobileToc() {
+    const details = document.querySelector(".toc-mobile");
+    if (!details) return;
+
+    details.querySelectorAll(".toc-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        (details as HTMLDetailsElement).open = false;
+      });
+    });
+  }
+
+  initMobileToc();
+  document.addEventListener("astro:after-swap", initMobileToc);
+</script>
