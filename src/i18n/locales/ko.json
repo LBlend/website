@@ -81,7 +81,7 @@
     "message": "막다른 길에 도달했을 수도 있지만, 우리의 여정은 여기서 끝나지 않길 바라요 :)"
   },
   "common": {
-    "minRead": "{time} 읽기 시간"
+    "minRead": "{time}분 읽기"
   },
   "recentlyLikedSongs": {
     "title": "최근에 좋아한 노래",

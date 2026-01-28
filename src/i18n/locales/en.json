@@ -81,7 +81,7 @@
     "message": "You may have reached a dead end, but hopefully our journey doesn't end here :)"
   },
   "common": {
-    "minRead": "{time} read"
+    "minRead": "{time} min read"
   },
   "recentlyLikedSongs": {
     "title": "Recently liked songs",
