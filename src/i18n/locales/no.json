@@ -81,7 +81,7 @@
     "message": "Du har dessverre naådd en blindvei, men det er ikke for sent å snu :)"
   },
   "common": {
-    "minRead": "{time} lesning"
+    "minRead": "{time} min lesning"
   },
   "recentlyLikedSongs": {
     "title": "Nylig likte sanger",

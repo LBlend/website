@@ -30,7 +30,7 @@ const latestPosts = posts.slice(0, 5);
             <FormattedDate date={post.data.pubDate} />
           </span>
           <span class="inline-block h-1 w-1 rounded bg-gray-500 opacity-75" />
-          <p>{t("common.minRead", { time: Math.round(readingTime(post.body ?? "").minutes) + " min" })}</p>
+          <p>{t("common.minRead", { time: Math.round(readingTime(post.body ?? "").minutes) })}</p>
         </div>
         <h3 class="text-xl font-extrabold">
           <a class="non-styled-link" href={`/blog/${post.id}`}>
