@@ -9,6 +9,9 @@ export const localeNames: Record<Locale, string> = {
 };
 
 export interface Translations {
+  hero: {
+    coordinates: string;
+  };
   nav: {
     home: string;
     blog: string;
