@@ -1,15 +1,10 @@
 ---
 import { getAllStats } from "@api/stats/all";
-
 import Stat from "@elements/Stat.astro";
-
 import { useTranslations } from "@i18n/index";
-
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
-
 const data = await getAllStats();
-
 const disclaimerLines = t("stats.disclaimer").split("\n");
 ---
 
@@ -23,23 +18,37 @@ const disclaimerLines = t("stats.disclaimer").split("\n");
   </div>
   <div class="flex flex-col items-center justify-center gap-2">
     <div class="flex flex-wrap items-center justify-center gap-12">
-      <Stat stat={data.simkl.movies.completedCount} text={t("stats.moviesWatched")} decimalPlaces={0} />
-      <Stat stat={data.simkl.shows.completedCount} text={t("stats.showsWatched")} decimalPlaces={0} />
+      <Stat stat={data.simkl.movies.completedCount} text={t("stats.moviesWatched")} decimalPlaces={0} locale={locale} />
+      <Stat stat={data.simkl.shows.completedCount} text={t("stats.showsWatched")} decimalPlaces={0} locale={locale} />
       <Stat
         stat={data.anilist.animeDaysWatched}
         text={t("stats.watchingAnime")}
         suffix={t("stats.days")}
         decimalPlaces={1}
+        locale={locale}
       />
     </div>
     <div class="mt-8 flex flex-wrap items-center justify-center gap-12">
-      <Stat stat={data.steam.gamingHours} text={t("stats.playingGames")} suffix={t("stats.hours")} decimalPlaces={0} />
-      <Stat stat={data.osu.playTime} text={t("stats.clickingCircles")} suffix={t("stats.hours")} decimalPlaces={0} />
+      <Stat
+        stat={data.steam.gamingHours}
+        text={t("stats.playingGames")}
+        suffix={t("stats.hours")}
+        decimalPlaces={0}
+        locale={locale}
+      />
+      <Stat
+        stat={data.osu.playTime}
+        text={t("stats.clickingCircles")}
+        suffix={t("stats.hours")}
+        decimalPlaces={0}
+        locale={locale}
+      />
       <Stat
         stat={data.wakatime.programmingHours}
         text={t("stats.programming")}
         suffix={t("stats.hours")}
         decimalPlaces={0}
+        locale={locale}
       />
     </div>
   </div>
@@ -56,7 +65,6 @@ const disclaimerLines = t("stats.disclaimer").split("\n");
     </p>
   </div>
 </section>
-
 <script
   is:inline
   type="module"
