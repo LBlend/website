@@ -1,5 +1,13 @@
 ---
-const { stat, text, decimalPlaces, suffix } = Astro.props;
+const { stat, text, decimalPlaces, suffix, locale = "en" } = Astro.props;
+
+const separators = {
+  en: { decimal: ".", separator: "," },
+  ko: { decimal: ".", separator: "," },
+  no: { decimal: ",", separator: " " },
+};
+
+const { decimal, separator } = separators[locale as keyof typeof separators] || separators["en"];
 ---
 
 <article class="flex flex-col items-center justify-center gap-1">
@@ -9,6 +17,8 @@ const { stat, text, decimalPlaces, suffix } = Astro.props;
         data-duration={3}
         data-suffix={suffix}
         data-decimal-places={decimalPlaces}
+        data-separator={separator}
+        data-decimal={decimal}
         class="text-center text-2xl font-bold"
       >
         {stat}
