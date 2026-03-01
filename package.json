@@ -37,5 +37,8 @@
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-tailwindcss": "^0.6.11"
+  },
+  "overrides": {
+    "lodash": "4.17.23"
   }
 }
