@@ -6,6 +6,7 @@
     "start": "2020-08-10",
     "end": "2024-06-04",
     "description": "Hand-picked bachelor's degree in STEM. I focused on computer science\nhttps://www.mn.uio.no/studier/programmer/fritt-sammensatt-bachelorgrad-realfag.html",
+    "url": "https://www.mn.uio.no/studier/programmer/fritt-sammensatt-bachelorgrad-realfag.html",
     "isRelevant": true,
     "courses": [
       {
@@ -122,6 +123,7 @@
     "start": "2023-03-02",
     "end": "2023-06-21",
     "description": "",
+    "url": "https://www.yonsei.ac.kr/en_sc/index.do",
     "isRelevant": true,
     "courses": [
       {
@@ -154,6 +156,7 @@
     "start": "2018-08-01",
     "end": "2020-06-22",
     "description": "",
+    "url": "https://afk.no/lillestrom-vgs/",
     "isRelevant": false,
     "courses": []
   },
@@ -164,6 +167,40 @@
     "start": "2016-08-01",
     "end": "2018-06-22",
     "description": "",
+    "url": "https://afk.no/mailand-vgs/",
+    "isRelevant": false,
+    "courses": []
+  },
+  {
+    "school": "Kjenn Lower Secondary School",
+    "degree": "",
+    "field": "General Education",
+    "start": "2013-08-01",
+    "end": "2016-06-22",
+    "description": "",
+    "url": "https://www.lorenskog.kommune.no/kjenn-skole/",
+    "isRelevant": false,
+    "courses": []
+  },
+  {
+    "school": "Rasta Primary School",
+    "degree": "",
+    "field": "General Education",
+    "start": "2007-08-01",
+    "end": "2013-06-22",
+    "description": "",
+    "url": "https://www.lorenskog.kommune.no/rasta-skole",
+    "isRelevant": false,
+    "courses": []
+  },
+  {
+    "school": "Dvergsnes Primary School",
+    "degree": "",
+    "field": "General Education",
+    "start": "2006-08-01",
+    "end": "2007-06-22",
+    "description": "",
+    "url": "https://www.minskole.no/dvergsnes",
     "isRelevant": false,
     "courses": []
   }
