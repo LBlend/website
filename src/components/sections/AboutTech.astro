@@ -1,0 +1,189 @@
+---
+import { useTranslations } from "@i18n/index";
+
+import CssIcon from "@assets/icons/css.svg";
+import DatabaseIcon from "@assets/icons/database.svg";
+import DockerIcon from "@assets/icons/docker.svg";
+import FastApiIcon from "@assets/icons/fastapi.svg";
+import FirestoreIcon from "@assets/icons/firestore.svg";
+import FlaskIcon from "@assets/icons/flask.svg";
+import FpIcon from "@assets/icons/functional_programming.svg";
+import GitIcon from "@assets/icons/git.svg";
+import GraphQlIcon from "@assets/icons/graphql.svg";
+import HtmlIcon from "@assets/icons/html.svg";
+import JavaIcon from "@assets/icons/java.svg";
+import JsIcon from "@assets/icons/javascript.svg";
+import KotlinIcon from "@assets/icons/kotlin.svg";
+import LinuxIcon from "@assets/icons/linux.svg";
+import MongoDbIcon from "@assets/icons/mongodb.svg";
+import NginxIcon from "@assets/icons/nginx.svg";
+import PythonIcon from "@assets/icons/python.svg";
+import ReactIcon from "@assets/icons/react.svg";
+import RegexIcon from "@assets/icons/regex.svg";
+import RestIcon from "@assets/icons/rest.svg";
+import TestingIcon from "@assets/icons/testing.svg";
+import TsIcon from "@assets/icons/typescript.svg";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+---
+
+<section id="tech" class="grid gap-6">
+  <h2 class="mb-2 text-2xl font-bold tracking-tight text-white">{t("about.programmingTools")}</h2>
+
+  <ul class="flex flex-wrap gap-4">
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <PythonIcon class="size-8" />
+      <p class="font-medium text-white">Python</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <ReactIcon class="size-8" />
+      <p class="font-medium text-white">React.js</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <JavaIcon class="size-8" />
+      <p class="font-medium text-white">Java</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <GitIcon class="size-8" />
+      <p class="font-medium text-white">Git</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <KotlinIcon class="size-8" />
+      <p class="font-medium text-white">Kotlin</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <HtmlIcon class="size-8" />
+      <p class="font-medium text-white">HTML</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <CssIcon class="size-8" />
+      <p class="font-medium text-white">CSS</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <JsIcon class="size-8" />
+      <p class="font-medium text-white">JavaScript</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <DatabaseIcon class="size-8" />
+      <p class="font-medium text-white">SQL</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <FirestoreIcon class="size-8" />
+      <p class="font-medium text-white">Firestore</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <FastApiIcon class="size-8" />
+      <p class="font-medium text-white">FastAPI</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <TestingIcon class="size-8" />
+      <p class="font-medium text-white">Software Testing</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <MongoDbIcon class="size-8" />
+      <p class="font-medium text-white">MongoDB</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <LinuxIcon class="size-8" />
+      <p class="font-medium text-white">Linux</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <NginxIcon class="size-8" />
+      <p class="font-medium text-white">Nginx</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <DockerIcon class="size-8" />
+      <p class="font-medium text-white">Docker</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <GraphQlIcon class="size-8" />
+      <p class="font-medium text-white">GraphQL</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <FlaskIcon class="size-8" />
+      <p class="font-medium text-white">Flask</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <RestIcon class="size-8" />
+      <p class="font-medium text-white">REST</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <FpIcon class="size-8" />
+      <p class="font-medium text-white">Functional Programming</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <TsIcon class="size-8" />
+      <p class="font-medium text-white">TypeScript</p>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <RegexIcon class="size-8" />
+      <p class="font-medium text-white">Regular Expressions</p>
+    </li>
+  </ul>
+</section>
