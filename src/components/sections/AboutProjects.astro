@@ -1,0 +1,24 @@
+---
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+---
+
+<section id="projects" class="grid gap-6">
+  <h2 class="mb-2 text-2xl font-bold tracking-tight text-white">{t("about.highlightedProjects")}</h2>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div
+      class="fade-in-section bg-backgroundlight rounded-2xl border border-slate-800 p-5 transition-colors hover:bg-slate-800"
+    >
+      <h3 class="mb-1 font-semibold text-white">Coming soon</h3>
+      <p class="mb-3 text-sm text-gray-400">I can't be arsed to build this rn.</p>
+      <div class="flex flex-wrap gap-2">
+        <span class="rounded-full bg-slate-800 px-2.5 py-0.5 text-xs text-gray-400">TypeScript</span>
+        <span class="rounded-full bg-slate-800 px-2.5 py-0.5 text-xs text-gray-400">Astro</span>
+      </div>
+    </div>
+  </div>
+  <a href="/projects" class="mt-2 w-fit">{t("about.viewAllProjects")}</a>
+</section>
