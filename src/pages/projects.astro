@@ -1,0 +1,24 @@
+---
+import DefaultPage from "@layouts/DefaultPage.astro";
+import { Image } from "astro:assets";
+
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+---
+
+<DefaultPage title="Projects" description="yeet">
+  <main class="fade-in-section flex flex-col items-center justify-center gap-8">
+    <h1 class="text-6xl font-bold">Projects</h1>
+    <p>Coming soon</p>
+    <Image
+      loading="eager"
+      width={256}
+      height={256}
+      src="https://i.pinimg.com/originals/eb/1b/27/eb1b27863813653543914d222ceb9cd0.gif"
+      alt="Jackhammer GIF"
+      class="h-64 w-64"
+    />
+  </main>
+</DefaultPage>
