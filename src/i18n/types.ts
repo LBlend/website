@@ -86,7 +86,36 @@ export interface Translations {
   };
   about: {
     title: string;
-    comingSoon: string;
+    pageTitle: string;
+    semester: string;
+    ects: string;
+    name: string;
+    birthday: string;
+    location: string;
+    sex: string;
+    height: string;
+    education: string;
+    emailMe: string;
+    callMe: string;
+    highlightedProjects: string;
+    viewAllProjects: string;
+    programmingTools: string;
+    humanLanguages: string;
+    native: string;
+    fluent: string;
+    basicA2: string;
+    basicA1: string;
+    languagesDesc: string;
+    courses: string;
+    showAllCourses: string;
+    showLess: string;
+    timeline: string;
+    present: string;
+    categoryLife: string;
+    categoryEducation: string;
+    categoryWork: string;
+    categoryVolunteer: string;
+    categoryCertification: string;
   };
   notFound: {
     title: string;
