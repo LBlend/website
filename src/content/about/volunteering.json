@@ -2,7 +2,7 @@
   {
     "org": "UiO Gaming",
     "url": "https://uiogaming.no",
-    "image": "",
+    "image": "uiogaming.png",
     "roles": [
       {
         "name": "Board Member & Technical Manager",
@@ -33,7 +33,7 @@
   {
     "org": "The Nowegian Student Society",
     "url": "https://neuf.no",
-    "image": "",
+    "image": "neuf.svg",
     "roles": [
       {
         "name": "Ledelsen",
@@ -52,7 +52,7 @@
   {
     "org": "EDB-gjengen",
     "url": "https://edb.neuf.no",
-    "image": "",
+    "image": "edb.svg",
     "roles": [
       {
         "name": "Leader",
@@ -65,7 +65,7 @@
   {
     "org": "Cybernetisk Selskab",
     "url": "https://cyb.no",
-    "image": "",
+    "image": "cyb.svg",
     "roles": [
       {
         "name": "Bartender",
@@ -96,7 +96,7 @@
   {
     "org": "IFI Navet",
     "url": "https://ifinavet.no",
-    "image": "",
+    "image": "navet.svg",
     "roles": [
       {
         "name": "Volunteer",
@@ -109,7 +109,7 @@
   {
     "org": "Fagultvaget ved Institutt for Informatikk",
     "url": "https://ififui.no",
-    "image": "",
+    "image": "fui.svg",
     "roles": [
       {
         "name": "Representative - Tilsettingsutvalget",
@@ -128,7 +128,7 @@
   {
     "org": "SIFI: Sikkerhet på IFI",
     "url": "https://sifi.no",
-    "image": "",
+    "image": "sifi.svg",
     "roles": [
       {
         "name": "Board Member",
@@ -141,7 +141,7 @@
   {
     "org": "IFI-LI:ST",
     "url": "https://www.mn.uio.no/ifi/livet-rundt-studiene/organisasjoner/list.html",
-    "image": "",
+    "image": "ifilist.svg",
     "roles": [
       {
         "name": "Board Member",
@@ -154,7 +154,7 @@
   {
     "org": "Øyafestivalen",
     "url": "https://www.oyafestivalen.no/",
-    "image": "",
+    "image": "oya.png",
     "roles": [
       {
         "name": "IT, Networking",
@@ -167,7 +167,7 @@
   {
     "org": "JavaZone",
     "url": "https://javazone.no",
-    "image": "",
+    "image": "javazone.svg",
     "roles": [
       {
         "name": "Volunteer",
@@ -180,7 +180,7 @@
   {
     "org": "dagen@ifi",
     "url": "https://www.dagenatifi.no",
-    "image": "",
+    "image": "dagenatifi.svg",
     "roles": [
       {
         "name": "Volunteer",
@@ -193,7 +193,7 @@
   {
     "org": "University of Oslo",
     "url": "https://uio.no",
-    "image": "",
+    "image": "uio.svg",
     "roles": [
       {
         "name": "Buddy, Buddy program",

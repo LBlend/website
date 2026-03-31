@@ -4,7 +4,7 @@
     "issuer": "Norwegian Public Roads Administration",
     "date": "2018-09-27",
     "url": "https://www.vegvesen.no/en/",
-    "image": "",
+    "image": "vegvesenet.svg",
     "proof": "",
     "isRelevant": false
   },
@@ -13,8 +13,8 @@
     "issuer": "Civil Aviation Authority Norway",
     "date": "2025-06-12",
     "url": "https://www.luftfartstilsynet.no/en/",
-    "image": "",
-    "proof": "",
+    "image": "luftfartstilsynet.svg",
+    "proof": "drone_certificate.pdf",
     "isRelevant": false
   }
 ]

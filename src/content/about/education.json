@@ -8,6 +8,7 @@
     "description": "Hand-picked bachelor's degree in STEM. I focused on computer science\nhttps://www.mn.uio.no/studier/programmer/fritt-sammensatt-bachelorgrad-realfag.html",
     "url": "https://www.mn.uio.no/studier/programmer/fritt-sammensatt-bachelorgrad-realfag.html",
     "isRelevant": true,
+    "image": "uio.svg",
     "courses": [
       {
         "code": "IN1000",
@@ -125,6 +126,7 @@
     "description": "",
     "url": "https://www.yonsei.ac.kr/en_sc/index.do",
     "isRelevant": true,
+    "image": "yonsei.svg",
     "courses": [
       {
         "code": "KLI1001",
@@ -158,6 +160,7 @@
     "description": "",
     "url": "https://afk.no/lillestrom-vgs/",
     "isRelevant": false,
+    "image": "school_generic.svg",
     "courses": []
   },
   {
@@ -169,6 +172,7 @@
     "description": "",
     "url": "https://afk.no/mailand-vgs/",
     "isRelevant": false,
+    "image": "school_generic.svg",
     "courses": []
   },
   {
@@ -180,6 +184,7 @@
     "description": "",
     "url": "https://www.lorenskog.kommune.no/kjenn-skole/",
     "isRelevant": false,
+    "image": "school_generic.svg",
     "courses": []
   },
   {
@@ -191,6 +196,7 @@
     "description": "",
     "url": "https://www.lorenskog.kommune.no/rasta-skole",
     "isRelevant": false,
+    "image": "school_generic.svg",
     "courses": []
   },
   {
@@ -202,6 +208,7 @@
     "description": "",
     "url": "https://www.minskole.no/dvergsnes",
     "isRelevant": false,
+    "image": "school_generic.svg",
     "courses": []
   }
 ]

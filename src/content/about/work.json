@@ -2,7 +2,7 @@
   {
     "company": "University of Oslo",
     "url": "https://uio.no",
-    "image": "",
+    "image": "uio.svg",
     "roles": [
       {
         "name": "Teaching Assistant",
@@ -25,7 +25,7 @@
   {
     "company": "The Norwegian Tax Administration",
     "url": "https://skatteetaten.no",
-    "image": "",
+    "image": "skatteetaten.svg",
     "roles": [
       {
         "name": "Engineer, Backend Developer",
@@ -40,7 +40,7 @@
   {
     "company": "Disputas",
     "url": "https://disputas.no",
-    "image": "",
+    "image": "disputas.svg",
     "roles": [
       {
         "name": "Software Engineer, Full Stack",
@@ -55,7 +55,7 @@
   {
     "company": "Meny Rasta",
     "url": "https://meny.no/Finn-butikk/MENY-Rasta",
-    "image": "",
+    "image": "meny.svg",
     "roles": [
       {
         "name": "Grocery Store Worker",
@@ -70,7 +70,7 @@
   {
     "company": "Skien Fritidspark",
     "url": "https://skienfritidspark.no",
-    "image": "",
+    "image": "skienfritidspark.svg",
     "roles": [
       {
         "name": "Lifeguard",
