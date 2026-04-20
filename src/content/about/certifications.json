@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Driver's License AM & B",
+    "issuer": "Norwegian Public Roads Administration",
+    "date": "2018-09-27",
+    "url": "https://www.vegvesen.no/en/",
+    "image": "vegvesenet.svg",
+    "proof": "",
+    "isRelevant": false
+  },
+  {
+    "name": "Drone Pilot License A1 & A3",
+    "issuer": "Civil Aviation Authority Norway",
+    "date": "2025-06-12",
+    "url": "https://www.luftfartstilsynet.no/en/",
+    "image": "luftfartstilsynet.svg",
+    "proof": "drone_certificate.pdf",
+    "isRelevant": false
+  }
+]

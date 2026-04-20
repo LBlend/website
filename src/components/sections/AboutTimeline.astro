@@ -1,0 +1,416 @@
+---
+import BabyIcon from "@assets/icons/logos/baby.svg";
+import SchoolIcon from "@assets/icons/logos/school_generic.svg";
+import certificationsData from "@content/about/certifications.json";
+import educationData from "@content/about/education.json";
+import lifeData from "@content/about/life.json";
+import volunteeringData from "@content/about/volunteering.json";
+import workData from "@content/about/work.json";
+import { useTranslations } from "@i18n/index";
+import { Image } from "astro:assets";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
+type WithImage = { image?: string };
+
+const images = import.meta.glob<{ default: ImageMetadata }>([
+  "/src/assets/icons/logos/**/*.{jpeg,jpg,png,gif,svg,ico,webp}",
+  "!/src/assets/icons/logos/baby.svg",
+  "!/src/assets/icons/logos/school_generic.svg",
+]);
+
+function getImagePath(path: string | undefined): string | undefined {
+  if (!path) return undefined;
+  if (path.startsWith("/src/assets/icons/")) return path;
+  return `/src/assets/icons/logos/${path}`;
+}
+
+type TimelineEvent = {
+  date: Date;
+  endDate: Date | null;
+  title: string;
+  subtitle: string;
+  description: string;
+  category: "life" | "education" | "work" | "volunteer" | "certification";
+  url?: string;
+  isCurrent?: boolean;
+  isPointInTime?: boolean;
+  image?: string;
+};
+
+const events: TimelineEvent[] = [];
+
+for (const event of lifeData) {
+  events.push({
+    date: new Date(event.date),
+    endDate: null,
+    title: event.title,
+    subtitle: event.subtitle,
+    description: event.description ?? "",
+    category: "life",
+    isPointInTime: event.isPointInTime ?? true,
+    image: getImagePath(event.image),
+  });
+}
+
+for (const edu of educationData) {
+  events.push({
+    date: new Date(edu.start),
+    endDate: edu.end ? new Date(edu.end) : null,
+    title: edu.degree ? `${edu.degree}${edu.field ? " – " + edu.field : ""}` : edu.field,
+    subtitle: edu.school,
+    description: edu.description?.replace(/https?:\/\/\S+/g, "").trim() ?? "",
+    category: "education",
+    url: edu.url ?? undefined,
+    isCurrent: !edu.end,
+    image: getImagePath((edu as WithImage).image),
+  });
+}
+
+for (const job of workData) {
+  for (const role of job.roles) {
+    events.push({
+      date: new Date(role.start),
+      endDate: role.end ? new Date(role.end) : null,
+      title: role.name,
+      subtitle: job.company,
+      description: role.description ?? "",
+      category: "work",
+      url: job.url,
+      isCurrent: !role.end,
+      image: getImagePath((job as WithImage).image),
+    });
+  }
+}
+
+for (const org of volunteeringData) {
+  for (const role of org.roles) {
+    events.push({
+      date: new Date(role.start),
+      endDate: role.end ? new Date(role.end) : null,
+      title: role.name,
+      subtitle: org.org,
+      description: role.description ?? "",
+      category: "volunteer",
+      url: org.url,
+      isCurrent: !role.end,
+      image: getImagePath((org as WithImage).image),
+    });
+  }
+}
+
+for (const cert of certificationsData) {
+  events.push({
+    date: new Date(cert.date),
+    endDate: null,
+    title: cert.name,
+    subtitle: cert.issuer,
+    description: "",
+    category: "certification",
+    url: cert.url ?? undefined,
+    isPointInTime: true,
+    image: getImagePath((cert as WithImage).image),
+  });
+}
+
+events.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+function formatDate(date: Date) {
+  const locale = Astro.locals.locale;
+  return date.toLocaleDateString(locale, { month: "short", year: "numeric" });
+}
+
+function formatRange(start: Date, end: Date | null, isCurrent?: boolean, isPointInTime?: boolean) {
+  if (isPointInTime) return formatDate(start);
+  if (isCurrent || !end) return `${formatDate(start)} – ${t("about.present")}`;
+  return `${formatDate(start)} – ${formatDate(end)}`;
+}
+
+const categoryMeta: Record<string, { label: string; color: string; icon: string }> = {
+  life: { label: t("about.categoryLife"), color: "#e879f9", icon: "★" },
+  education: { label: t("about.categoryEducation"), color: "#38bdf8", icon: "🎓" },
+  work: { label: t("about.categoryWork"), color: "#4ade80", icon: "💼" },
+  volunteer: { label: t("about.categoryVolunteer"), color: "#fb923c", icon: "🤝" },
+  certification: { label: t("about.categoryCertification"), color: "#facc15", icon: "📜" },
+};
+
+const MS_PER_MONTH = 1000 * 60 * 60 * 24 * 30.44;
+const PX_PER_MONTH = 4;
+
+const margins: number[] = events.map((event, i) => {
+  if (i === 0) return 0;
+  const prev = events[i - 1];
+  const monthsGap = (prev.date.getTime() - event.date.getTime()) / MS_PER_MONTH;
+  return Math.max(0, Math.round(monthsGap * PX_PER_MONTH));
+});
+---
+
+<section id="timeline" class="grid gap-6">
+  <h2 class="mb-2 text-2xl font-bold tracking-tight text-white">{t("about.timeline")}</h2>
+
+  <div class="mb-10 flex flex-wrap justify-center gap-x-2 gap-y-2">
+    {
+      Object.entries(categoryMeta).map(([key, meta]) => (
+        <button
+          class="tl-filter-btn flex cursor-pointer items-center gap-1.5 rounded-full border border-slate-700 px-3 py-1 text-xs tracking-wider text-slate-400 uppercase transition-all duration-200 hover:border-slate-500 hover:text-slate-200"
+          data-filter={key}
+          style={`--btn-accent:${meta.color}`}
+        >
+          <span class="inline-block h-2 w-2 shrink-0 rounded-full bg-(--btn-accent)" />
+          {meta.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="tl-root relative">
+    {
+      events.map((event, i) => {
+        const meta = categoryMeta[event.category];
+        const startLeft = i % 2 === 0;
+        const extraMargin = margins[i];
+        return (
+          <div
+            class={`tl-item relative ${startLeft ? "is-left" : "is-right"}`}
+            style={`--accent:${meta.color}; margin-top:${extraMargin}px;`}
+            data-category={event.category}
+            data-date={event.date.getTime()}
+          >
+            <div class="tl-dot-col">
+              <span class="tl-dot block h-3.5 w-3.5 rounded-full transition-transform duration-200" />
+            </div>
+
+            <div class="tl-card-col fade-in-section">
+              <div class="tl-card relative rounded-lg border border-slate-800 px-4 py-3 transition-colors duration-200">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div class="flex-1">
+                    <div class="tl-meta mb-1.5 flex flex-wrap items-center gap-2">
+                      <span class="tl-badge rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-widest whitespace-nowrap text-(--accent) uppercase">
+                        {meta.icon} {meta.label}
+                      </span>
+                      <time class="text-xs tracking-wide text-slate-500">
+                        {formatRange(event.date, event.endDate, event.isCurrent, event.isPointInTime)}
+                      </time>
+                    </div>
+                    <h2 class="tl-title mb-0.5 text-base leading-snug font-bold text-slate-100">{event.title}</h2>
+                    <div class="mb-1">
+                      {event.url ? (
+                        <a href={event.url} target="_blank" rel="noopener" class="tl-org-link text-sm">
+                          {event.subtitle} ↗
+                        </a>
+                      ) : (
+                        <span class="text-sm text-slate-400">{event.subtitle}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {event.image?.endsWith("school_generic.svg") ? (
+                    <SchoolIcon class="size-8 shrink-0 self-center text-white" />
+                  ) : event.image?.endsWith("baby.svg") ? (
+                    <BabyIcon class="size-8 shrink-0 self-center text-white" />
+                  ) : event.image && images[event.image] ? (
+                    <Image
+                      src={images[event.image]()}
+                      alt={event.subtitle}
+                      width={48}
+                      height={48}
+                      class="size-12 shrink-0 self-center rounded-lg bg-slate-800 p-1"
+                    />
+                  ) : (
+                    <SchoolIcon class="size-8 shrink-0 self-center text-white" />
+                  )}
+                </div>
+                {event.description && (
+                  <p class="mt-1.5 text-sm leading-relaxed whitespace-pre-line text-slate-500">{event.description}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</section>
+
+<style>
+  .tl-item {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    align-items: start;
+    padding-bottom: 2rem;
+  }
+  @media (min-width: 640px) {
+    .tl-item {
+      grid-template-columns: 1fr 2rem 1fr;
+    }
+  }
+
+  .tl-dot-col {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0.75rem;
+    position: relative;
+    z-index: 10;
+  }
+  @media (min-width: 640px) {
+    .tl-dot-col {
+      grid-column: 2;
+    }
+  }
+
+  .tl-card-col {
+    grid-column: 2;
+    grid-row: 1;
+    padding-left: 1rem;
+  }
+  @media (min-width: 640px) {
+    .tl-item.is-left .tl-card-col {
+      grid-column: 1;
+      padding-left: 0;
+      padding-right: 1rem;
+    }
+    .tl-item.is-right .tl-card-col {
+      grid-column: 3;
+      padding-left: 1rem;
+      padding-right: 0;
+    }
+    .tl-item.is-left .tl-card {
+      border-left-width: 1px !important;
+      border-right-width: 3px !important;
+      border-right-color: var(--accent) !important;
+      border-left-color: var(--backgroundlight) !important;
+    }
+    .tl-item.is-left .tl-meta {
+      flex-direction: row-reverse;
+    }
+    .tl-item.is-left .tl-title {
+      text-align: right;
+    }
+    .tl-item.is-left .tl-org-link,
+    .tl-item.is-left .tl-card-col > .tl-card .mb-1 {
+      text-align: right;
+      display: block;
+    }
+    .tl-item.is-left p {
+      text-align: right;
+    }
+    .tl-item.is-right .tl-card {
+      border-left-width: 3px !important;
+      border-left-color: var(--accent) !important;
+      border-right-width: 1px !important;
+    }
+  }
+
+  .tl-root::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 1rem;
+    transform: translateX(-50%);
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, #334155 4%, #334155 96%, transparent);
+    pointer-events: none;
+  }
+  @media (min-width: 640px) {
+    .tl-root::before {
+      left: 50%;
+    }
+  }
+
+  .tl-dot {
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    flex-shrink: 0;
+  }
+  .tl-item:hover .tl-dot {
+    transform: scale(1.45);
+    box-shadow: 0 0 22px var(--accent);
+  }
+
+  .tl-card {
+    background: var(--backgroundlight);
+    border-left-width: 3px;
+    border-left-color: var(--accent);
+    cursor: default;
+  }
+  .tl-card a {
+    cursor: pointer;
+  }
+  .tl-item:hover .tl-card {
+    background: rgb(30 41 59); /* slate-800 */
+  }
+
+  .tl-badge {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+  .tl-org-link:hover {
+    color: var(--accent);
+  }
+
+  .tl-filter-btn.is-active {
+    background: color-mix(in srgb, var(--btn-accent) 15%, transparent);
+    border-color: var(--btn-accent);
+    color: var(--btn-accent);
+  }
+
+  .tl-item.is-hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  const MS_PER_MONTH = 1000 * 60 * 60 * 24 * 30.44;
+  const PX_PER_MONTH = 4;
+
+  const buttons = document.querySelectorAll(".tl-filter-btn");
+  const items = Array.from(document.querySelectorAll(".tl-item"));
+  const active = new Set<string>();
+
+  function recalcMargins(visibleItems: Element[]) {
+    visibleItems.forEach((item, idx) => {
+      const el = item as HTMLElement;
+      if (idx === 0) {
+        el.style.marginTop = "0px";
+        return;
+      }
+      const prev = visibleItems[idx - 1] as HTMLElement;
+      const months = (parseInt(prev.dataset.date!) - parseInt(el.dataset.date!)) / MS_PER_MONTH;
+      el.style.marginTop = Math.max(0, Math.round(months * PX_PER_MONTH)) + "px";
+    });
+  }
+
+  function applyFilter() {
+    items.forEach((item) => {
+      const el = item as HTMLElement;
+      const visible = active.size === 0 || active.has(el.dataset.category!);
+      el.classList.toggle("is-hidden", !visible);
+    });
+    const visible = items.filter((el) => !el.classList.contains("is-hidden"));
+    visible.forEach((item, idx) => {
+      item.classList.toggle("is-left", idx % 2 === 0);
+      item.classList.toggle("is-right", idx % 2 !== 0);
+    });
+    recalcMargins(visible);
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = (btn as HTMLElement).dataset.filter ?? "";
+      if (active.has(key)) {
+        active.clear();
+        btn.classList.remove("is-active");
+      } else {
+        active.clear();
+        buttons.forEach((b) => b.classList.remove("is-active"));
+        active.add(key);
+        btn.classList.add("is-active");
+      }
+      applyFilter();
+    });
+  });
+</script>

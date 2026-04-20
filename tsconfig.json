@@ -9,6 +9,7 @@
       "@api/*": ["src/pages/api/*"],
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
+      "@content/*": ["src/content/*"],
       "@elements/*": ["src/components/elements/*"],
       "@i18n/*": ["src/i18n/*"],
       "@layouts/*": ["src/layouts/*"],

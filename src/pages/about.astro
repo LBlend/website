@@ -1,24 +1,29 @@
 ---
-import DefaultPage from "@layouts/DefaultPage.astro";
-import { Image } from "astro:assets";
-
 import { useTranslations } from "@i18n/index";
+import DefaultPage from "@layouts/DefaultPage.astro";
+import AboutCourses from "@sections/AboutCourses.astro";
+import AboutFavourites from "@sections/AboutFavourites.astro";
+import AboutIntro from "@sections/AboutIntro.astro";
+import AboutLanguages from "@sections/AboutLanguages.astro";
+import AboutProjects from "@sections/AboutProjects.astro";
+import AboutTech from "@sections/AboutTech.astro";
+import AboutTimeline from "@sections/AboutTimeline.astro";
 
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
 ---
 
-<DefaultPage title={t("about.title")} description="An overview about me and my projects">
-  <main class="fade-in-section flex flex-col items-center justify-center gap-8">
-    <h1 class="text-6xl font-bold">{t("about.title")}</h1>
-    <p>{t("about.comingSoon")}</p>
-    <Image
-      loading="eager"
-      width={256}
-      height={256}
-      src="https://i.pinimg.com/originals/eb/1b/27/eb1b27863813653543914d222ceb9cd0.gif"
-      alt="Jackhammer GIF"
-      class="h-64 w-64"
-    />
+<DefaultPage title={t("about.title")} description="About me">
+  <main class="fade-in-section mx-auto grid max-w-6xl gap-24">
+    <h1 class="text-center text-6xl font-bold">
+      {t("about.pageTitle")}
+    </h1>
+    <AboutIntro />
+    <AboutFavourites />
+    <AboutLanguages />
+    <AboutTech />
+    <AboutProjects />
+    <AboutCourses />
+    <AboutTimeline />
   </main>
 </DefaultPage>

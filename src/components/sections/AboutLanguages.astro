@@ -1,0 +1,59 @@
+---
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
+import KoreaFlag from "@assets/icons/korea.svg";
+import NorwayFlag from "@assets/icons/norway.svg";
+import SpainFlag from "@assets/icons/spain.svg";
+import UkFlag from "@assets/icons/uk.svg";
+---
+
+<section id="languages" class="grid gap-6">
+  <h2 class="mb-2 text-2xl font-bold tracking-tight text-white">{t("about.humanLanguages")}</h2>
+
+  <ul class="flex flex-wrap items-center gap-4">
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3"
+    >
+      <NorwayFlag class="h-8 w-10 rounded-sm" />
+      <div>
+        <p class="font-medium text-white">Norsk</p>
+        <p class="text-sm text-gray-400">{t("about.native")}</p>
+      </div>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-4 py-3"
+    >
+      <UkFlag class="h-8 w-10 rounded-sm" />
+      <div>
+        <p class="font-medium text-white">English</p>
+        <p class="text-sm text-gray-400">{t("about.fluent")}</p>
+      </div>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-4 py-3"
+    >
+      <KoreaFlag class="h-8 w-10 rounded-sm" />
+      <div>
+        <p class="font-medium text-white">한국어</p>
+        <p class="text-sm text-gray-400">{t("about.basicA2")}</p>
+      </div>
+    </li>
+
+    <li
+      class="fade-in-section bg-backgroundlight flex items-center gap-3 rounded-2xl border border-slate-800 px-4 py-3"
+    >
+      <SpainFlag class="h-8 w-10 rounded-sm" />
+      <div>
+        <p class="font-medium text-white">Español</p>
+        <p class="text-sm text-gray-400">{t("about.basicA1")}</p>
+      </div>
+    </li>
+  </ul>
+
+  <p>{t("about.languagesDesc")}</p>
+</section>
