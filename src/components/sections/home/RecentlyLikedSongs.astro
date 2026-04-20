@@ -55,12 +55,7 @@ export interface Image {
   "#text": string;
 }
 
-export enum Size {
-  Extralarge = "extralarge",
-  Large = "large",
-  Medium = "medium",
-  Small = "small",
-}
+export type Size = "extralarge" | "large" | "medium" | "small";
 
 export interface Streamable {
   fulltrack: string;
