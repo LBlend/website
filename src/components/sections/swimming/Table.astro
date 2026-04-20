@@ -39,7 +39,7 @@ const i18nData = JSON.stringify({
 <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
 <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
 
-<script define:vars={{ data }}>
+<script is:inline define:vars={{ data }}>
   function initTable() {
     if (typeof window.gridjs === "undefined") {
       setTimeout(initTable, 100);

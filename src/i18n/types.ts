@@ -18,6 +18,7 @@ export interface Translations {
     photos: string;
     about: string;
     microblog: string;
+    projects: string;
     swimming: string;
   };
   blog: {
@@ -35,7 +36,6 @@ export interface Translations {
     pgpKey: string;
     copiedXmr: string;
     enableJs: string;
-    xmrPrefix: string;
   };
   intro: {
     greeting: string;
