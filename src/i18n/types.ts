@@ -116,6 +116,13 @@ export interface Translations {
     categoryWork: string;
     categoryVolunteer: string;
     categoryCertification: string;
+    favourites: string;
+    favouritesDesc: string;
+    favouriteFood: string;
+    favouriteMovie: string;
+    favouriteTvShow: string;
+    favouriteGame: string;
+    favouriteAlbum: string;
   };
   notFound: {
     title: string;

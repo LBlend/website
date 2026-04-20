@@ -2,6 +2,7 @@
 import { useTranslations } from "@i18n/index";
 import DefaultPage from "@layouts/DefaultPage.astro";
 import AboutCourses from "@sections/AboutCourses.astro";
+import AboutFavourites from "@sections/AboutFavourites.astro";
 import AboutIntro from "@sections/AboutIntro.astro";
 import AboutLanguages from "@sections/AboutLanguages.astro";
 import AboutProjects from "@sections/AboutProjects.astro";
@@ -18,9 +19,10 @@ const t = useTranslations(locale);
       {t("about.pageTitle")}
     </h1>
     <AboutIntro />
-    <AboutProjects />
-    <AboutTech />
+    <AboutFavourites />
     <AboutLanguages />
+    <AboutTech />
+    <AboutProjects />
     <AboutCourses />
     <AboutTimeline />
   </main>

@@ -104,7 +104,14 @@
     "categoryEducation": "교육",
     "categoryWork": "직업",
     "categoryVolunteer": "자원봉사",
-    "categoryCertification": "자격증"
+    "categoryCertification": "자격증",
+    "favourites": "즐겨찾기",
+    "favouritesDesc": "네, 취향이 정말 평범하죠. 어떻게 알았나요?",
+    "favouriteFood": "음식",
+    "favouriteMovie": "영화",
+    "favouriteTvShow": "시리즈",
+    "favouriteGame": "게임",
+    "favouriteAlbum": "앨범"
   },
   "notFound": {
     "title": "404: 찾을 수 없음!",

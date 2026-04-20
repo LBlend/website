@@ -104,7 +104,14 @@
     "categoryEducation": "Utdanning",
     "categoryWork": "Jobb",
     "categoryVolunteer": "Frivillig",
-    "categoryCertification": "Sertifisering"
+    "categoryCertification": "Sertifisering",
+    "favourites": "Favoritter",
+    "favouritesDesc": "Ja, jeg har veldig ueksotisk smak. Hvordan visste du det?",
+    "favouriteFood": "Mat",
+    "favouriteMovie": "Film",
+    "favouriteTvShow": "Serie",
+    "favouriteGame": "Spill",
+    "favouriteAlbum": "Album"
   },
   "notFound": {
     "title": "404: Fant ikke siden!",

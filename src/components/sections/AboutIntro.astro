@@ -1,0 +1,96 @@
+---
+import { useTranslations } from "@i18n/index";
+import { Image } from "astro:assets";
+
+import BabyIcon from "@assets/icons/baby.svg";
+import BirthdayIcon from "@assets/icons/birthday.svg";
+import GraduationIcon from "@assets/icons/education.svg";
+import Email from "@assets/icons/email.svg";
+import GenderIcon from "@assets/icons/gender.svg";
+import HeightIcon from "@assets/icons/height.svg";
+import PhoneIcon from "@assets/icons/phone.svg";
+import UserIcon from "@assets/icons/user.svg";
+import Me2025 from "@assets/images/me_2025.jpg";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+---
+
+<section id="intro" class="grid gap-6">
+  <div class="bg-backgroundlight grid items-center gap-4 rounded-xl border border-slate-800 p-8 md:p-12">
+    <div class="flex flex-col items-center gap-6 md:flex-row">
+      <Image
+        src={Me2025}
+        alt="Leander Furumo"
+        width={2590}
+        height={2590}
+        loading="eager"
+        class="fade-in-section w-full rounded-xl object-cover md:w-64"
+      />
+      <div class="grid w-full gap-4 divide-y-2 divide-gray-700 border-b-2 border-gray-700">
+        <p class="flex items-center gap-2"><UserIcon class="size-5" /> {t("about.name")}</p>
+        <p class="flex items-center gap-2"><BirthdayIcon class="size-5" /> {t("about.birthday")}</p>
+        <p class="flex items-center gap-2"><BabyIcon class="size-5" /> {t("about.location")}</p>
+        <p class="flex items-center gap-2"><GenderIcon class="size-5" /> {t("about.sex")}</p>
+        <p class="flex items-center gap-2"><HeightIcon class="size-5" /> {t("about.height")}</p>
+        <p class="flex items-center gap-2"><GraduationIcon class="size-5" /> {t("about.education")}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap justify-center gap-4">
+    <a href="mailto:leander@furumo.eu" class="non-styled-link link-button">
+      <div
+        class="bg-backgroundlight flex items-center gap-2 rounded-xl border border-gray-700 px-5 py-2 font-medium text-gray-300 transition-colors hover:bg-slate-800"
+      >
+        <Email class="size-5" />
+        {t("about.emailMe")}
+      </div>
+    </a>
+    <a id="call-btn" href="tel:22225555" class="non-styled-link link-button relative">
+      <div
+        class="bg-backgroundlight flex items-center gap-2 rounded-xl border border-gray-700 px-5 py-2 font-medium text-gray-300 transition-colors hover:bg-slate-800"
+      >
+        <PhoneIcon class="size-5" />
+        {t("about.callMe")}
+      </div>
+    </a>
+  </div>
+</section>
+
+<script>
+  const btn = document.getElementById("call-btn") as HTMLAnchorElement;
+  const TRIGGER_RADIUS = 120;
+  const FLEE_STRENGTH = 200;
+
+  let naturalCenterX = 0;
+  let naturalCenterY = 0;
+
+  function cacheNaturalCenter() {
+    const prev = btn.style.transform;
+    btn.style.transform = "";
+    const rect = btn.getBoundingClientRect();
+    naturalCenterX = rect.left + rect.width / 2;
+    naturalCenterY = rect.top + rect.height / 2;
+    btn.style.transform = prev;
+  }
+
+  cacheNaturalCenter();
+  window.addEventListener("resize", cacheNaturalCenter);
+  window.addEventListener("scroll", cacheNaturalCenter, { passive: true });
+
+  document.addEventListener("mousemove", (e) => {
+    const dx = e.clientX - naturalCenterX;
+    const dy = e.clientY - naturalCenterY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < TRIGGER_RADIUS && dist > 0) {
+      const scale = (TRIGGER_RADIUS - dist) / TRIGGER_RADIUS;
+      const tx = -(dx / dist) * FLEE_STRENGTH * scale;
+      const ty = -(dy / dist) * FLEE_STRENGTH * scale;
+      btn.style.transform = `translate(${tx}px, ${ty}px)`;
+    } else {
+      btn.style.transform = "";
+    }
+  });
+</script>

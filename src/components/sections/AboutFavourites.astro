@@ -1,0 +1,178 @@
+---
+import favouritesData from "@content/about/favourites.json";
+import { useTranslations } from "@i18n/index";
+import { Image } from "astro:assets";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/favourites/**/*.{jpeg,jpg,png,gif,webp,avif}",
+);
+
+function getImagePath(filename: string | undefined): string | undefined {
+  if (!filename) return undefined;
+  return `/src/assets/images/favourites/${filename}`;
+}
+
+type CategoryKey = "food" | "movie" | "tvShow" | "game" | "album";
+
+type HonorableMention = {
+  name: string;
+  subtitle?: string;
+  image?: string;
+};
+
+const categoryMeta: Record<CategoryKey, { label: string; color: string }> = {
+  food: { label: t("about.favouriteFood"), color: "#fb923c" },
+  movie: { label: t("about.favouriteMovie"), color: "#f87171" },
+  tvShow: { label: t("about.favouriteTvShow"), color: "#c084fc" },
+  game: { label: t("about.favouriteGame"), color: "#60a5fa" },
+  album: { label: t("about.favouriteAlbum"), color: "#34d399" },
+};
+---
+
+<section id="favourites" class="grid gap-6">
+  <h2 class="mb-2 text-2xl font-bold tracking-tight text-white">{t("about.favourites")}</h2>
+
+  <p>{t("about.favouritesDesc")}</p>
+
+  <ul class="flex flex-wrap justify-center gap-4 md:grid md:grid-cols-5">
+    {
+      favouritesData.map((fav) => {
+        const meta = categoryMeta[fav.category as CategoryKey];
+        const mentions = fav.honorableMentions as HonorableMention[];
+
+        const topImagePath = getImagePath(fav.top.image || undefined);
+        const topResolvedImage = topImagePath ? images[topImagePath] : undefined;
+
+        const mentionLayers = mentions.map((mention) => {
+          const path = getImagePath(mention.image || undefined);
+          return { mention, resolvedImage: path ? images[path] : undefined };
+        });
+
+        return (
+          <li
+            class="fav-card fade-in-section bg-backgroundlight flex w-[calc(50%-0.5rem)] flex-col overflow-hidden rounded-xl border border-slate-800 sm:w-[calc(33.333%-0.667rem)] md:w-auto"
+            style={`--accent:${meta.color}`}
+          >
+            <div class="relative aspect-square w-full shrink-0 overflow-hidden">
+              <div class="fav-layer is-active absolute inset-0">
+                {topResolvedImage ? (
+                  <Image
+                    src={topResolvedImage()}
+                    alt={fav.top.name}
+                    width={300}
+                    height={450}
+                    class="h-full w-full object-cover object-center"
+                  />
+                ) : (
+                  <div class="h-full w-full bg-[linear-gradient(135deg,color-mix(in_srgb,var(--accent)_20%,#0f172a),color-mix(in_srgb,var(--accent)_8%,#0f172a))]" />
+                )}
+              </div>
+
+              {/* Layers 1..n: honorable mention images */}
+              {mentionLayers.map(({ mention, resolvedImage }) => (
+                <div class="fav-layer absolute inset-0">
+                  {resolvedImage ? (
+                    <Image
+                      src={resolvedImage()}
+                      alt={mention.name}
+                      width={300}
+                      height={450}
+                      class="h-full! w-full object-cover object-center"
+                    />
+                  ) : (
+                    <div class="h-full w-full bg-[linear-gradient(315deg,color-mix(in_srgb,var(--accent)_20%,#0f172a),color-mix(in_srgb,var(--accent)_8%,#0f172a))]" />
+                  )}
+                </div>
+              ))}
+
+              <div class="absolute top-2 left-2 rounded-full bg-[color-mix(in_srgb,var(--accent)_20%,#0f172a)] px-2.5 py-0.5 text-xs font-semibold tracking-widest text-(--accent) uppercase">
+                {meta.label}
+              </div>
+            </div>
+
+            {/* Text body */}
+            <div class="flex flex-1 flex-col gap-2 p-3">
+              {/* Display area: fixed height so it never causes layout shift */}
+              <div class="h-14 overflow-hidden">
+                <p class="fav-display-name line-clamp-2 text-sm leading-tight font-bold text-slate-100">
+                  {fav.top.name || "—"}
+                </p>
+                <p class="fav-display-subtitle text-xs text-slate-500">{fav.top.subtitle}</p>
+              </div>
+
+              {/* Full list: top pick + mentions — truncated to prevent wrapping */}
+              <ul class="flex flex-col gap-0.5 border-t border-slate-800 pt-2">
+                <li
+                  class="fav-mention is-active cursor-default truncate text-xs transition-colors duration-150"
+                  data-layer="0"
+                  data-name={fav.top.name || "—"}
+                  data-subtitle={fav.top.subtitle || ""}
+                >
+                  {fav.top.name || "—"}
+                </li>
+                {mentions.map((mention, i) => (
+                  <li
+                    class="fav-mention cursor-default truncate text-xs transition-colors duration-150"
+                    data-layer={i + 1}
+                    data-name={(mention as HonorableMention).name}
+                    data-subtitle={(mention as HonorableMention).subtitle || ""}
+                  >
+                    {(mention as HonorableMention).name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>
+
+<style>
+  .fav-layer {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .fav-layer.is-active {
+    opacity: 1;
+  }
+
+  .fav-mention {
+    color: #64748b; /* slate-500 */
+  }
+  .fav-mention.is-active {
+    color: #f1f5f9; /* slate-100 */
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".fav-card").forEach((card) => {
+    const layers = card.querySelectorAll<HTMLElement>(".fav-layer");
+    const items = card.querySelectorAll<HTMLElement>(".fav-mention");
+    const displayName = card.querySelector<HTMLElement>(".fav-display-name");
+    const displaySubtitle = card.querySelector<HTMLElement>(".fav-display-subtitle");
+
+    function activate(item: HTMLElement) {
+      const index = parseInt(item.dataset.layer ?? "0", 10);
+
+      layers.forEach((l) => l.classList.remove("is-active"));
+      layers[index]?.classList.add("is-active");
+
+      items.forEach((i) => i.classList.remove("is-active"));
+      item.classList.add("is-active");
+
+      if (displayName) displayName.textContent = item.dataset.name ?? "";
+      if (displaySubtitle) displaySubtitle.textContent = item.dataset.subtitle ?? "";
+    }
+
+    items.forEach((item) => {
+      item.addEventListener("mouseenter", () => activate(item));
+    });
+
+    card.querySelector("ul")?.addEventListener("mouseleave", () => activate(items[0]));
+  });
+</script>

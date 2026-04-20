@@ -1,0 +1,190 @@
+---
+import SchoolIcon from "@assets/icons/school_generic.svg";
+import UioLogo from "@assets/icons/uio.svg";
+import YonseiLogo from "@assets/icons/yonsei.svg";
+import educationData from "@content/about/education.json";
+import { useTranslations } from "@i18n/index";
+
+const locale = Astro.locals.locale;
+const t = useTranslations(locale);
+
+const allCourses = educationData.flatMap((edu) =>
+  edu.courses.map((course) => ({
+    ...course,
+    school: edu.school,
+  })),
+);
+
+const coursesBySemester = allCourses.reduce(
+  (acc, course) => {
+    const semester = course.semester;
+    if (!acc[semester]) {
+      acc[semester] = [];
+    }
+    acc[semester].push(course);
+    return acc;
+  },
+  {} as Record<number, typeof allCourses>,
+);
+
+const sortedSemesters = Object.keys(coursesBySemester)
+  .map(Number)
+  .sort((a, b) => a - b);
+---
+
+<section id="courses" class="grid gap-6">
+  <h2 class="mb-2 text-2xl font-bold tracking-tight text-white">{t("about.courses")}</h2>
+
+  <div class="relative">
+    <!-- Preview: first semester only, faded out at the bottom -->
+    <div id="courses-preview" class="pointer-events-none relative max-h-64 overflow-hidden">
+      {
+        (() => {
+          const firstSem = sortedSemesters[0];
+          return (
+            <div class="grid gap-4">
+              <h3 class="text-xl font-semibold text-gray-300">{t("about.semester", { num: firstSem })}</h3>
+              <ul class="flex flex-wrap gap-4">
+                {coursesBySemester[firstSem].map((course) => {
+                  const CardTag = course.link ? "a" : "div";
+                  const cardProps = course.link
+                    ? { href: course.link, target: "_blank", rel: "noopener noreferrer" }
+                    : {};
+                  return (
+                    <li class="flex w-full sm:w-auto">
+                      <CardTag
+                        {...cardProps}
+                        class="course-card bg-backgroundlight flex w-full items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3 transition-colors outline-none hover:bg-slate-800 sm:w-auto"
+                      >
+                        {course.school === "University of Oslo" ? (
+                          <UioLogo class="h-8 w-10 shrink-0 rounded-sm" />
+                        ) : course.school === "Yonsei Univeristy" ? (
+                          <YonseiLogo class="h-8 w-10 shrink-0 rounded-sm" />
+                        ) : (
+                          <SchoolIcon class="h-8 w-10 shrink-0 rounded-sm" />
+                        )}
+                        <div>
+                          <p class="font-medium text-white">
+                            {course.code} - {course.name}
+                          </p>
+                          <p class="text-xs text-gray-400">
+                            {course.school} • {t("about.ects", { num: course.ects })}
+                          </p>
+                        </div>
+                      </CardTag>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })()
+      }
+      <!-- Fade overlay -->
+      <div class="from-background absolute inset-x-0 bottom-0 h-24 bg-linear-to-t to-transparent"></div>
+    </div>
+
+    <!-- Full content -->
+    <div id="courses-full" class="hidden flex-col gap-8">
+      {
+        sortedSemesters.map((semNum) => (
+          <div class="grid gap-4">
+            <h3 class="text-xl font-semibold text-gray-300">{t("about.semester", { num: semNum })}</h3>
+            <ul class="flex flex-wrap gap-4">
+              {coursesBySemester[semNum].map((course) => {
+                const CardTag = course.link ? "a" : "div";
+                const cardProps = course.link
+                  ? { href: course.link, target: "_blank", rel: "noopener noreferrer" }
+                  : {};
+                return (
+                  <li class="fade-in-section flex w-full sm:w-auto">
+                    <CardTag
+                      {...cardProps}
+                      class="course-card bg-backgroundlight flex w-full items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3 transition-colors outline-none hover:bg-slate-800 sm:w-auto"
+                    >
+                      {course.school === "University of Oslo" ? (
+                        <UioLogo class="h-8 w-10 shrink-0 rounded-sm" />
+                      ) : course.school === "Yonsei Univeristy" ? (
+                        <YonseiLogo class="h-8 w-10 shrink-0 rounded-sm" />
+                      ) : (
+                        <SchoolIcon class="h-8 w-10 shrink-0 rounded-sm" />
+                      )}
+                      <div>
+                        <p class="font-medium text-white">
+                          {course.code} - {course.name}
+                        </p>
+                        <p class="text-xs text-gray-400">
+                          {course.school} • {t("about.ects", { num: course.ects })}
+                        </p>
+                      </div>
+                    </CardTag>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Toggle button -->
+    <button
+      id="courses-toggle"
+      data-show-all={t("about.showAllCourses")}
+      data-show-less={t("about.showLess")}
+      class="bg-backgroundlight mt-4 flex cursor-pointer items-center gap-2 rounded-xl border border-gray-700 px-5 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-slate-800"
+    >
+      <span id="courses-toggle-label">{t("about.showAllCourses")}</span>
+      <svg
+        id="courses-toggle-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        class="size-4 transition-transform"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  .course-card:hover {
+    background: rgb(30 41 59); /* slate-800 */
+    background-clip: border-box;
+    -webkit-text-fill-color: inherit;
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById("courses-toggle")!;
+  const showAllLabel = toggle.dataset.showAll!;
+  const showLessLabel = toggle.dataset.showLess!;
+  const preview = document.getElementById("courses-preview")!;
+  const full = document.getElementById("courses-full")!;
+  const label = document.getElementById("courses-toggle-label")!;
+  const icon = document.getElementById("courses-toggle-icon")!;
+
+  let expanded = false;
+
+  toggle.addEventListener("click", () => {
+    expanded = !expanded;
+    if (expanded) {
+      preview.classList.add("hidden");
+      full.classList.remove("hidden");
+      full.classList.add("flex");
+      label.textContent = showLessLabel;
+      icon.style.transform = "rotate(180deg)";
+    } else {
+      preview.classList.remove("hidden");
+      full.classList.add("hidden");
+      full.classList.remove("flex");
+      label.textContent = showAllLabel;
+      icon.style.transform = "";
+    }
+  });
+</script>

@@ -104,7 +104,14 @@
     "categoryEducation": "Education",
     "categoryWork": "Work",
     "categoryVolunteer": "Volunteer",
-    "categoryCertification": "Certification"
+    "categoryCertification": "Certification",
+    "favourites": "Favourites",
+    "favouritesDesc": "Yes, I have very basic taste. How could you tell?",
+    "favouriteFood": "Food",
+    "favouriteMovie": "Movie",
+    "favouriteTvShow": "TV Show",
+    "favouriteGame": "Game",
+    "favouriteAlbum": "Album"
   },
   "notFound": {
     "title": "404: Not found!",
