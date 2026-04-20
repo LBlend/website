@@ -1,13 +1,13 @@
 ---
 import { useTranslations } from "@i18n/index";
 import DefaultPage from "@layouts/DefaultPage.astro";
-import AboutCourses from "@sections/AboutCourses.astro";
-import AboutFavourites from "@sections/AboutFavourites.astro";
-import AboutIntro from "@sections/AboutIntro.astro";
-import AboutLanguages from "@sections/AboutLanguages.astro";
-import AboutProjects from "@sections/AboutProjects.astro";
-import AboutTech from "@sections/AboutTech.astro";
-import AboutTimeline from "@sections/AboutTimeline.astro";
+import AboutCourses from "@sections/about/Courses.astro";
+import AboutFavourites from "@sections/about/Favourites.astro";
+import AboutIntro from "@sections/about/Intro.astro";
+import AboutLanguages from "@sections/about/Languages.astro";
+import AboutProjects from "@sections/about/Projects.astro";
+import AboutTech from "@sections/about/Tech.astro";
+import AboutTimeline from "@sections/about/Timeline.astro";
 
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
