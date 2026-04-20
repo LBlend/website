@@ -1,7 +1,7 @@
 ---
-import SchoolIcon from "@assets/icons/school_generic.svg";
-import UioLogo from "@assets/icons/uio.svg";
-import YonseiLogo from "@assets/icons/yonsei.svg";
+import SchoolIcon from "@assets/icons/logos/school_generic.svg";
+import uioUrl from "@assets/icons/logos/uio.svg?url";
+import yonseiUrl from "@assets/icons/logos/yonsei.svg?url";
 import educationData from "@content/about/education.json";
 import { useTranslations } from "@i18n/index";
 
@@ -57,9 +57,9 @@ const sortedSemesters = Object.keys(coursesBySemester)
                         class="course-card bg-backgroundlight flex w-full items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3 transition-colors outline-none hover:bg-slate-800 sm:w-auto"
                       >
                         {course.school === "University of Oslo" ? (
-                          <UioLogo class="h-8 w-10 shrink-0 rounded-sm" />
+                          <img src={uioUrl} alt="University of Oslo" class="h-8 w-10 shrink-0 rounded-sm" />
                         ) : course.school === "Yonsei Univeristy" ? (
-                          <YonseiLogo class="h-8 w-10 shrink-0 rounded-sm" />
+                          <img src={yonseiUrl} alt="Yonsei University" class="h-8 w-10 shrink-0 rounded-sm" />
                         ) : (
                           <SchoolIcon class="h-8 w-10 shrink-0 rounded-sm" />
                         )}
@@ -103,9 +103,9 @@ const sortedSemesters = Object.keys(coursesBySemester)
                       class="course-card bg-backgroundlight flex w-full items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3 transition-colors outline-none hover:bg-slate-800 sm:w-auto"
                     >
                       {course.school === "University of Oslo" ? (
-                        <UioLogo class="h-8 w-10 shrink-0 rounded-sm" />
+                        <img src={uioUrl} alt="University of Oslo" class="h-8 w-10 shrink-0 rounded-sm" />
                       ) : course.school === "Yonsei Univeristy" ? (
-                        <YonseiLogo class="h-8 w-10 shrink-0 rounded-sm" />
+                        <img src={yonseiUrl} alt="Yonsei University" class="h-8 w-10 shrink-0 rounded-sm" />
                       ) : (
                         <SchoolIcon class="h-8 w-10 shrink-0 rounded-sm" />
                       )}

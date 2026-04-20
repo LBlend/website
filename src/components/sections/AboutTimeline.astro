@@ -1,6 +1,6 @@
 ---
-import BabyIcon from "@assets/icons/baby.svg";
-import SchoolIcon from "@assets/icons/school_generic.svg";
+import BabyIcon from "@assets/icons/logos/baby.svg";
+import SchoolIcon from "@assets/icons/logos/school_generic.svg";
 import certificationsData from "@content/about/certifications.json";
 import educationData from "@content/about/education.json";
 import lifeData from "@content/about/life.json";
@@ -14,12 +14,16 @@ const t = useTranslations(locale);
 
 type WithImage = { image?: string };
 
-const images = import.meta.glob<{ default: ImageMetadata }>("/src/assets/icons/**/*.{jpeg,jpg,png,gif,svg,ico,webp}");
+const images = import.meta.glob<{ default: ImageMetadata }>([
+  "/src/assets/icons/logos/**/*.{jpeg,jpg,png,gif,svg,ico,webp}",
+  "!/src/assets/icons/logos/baby.svg",
+  "!/src/assets/icons/logos/school_generic.svg",
+]);
 
 function getImagePath(path: string | undefined): string | undefined {
   if (!path) return undefined;
   if (path.startsWith("/src/assets/icons/")) return path;
-  return `/src/assets/icons/${path}`;
+  return `/src/assets/icons/logos/${path}`;
 }
 
 type TimelineEvent = {
