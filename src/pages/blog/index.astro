@@ -46,7 +46,7 @@ const postCountText =
       <div>
         <button
           id="dropdown-button"
-          class="focus:border-accent focus:ring-accent flex min-w-[200px] items-center justify-between rounded-md border border-gray-300/50 bg-gray-700/50 px-3 py-2 text-sm focus:ring-1 focus:outline-none"
+          class="focus:border-accent focus:ring-accent flex min-w-50 items-center justify-between rounded-md border border-gray-300/50 bg-gray-700/50 px-3 py-2 text-sm focus:ring-1 focus:outline-none"
           onclick="toggleDropdown()"
         >
           {t("blog.selectTags")}
@@ -55,7 +55,7 @@ const postCountText =
 
         <div
           id="dropdown-menu"
-          class="bg-backgroundlight absolute z-50 min-w-[200px] rounded-md border border-gray-700/30 shadow-lg transition-all duration-200"
+          class="bg-backgroundlight absolute z-50 min-w-50 rounded-md border border-gray-700/30 shadow-lg transition-all duration-200"
         >
           {
             allTags.map((tag) => (

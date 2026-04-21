@@ -1,14 +1,10 @@
 ---
 export const prerender = false;
 
-import type { CollectionEntry } from "astro:content";
-
 import DefaultPage from "@layouts/DefaultPage.astro";
 
 import PhotoAlbum from "@elements/PhotoAlbum.astro";
 import { useTranslations } from "@i18n/index";
-
-type Props = CollectionEntry<"blog">["data"];
 
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);

@@ -1,4 +1,12 @@
 ---
+interface Props {
+  stat: number;
+  text: string;
+  decimalPlaces: number;
+  suffix?: string;
+  locale?: string;
+}
+
 const { stat, text, decimalPlaces, suffix, locale = "en" } = Astro.props;
 
 const separators = {

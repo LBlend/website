@@ -13,6 +13,10 @@ const t = useTranslations(locale);
 
 const discordPosts = await getDiscordMessages();
 
+interface Props {
+  numberOfPosts?: number;
+}
+
 const { numberOfPosts } = Astro.props;
 const totalNumberOfPosts = discordPosts.length;
 if (numberOfPosts && discordPosts.length > numberOfPosts) {
@@ -138,7 +142,10 @@ const discordMdToHtml = (post: MicroblogMessage) => {
   </div>
   {/* View all link */}
   {
-    Astro.url.pathname !== "/microblog" && discordPosts.length > 0 && totalNumberOfPosts > numberOfPosts ? (
+    Astro.url.pathname !== "/microblog" &&
+    discordPosts.length > 0 &&
+    numberOfPosts !== undefined &&
+    totalNumberOfPosts > numberOfPosts ? (
       <div class="mt-8 text-center">
         <a href="/microblog">{t("microblog.viewAll")}</a>
       </div>

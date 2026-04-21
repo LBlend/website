@@ -1,9 +1,16 @@
 ---
-const { artist, track } = Astro.props;
 import PlaceholderSongImage from "@assets/images/placeholder_song.jpg";
+import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 
-let imageSrc = PlaceholderSongImage;
+interface Props {
+  artist: string;
+  track: string;
+}
+
+const { artist, track } = Astro.props;
+
+let imageSrc: ImageMetadata | string = PlaceholderSongImage;
 let altText = `Cover for ${track}`;
 
 try {
@@ -39,4 +46,10 @@ try {
 }
 ---
 
-<Image src={imageSrc} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
+{
+  typeof imageSrc === "string" ? (
+    <img src={imageSrc} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
+  ) : (
+    <Image src={imageSrc} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
+  )
+}

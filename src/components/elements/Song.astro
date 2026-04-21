@@ -1,5 +1,10 @@
 ---
 import SongImage from "@elements/SongImage.astro";
+import type { Track } from "@sections/home/RecentlyLikedSongs.astro";
+
+interface Props {
+  track: Track;
+}
 
 const { track } = Astro.props;
 ---

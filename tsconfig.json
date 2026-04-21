@@ -4,17 +4,17 @@
   "exclude": ["dist"],
   "compilerOptions": {
     "strictNullChecks": true,
-    "baseUrl": ".",
     "paths": {
-      "@api/*": ["src/pages/api/*"],
-      "@assets/*": ["src/assets/*"],
-      "@components/*": ["src/components/*"],
-      "@content/*": ["src/content/*"],
-      "@elements/*": ["src/components/elements/*"],
-      "@i18n/*": ["src/i18n/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@sections/*": ["src/components/sections/*"],
-      "@styles/*": ["src/styles/*"]
+      "@api/*": ["./src/pages/api/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@consts": ["./src/consts"],
+      "@content/*": ["./src/content/*"],
+      "@elements/*": ["./src/components/elements/*"],
+      "@i18n/*": ["./src/i18n/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@sections/*": ["./src/components/sections/*"],
+      "@styles/*": ["./src/styles/*"]
     }
   }
 }

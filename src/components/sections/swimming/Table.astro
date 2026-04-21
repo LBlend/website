@@ -1,6 +1,10 @@
 ---
 import { useTranslations } from "@i18n/index";
 
+interface Props {
+  data: (string | number | boolean | Date)[][];
+}
+
 const { data } = Astro.props;
 
 const locale = Astro.locals.locale;
@@ -157,7 +161,6 @@ const i18nData = JSON.stringify({
         columns: columns,
         data: adjustedData,
         sort: true,
-        search: true,
         pagination: { enabled: true, limit: 20 },
         search: {
           enabled: true,

@@ -193,7 +193,7 @@ export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
         },
         attachments: msg.attachments.map((attachment) => ({
           url: attachment.url,
-          filename: attachment.filename,
+          filename: attachment.filename ?? "",
           contentType: attachment.content_type,
         })),
         emojis,
