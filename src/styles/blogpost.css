@@ -19,7 +19,7 @@
     @apply block;
     grid-column: 1;
     grid-row: 1;
-    @apply w-[250px];
+    @apply w-62.5;
     @apply justify-self-end;
   }
 }
