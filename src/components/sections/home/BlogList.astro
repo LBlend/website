@@ -16,7 +16,7 @@ posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const latestPosts = posts.slice(0, 5);
 ---
 
-<section class="blog-list flex flex-col gap-4">
+<section id="latest-posts" class="blog-list flex flex-col gap-4">
   <div class="flex items-center justify-between">
     <h2 class="text-4xl font-bold">{t("blog.latestPosts")}</h2>
     <RssSubscribe />

@@ -76,7 +76,7 @@ const discordMdToHtml = (post: MicroblogMessage) => {
 };
 ---
 
-<section class="grid grid-cols-1 gap-4 rounded-2xl bg-[#323339] py-6 shadow-lg/30" data-locale={locale}>
+<section id="microblog" class="grid grid-cols-1 gap-4 rounded-2xl bg-[#323339] py-6 shadow-lg/30" data-locale={locale}>
   {/* Header */}
   <div class="border-b border-[#3e3f45] pb-4 pl-4 md:pl-10">
     <h2 class="text-2xl text-[#dcdddf]"><span class="mr-4 text-[#9b9ca3]">#</span>{t("microblog.title")}</h2>
