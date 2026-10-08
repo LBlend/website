@@ -114,7 +114,14 @@ for (const cert of certificationsData) {
   });
 }
 
-events.sort((a, b) => b.date.getTime() - a.date.getTime());
+function getTimelineEndDate(event: TimelineEvent): Date {
+  return event.endDate ?? event.date;
+}
+
+events.sort((a, b) => {
+  if (Boolean(a.isCurrent) !== Boolean(b.isCurrent)) return a.isCurrent ? -1 : 1;
+  return getTimelineEndDate(b).getTime() - getTimelineEndDate(a).getTime();
+});
 
 function formatDate(date: Date) {
   const locale = Astro.locals.locale;
@@ -141,7 +148,7 @@ const PX_PER_MONTH = 4;
 const margins: number[] = events.map((event, i) => {
   if (i === 0) return 0;
   const prev = events[i - 1];
-  const monthsGap = (prev.date.getTime() - event.date.getTime()) / MS_PER_MONTH;
+  const monthsGap = (getTimelineEndDate(prev).getTime() - getTimelineEndDate(event).getTime()) / MS_PER_MONTH;
   return Math.max(0, Math.round(monthsGap * PX_PER_MONTH));
 });
 ---
@@ -175,7 +182,7 @@ const margins: number[] = events.map((event, i) => {
             class={`tl-item relative ${startLeft ? "is-left" : "is-right"}`}
             style={`--accent:${meta.color}; margin-top:${extraMargin}px;`}
             data-category={event.category}
-            data-date={event.date.getTime()}
+            data-date={getTimelineEndDate(event).getTime()}
           >
             <div class="tl-dot-col">
               <span class="tl-dot block h-3.5 w-3.5 rounded-full transition-transform duration-200" />
