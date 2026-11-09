@@ -20,7 +20,6 @@ export async function getSteamData(): Promise<SteamData> {
   });
   const res = await fetch(`${STEAM_URL}IPlayerService/GetOwnedGames/v0001/?` + queryParams, {
     method: "GET",
-    cache: "force-cache",
   });
 
   if (!res.ok) {

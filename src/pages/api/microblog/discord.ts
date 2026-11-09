@@ -105,7 +105,6 @@ export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
       headers: {
         Authorization: `Bot ${discordToken}`,
       },
-      cache: "force-cache",
     });
 
     if (!messagesResponse.ok) {
@@ -120,7 +119,6 @@ export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
       headers: {
         Authorization: `Bot ${discordToken}`,
       },
-      cache: "force-cache",
     });
 
     if (!rolesResponse.ok) {
@@ -136,7 +134,6 @@ export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
       headers: {
         Authorization: `Bot ${discordToken}`,
       },
-      cache: "force-cache",
     });
 
     if (!membersResponse.ok) {

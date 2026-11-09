@@ -96,7 +96,6 @@ async function getLovedTracks(): Promise<LastFMResponse> {
 
     const res = await fetch(`${LASTFM_URL}?` + params, {
       method: "GET",
-      cache: "force-cache",
       signal: controller.signal,
     });
 

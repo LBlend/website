@@ -14,7 +14,6 @@ export async function getWakatimeData(): Promise<WakatimeData> {
 
   const res = await fetch(`${WAKATIME_URL}users/@${WAKATIME_USERNAME}/all_time_since_today`, {
     method: "GET",
-    cache: "force-cache",
     headers: {
       Authorization: `Basic  ${btoa(WAKATIME_API_KEY ?? "")}`,
     },

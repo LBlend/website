@@ -54,7 +54,6 @@ export async function getOsuData(): Promise<OsuData> {
 
   const res = await fetch(`${OSU_URL}api/v2/users/${OSU_USER_ID}/osu?key=id`, {
     method: "GET",
-    cache: "force-cache",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

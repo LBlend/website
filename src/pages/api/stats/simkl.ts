@@ -21,7 +21,6 @@ export async function getSimklData(): Promise<SimklData> {
 
   const res = await fetch(`${SIMKL_URL}users/${SIMKL_USER_ID}/stats`, {
     method: "GET",
-    cache: "force-cache",
     headers: {
       "Content-Type": "application/json",
       "simkl-api-key": SIMKL_CLIENT_ID ?? "",

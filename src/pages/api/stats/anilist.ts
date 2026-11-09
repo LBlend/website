@@ -27,7 +27,6 @@ export async function getAnilistData(): Promise<AnilistData> {
 
   const res = await fetch(ANILIST_URL, {
     method: "POST",
-    cache: "force-cache",
     body: JSON.stringify({
       query,
       variables,
