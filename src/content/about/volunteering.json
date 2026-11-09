@@ -63,6 +63,19 @@
     ]
   },
   {
+    "org": "Y Oslo",
+    "url": "https://www.y-oslo.com/",
+    "image": "yoslo.png",
+    "roles": [
+      {
+        "name": "Volunteer (kinda)",
+        "description": "I was technically not volunteering as I was compensated for my work but since it was a one day affair it feels more like volunteer work to me.",
+        "start": "2026-10-26",
+        "end": "2026-10-26"
+      }
+    ]
+  },
+  {
     "org": "Cybernetisk Selskab",
     "url": "https://cyb.no",
     "image": "cyb.svg",
