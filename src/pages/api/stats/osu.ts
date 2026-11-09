@@ -7,18 +7,19 @@ interface OsuData {
 let osuToken: string | null = null;
 let osuTokenExpiry: number | null = null; // Unix timestamp in ms
 
+import { OSU_CLIENT_ID, OSU_CLIENT_SECRET, OSU_URL, OSU_USER_ID } from "astro:env/server";
 import cache from "@api/_cache";
 
 async function getOsuToken(): Promise<{ token: string | null; expiry: number | null }> {
-  const res = await fetch(`${import.meta.env.OSU_URL}oauth/token`, {
+  const res = await fetch(`${OSU_URL}oauth/token`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       Accept: "application/json",
     },
     body: new URLSearchParams({
-      client_id: import.meta.env.OSU_CLIENT_ID || "",
-      client_secret: import.meta.env.OSU_CLIENT_SECRET || "",
+      client_id: OSU_CLIENT_ID || "",
+      client_secret: OSU_CLIENT_SECRET || "",
       grant_type: "client_credentials",
       scope: "public",
     }),
@@ -48,7 +49,7 @@ export async function getOsuData(): Promise<OsuData> {
   if (cached) return cached;
   await ensureValidToken();
 
-  const res = await fetch(`${import.meta.env.OSU_URL}api/v2/users/${import.meta.env.OSU_USER_ID}/osu?key=id`, {
+  const res = await fetch(`${OSU_URL}api/v2/users/${OSU_USER_ID}/osu?key=id`, {
     method: "GET",
     cache: "force-cache",
     headers: {

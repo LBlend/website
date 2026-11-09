@@ -1,5 +1,6 @@
 export const prerender = false;
 
+import { ANILIST_URL, ANILIST_USERNAME } from "astro:env/server";
 import cache from "@api/_cache";
 
 interface AnilistData {
@@ -21,10 +22,10 @@ export async function getAnilistData(): Promise<AnilistData> {
             }
         }`;
   const variables = {
-    name: import.meta.env.ANILIST_USERNAME,
+    name: ANILIST_USERNAME,
   };
 
-  const res = await fetch(import.meta.env.ANILIST_URL || "https://graphql.anilist.co", {
+  const res = await fetch(ANILIST_URL, {
     method: "POST",
     cache: "force-cache",
     body: JSON.stringify({

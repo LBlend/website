@@ -1,29 +1,27 @@
 ---
+import { IMMICH_API_KEY, IMMICH_URL } from "astro:env/server";
 const { albumId } = Astro.props;
 
 // Get album data
-const album = await fetch(`${import.meta.env.IMMICH_URL}api/albums/${albumId}`, {
+const album = await fetch(`${IMMICH_URL}api/albums/${albumId}`, {
   method: "GET",
   cache: "force-cache",
   headers: {
     Accept: "application/json",
-    "x-api-key": import.meta.env.IMMICH_API_KEY,
+    "x-api-key": IMMICH_API_KEY ?? "",
   },
 });
 const albumData = await album.json();
 
 // Get album thumbnail blob
-const thumbnailRes = await fetch(
-  `${import.meta.env.IMMICH_URL}api/assets/${albumData.albumThumbnailAssetId}/thumbnail?size=preview`,
-  {
-    method: "GET",
-    cache: "force-cache",
-    headers: {
-      Accept: "application/json",
-      "x-api-key": import.meta.env.IMMICH_API_KEY,
-    },
+const thumbnailRes = await fetch(`${IMMICH_URL}api/assets/${albumData.albumThumbnailAssetId}/thumbnail?size=preview`, {
+  method: "GET",
+  cache: "force-cache",
+  headers: {
+    Accept: "application/json",
+    "x-api-key": IMMICH_API_KEY ?? "",
   },
-);
+});
 const thumbnailBlob = await thumbnailRes.blob();
 // Convert blob to base64
 const buffer = await thumbnailBlob.arrayBuffer();
@@ -32,24 +30,21 @@ const contentType = thumbnailRes.headers.get("content-type");
 const thumbnailDataUrl = `data:${contentType};base64,${base64}`;
 
 // Get album link
-const sharedLinkRes = await fetch(
-  `${import.meta.env.IMMICH_URL}api/shared-links?` + new URLSearchParams({ albumId: albumId }),
-  {
-    method: "GET",
-    cache: "force-cache",
-    headers: {
-      Accept: "application/json",
-      "x-api-key": import.meta.env.IMMICH_API_KEY,
-    },
+const sharedLinkRes = await fetch(`${IMMICH_URL}api/shared-links?` + new URLSearchParams({ albumId: albumId }), {
+  method: "GET",
+  cache: "force-cache",
+  headers: {
+    Accept: "application/json",
+    "x-api-key": IMMICH_API_KEY ?? "",
   },
-);
+});
 
 const sharedLinkData = await sharedLinkRes.json();
 const sharedLink = sharedLinkData.find((link: { album: { id: string } }) => link.album.id === albumId);
 ---
 
 <a
-  href={`${import.meta.env.IMMICH_URL}share/${sharedLink.key}`}
+  href={`${IMMICH_URL}share/${sharedLink.key}`}
   target="_blank"
   class="flex items-center justify-center gap-4 rounded-lg transition-all duration-300 hover:scale-105"
 >

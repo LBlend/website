@@ -1,4 +1,5 @@
 ---
+import { LASTFM_API_KEY, LASTFM_URL, LASTFM_USERNAME } from "astro:env/server";
 import { formatDistance } from "date-fns";
 import { ko, nb } from "date-fns/locale";
 
@@ -75,7 +76,7 @@ async function getLovedTracks(): Promise<LastFMResponse> {
   };
 
   try {
-    const apiKey = import.meta.env.LASTFM_API_KEY;
+    const apiKey = LASTFM_API_KEY;
     if (!apiKey) {
       console.warn("LastFM API key not configured");
       return emptyResponse;
@@ -85,7 +86,7 @@ async function getLovedTracks(): Promise<LastFMResponse> {
       method: "user.getlovedtracks",
       format: "json",
       api_key: apiKey,
-      user: import.meta.env.LASTFM_USERNAME,
+      user: LASTFM_USERNAME ?? "",
       limit: "1000",
     });
 
@@ -93,7 +94,7 @@ async function getLovedTracks(): Promise<LastFMResponse> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-    const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
+    const res = await fetch(`${LASTFM_URL}?` + params, {
       method: "GET",
       cache: "force-cache",
       signal: controller.signal,

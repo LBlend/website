@@ -5,6 +5,7 @@ export const prerender = false;
 // See issue #3 on GitHub
 // I just want to commit this for now
 
+import { DISCORD_BLOG_CHANNEL_ID, DISCORD_BOT_TOKEN, DISCORD_GUILD_ID } from "astro:env/server";
 import type { APIRoute } from "astro";
 
 interface DiscordAttachment {
@@ -84,13 +85,13 @@ function isDiscordRole(role: unknown): role is DiscordRole {
 
 export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
   try {
-    const discordToken = import.meta.env.DISCORD_BOT_TOKEN;
+    const discordToken = DISCORD_BOT_TOKEN;
     if (!discordToken) {
       throw new Error("Discord bot token not configured");
     }
 
-    const guildId = import.meta.env.DISCORD_GUILD_ID;
-    const channelId = import.meta.env.DISCORD_BLOG_CHANNEL_ID;
+    const guildId = DISCORD_GUILD_ID;
+    const channelId = DISCORD_BLOG_CHANNEL_ID;
 
     // Fetch messages
     const messagesResponse = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {

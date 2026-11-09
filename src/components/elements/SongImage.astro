@@ -2,6 +2,7 @@
 import PlaceholderSongImage from "@assets/images/placeholder_song.jpg";
 import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
+import { LASTFM_API_KEY, LASTFM_URL, LASTFM_USERNAME } from "astro:env/server";
 
 interface Props {
   artist: string;
@@ -17,13 +18,13 @@ try {
   const params = new URLSearchParams({
     method: "track.getInfo",
     format: "json",
-    api_key: import.meta.env.LASTFM_API_KEY || "",
+    api_key: LASTFM_API_KEY || "",
     artist: artist,
     track: track,
-    username: import.meta.env.LASTFM_USERNAME || "",
+    username: LASTFM_USERNAME || "",
   });
 
-  const res = await fetch(`${import.meta.env.LASTFM_URL}?` + params, {
+  const res = await fetch(`${LASTFM_URL}?` + params, {
     method: "GET",
     cache: "force-cache",
   });

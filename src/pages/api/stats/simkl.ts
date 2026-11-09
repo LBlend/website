@@ -1,5 +1,6 @@
 export const prerender = false;
 
+import { SIMKL_CLIENT_ID, SIMKL_URL, SIMKL_USER_ID } from "astro:env/server";
 import cache from "@api/_cache";
 
 interface SimklData {
@@ -18,12 +19,12 @@ export async function getSimklData(): Promise<SimklData> {
   const cached = cache.get<SimklData>(cacheKey);
   if (cached) return cached;
 
-  const res = await fetch(`${import.meta.env.SIMKL_URL}users/${import.meta.env.SIMKL_USER_ID}/stats`, {
+  const res = await fetch(`${SIMKL_URL}users/${SIMKL_USER_ID}/stats`, {
     method: "GET",
     cache: "force-cache",
     headers: {
       "Content-Type": "application/json",
-      "simkl-api-key": import.meta.env.SIMKL_CLIENT_ID,
+      "simkl-api-key": SIMKL_CLIENT_ID ?? "",
     },
   });
 

@@ -1,5 +1,6 @@
 export const prerender = false;
 
+import { WAKATIME_API_KEY, WAKATIME_URL, WAKATIME_USERNAME } from "astro:env/server";
 import cache from "@api/_cache";
 
 interface WakatimeData {
@@ -11,16 +12,13 @@ export async function getWakatimeData(): Promise<WakatimeData> {
   const cached = cache.get<WakatimeData>(cacheKey);
   if (cached) return cached;
 
-  const res = await fetch(
-    `${import.meta.env.WAKATIME_URL}users/@${import.meta.env.WAKATIME_USERNAME}/all_time_since_today`,
-    {
-      method: "GET",
-      cache: "force-cache",
-      headers: {
-        Authorization: `Basic  ${btoa(import.meta.env.WAKATIME_API_KEY ?? "")}`,
-      },
+  const res = await fetch(`${WAKATIME_URL}users/@${WAKATIME_USERNAME}/all_time_since_today`, {
+    method: "GET",
+    cache: "force-cache",
+    headers: {
+      Authorization: `Basic  ${btoa(WAKATIME_API_KEY ?? "")}`,
     },
-  );
+  });
 
   if (!res.ok) {
     return { programmingHours: 0 };

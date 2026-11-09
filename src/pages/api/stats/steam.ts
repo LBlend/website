@@ -1,5 +1,6 @@
 export const prerender = false;
 
+import { STEAM_API_KEY, STEAM_URL, STEAM_USER_ID } from "astro:env/server";
 import cache from "@api/_cache";
 
 interface SteamData {
@@ -12,12 +13,12 @@ export async function getSteamData(): Promise<SteamData> {
   if (cached) return cached;
 
   const queryParams = new URLSearchParams({
-    key: import.meta.env.STEAM_API_KEY || "",
-    steamid: import.meta.env.STEAM_USER_ID || "",
+    key: STEAM_API_KEY || "",
+    steamid: STEAM_USER_ID || "",
     include_played_free_games: "1",
     format: "json",
   });
-  const res = await fetch(`${import.meta.env.STEAM_URL}IPlayerService/GetOwnedGames/v0001/?` + queryParams, {
+  const res = await fetch(`${STEAM_URL}IPlayerService/GetOwnedGames/v0001/?` + queryParams, {
     method: "GET",
     cache: "force-cache",
   });
