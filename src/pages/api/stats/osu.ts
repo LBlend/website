@@ -48,6 +48,9 @@ export async function getOsuData(): Promise<OsuData> {
   const cached = cache.get<OsuData>(cacheKey);
   if (cached) return cached;
   await ensureValidToken();
+  if (!osuToken) {
+    return { playTime: 0 };
+  }
 
   const res = await fetch(`${OSU_URL}api/v2/users/${OSU_USER_ID}/osu?key=id`, {
     method: "GET",
