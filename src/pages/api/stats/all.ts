@@ -8,13 +8,18 @@ import { getWakatimeData } from "./wakatime";
 
 // Create a timeout wrapper for API calls
 async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, fallback: T): Promise<T> {
-  const timeoutPromise = new Promise<T>((_, reject) => setTimeout(() => reject(new Error("Timeout")), timeoutMs));
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  const timeoutPromise = new Promise<T>((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error("Timeout")), timeoutMs);
+  });
 
   try {
     return await Promise.race([promise, timeoutPromise]);
   } catch (error) {
     console.warn("API call failed or timed out:", error);
     return fallback;
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
