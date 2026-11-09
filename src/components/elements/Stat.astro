@@ -20,8 +20,8 @@ const { decimal, separator } = separators[locale as keyof typeof separators] || 
 
 <article class="flex flex-col items-center justify-center gap-1">
   {stat > 0 ? (
-    <count-up
-      data-duration={3}
+    <span
+      data-count-up={stat}
       data-suffix={suffix}
       data-decimal-places={decimalPlaces}
       data-separator={separator}
@@ -29,9 +29,30 @@ const { decimal, separator } = separators[locale as keyof typeof separators] || 
       class="text-center text-2xl font-bold"
     >
       {stat}
-    </count-up>
+    </span>
   ) : (
     <span class="text-center text-2xl font-bold">?</span>
   )}
   <p class="text-center text-lg font-light">{text}</p>
 </article>
+
+<script>
+  import { CountUp } from "countup.js";
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      const element = entry.target as HTMLElement;
+      new CountUp(element, Number(element.dataset.countUp), {
+        duration: 3,
+        decimalPlaces: Number(element.dataset.decimalPlaces),
+        separator: element.dataset.separator,
+        decimal: element.dataset.decimal,
+        suffix: element.dataset.suffix,
+      }).start();
+    });
+  });
+
+  document.querySelectorAll<HTMLElement>("[data-count-up]").forEach((element) => observer.observe(element));
+</script>

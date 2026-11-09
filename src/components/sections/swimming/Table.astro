@@ -1,4 +1,6 @@
 ---
+import "gridjs/dist/theme/mermaid.css";
+
 import { useTranslations } from "@i18n/index";
 
 interface Props {
@@ -36,25 +38,29 @@ const i18nData = JSON.stringify({
   </div>
 
   <div class="overflow-x-auto">
-    <div id="wrapper" class="text-xs sm:text-sm md:text-base" data-i18n={i18nData}></div>
+    <div
+      id="wrapper"
+      class="text-xs sm:text-sm md:text-base"
+      data-i18n={i18nData}
+      data-rows={JSON.stringify(data)}
+    ></div>
   </div>
 </div>
 
-<link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
-<script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+<script>
+  import { Grid } from "gridjs";
 
-<script is:inline define:vars={{ data }}>
+  type Row = [number, string, number, string, string, string, number, number];
+
   function initTable() {
-    if (typeof window.gridjs === "undefined") {
-      setTimeout(initTable, 100);
-      return;
-    }
-
-    const { Grid } = window.gridjs;
-    let gridInstance = null;
-
     const wrapper = document.getElementById("wrapper");
-    const i18n = JSON.parse(wrapper?.dataset.i18n || "{}");
+    const bestTimesToggle = document.getElementById("bestTimesToggle") as HTMLInputElement | null;
+    const showPartialsToggle = document.getElementById("showPartialsToggle") as HTMLInputElement | null;
+    if (!wrapper || !bestTimesToggle || !showPartialsToggle) return;
+
+    const i18n: Record<string, string> = JSON.parse(wrapper.dataset.i18n || "{}");
+    const data: string[][] = JSON.parse(wrapper.dataset.rows || "[]");
+    let gridInstance: Grid | null = null;
 
     // Remove tabindex from th elements to fix accessibility audit warning
     // Grid.js adds tabindex for sortable headers, but th elements should not have tabindex
@@ -66,10 +72,9 @@ const i18nData = JSON.stringify({
     });
     observer.observe(wrapper, { childList: true, subtree: true, attributes: true, attributeFilter: ["tabindex"] });
 
-    function formatTime(seconds) {
-      const totalSeconds = parseFloat(seconds);
-      const minutes = Math.floor(totalSeconds / 60);
-      const remainingSeconds = totalSeconds % 60;
+    function formatTime(seconds: number) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
 
       if (minutes > 0) {
         return `${minutes}:${remainingSeconds.toFixed(2).padStart(5, "0")}`;
@@ -79,7 +84,7 @@ const i18nData = JSON.stringify({
     }
 
     // Convert to data types
-    const processedData = data.map((row) => [
+    const processedData: Row[] = data.map((row) => [
       parseFloat(row[0]), // Distance
       row[1], // Stroke
       parseFloat(row[2]), // Time (keep as number for sorting)
@@ -90,35 +95,26 @@ const i18nData = JSON.stringify({
       parseInt(row[7]), // IsPartialDistance (0 or 1)
     ]);
 
-    function filterPartials(data, showPartials) {
-      if (showPartials) return data;
-      return data.filter((row) => row[7] === 0);
+    function filterPartials(rows: Row[], showPartials: boolean) {
+      if (showPartials) return rows;
+      return rows.filter((row) => row[7] === 0);
     }
 
-    function getBestTimes(data) {
-      const bestTimes = {};
+    function getBestTimes(rows: Row[]) {
+      const bestTimes: Record<string, Row> = {};
 
-      data.forEach((row) => {
-        const distance = row[0];
-        const stroke = row[1];
-        const time = row[2];
-        const key = `${distance}-${stroke}`;
-
-        if (!bestTimes[key] || time < bestTimes[key].time) {
-          bestTimes[key] = {
-            time: time,
-            row: row,
-          };
+      rows.forEach((row) => {
+        const key = `${row[0]}-${row[1]}`;
+        if (!bestTimes[key] || row[2] < bestTimes[key][2]) {
+          bestTimes[key] = row;
         }
       });
 
-      return Object.values(bestTimes).map((item) => item.row);
+      return Object.values(bestTimes);
     }
 
-    function createGrid(showBestOnly = true, showPartials = true) {
-      let dataToShow = processedData;
-
-      dataToShow = filterPartials(dataToShow, showPartials);
+    function createGrid(showBestOnly: boolean, showPartials: boolean) {
+      let dataToShow = filterPartials(processedData, showPartials);
       if (showBestOnly) {
         dataToShow = getBestTimes(dataToShow);
       }
@@ -126,19 +122,19 @@ const i18nData = JSON.stringify({
       const columns = [
         {
           name: i18n.distance || "Distance",
-          formatter: (cell) => `${cell}m`,
+          formatter: (cell: unknown) => `${cell}m`,
         },
         i18n.stroke || "Stroke",
         {
           name: i18n.time || "Time",
-          formatter: (cell) => formatTime(cell),
+          formatter: (cell: unknown) => formatTime(Number(cell)),
         },
         i18n.date || "Date",
         i18n.city || "City",
         i18n.country || "Country",
         {
           name: i18n.poolLength || "Pool Length",
-          formatter: (cell) => `${cell}m`,
+          formatter: (cell: unknown) => `${cell}m`,
         },
       ];
 
@@ -146,45 +142,34 @@ const i18nData = JSON.stringify({
       if (showPartials) {
         columns.push({
           name: i18n.partialDistance || "Partial Distance?",
-          formatter: (cell) => (cell === 1 ? i18n.yes || "Yes" : ""),
+          formatter: (cell: unknown) => (cell === 1 ? i18n.yes || "Yes" : ""),
         });
       }
       // Adjust data to match columns
       const adjustedData = showPartials ? dataToShow : dataToShow.map((row) => row.slice(0, 7)); // Remove last column (Partial Distance)
 
-      // Destroy existing grid if it exists
-      if (gridInstance) {
-        gridInstance.destroy();
-      }
+      gridInstance?.destroy();
 
       gridInstance = new Grid({
         columns: columns,
         data: adjustedData,
         sort: true,
-        pagination: { enabled: true, limit: 20 },
-        search: {
-          enabled: true,
-        },
+        pagination: { limit: 20 },
+        search: true,
       });
 
-      gridInstance.render(document.getElementById("wrapper"));
+      gridInstance.render(wrapper!);
     }
 
     // Initial render
-    createGrid(true, true);
+    createGrid(bestTimesToggle.checked, showPartialsToggle.checked);
 
-    const bestTimesToggle = document.getElementById("bestTimesToggle");
-    const showPartialsToggle = document.getElementById("showPartialsToggle");
     function updateGrid() {
-      createGrid(bestTimesToggle.checked, showPartialsToggle.checked);
+      createGrid(bestTimesToggle!.checked, showPartialsToggle!.checked);
     }
     bestTimesToggle.addEventListener("change", updateGrid);
     showPartialsToggle.addEventListener("change", updateGrid);
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initTable);
-  } else {
-    initTable();
-  }
+  initTable();
 </script>
