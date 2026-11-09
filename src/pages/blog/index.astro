@@ -18,7 +18,7 @@ import { useTranslations } from "@i18n/index";
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
 
-const tags = Astro.url.searchParams.get("tags")?.split(",") || [];
+const tags = Astro.url.searchParams.get("tags")?.split(",").filter(Boolean) ?? [];
 
 const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const allTags = [...new Set(posts.flatMap((post) => post.data.tags || []))].sort();
@@ -47,7 +47,6 @@ const postCountText =
         <button
           id="dropdown-button"
           class="focus:border-accent focus:ring-accent flex min-w-50 items-center justify-between rounded-md border border-gray-300/50 bg-gray-700/50 px-3 py-2 text-sm focus:ring-1 focus:outline-none"
-          onclick="toggleDropdown()"
         >
           {t("blog.selectTags")}
           <ArrowSVG id="dropdown-arrow" class="size-3 text-gray-300 transition-transform duration-200" />
@@ -59,12 +58,11 @@ const postCountText =
         >
           {allTags.map((tag) => (
             <button
-              class="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-700/10"
-              id="tag-button"
+              class="tag-button flex w-full items-center justify-between px-3 py-2 hover:bg-gray-700/10"
               data-tag={tag}
             >
               {tag}
-              {tags.includes(tag) && <CheckmarkSVG id="checkmark" class="text-accent h-4 w-4" />}
+              {tags.includes(tag) && <CheckmarkSVG class="text-accent h-4 w-4" />}
             </button>
           ))}
         </div>
@@ -72,12 +70,13 @@ const postCountText =
 
       <div id="selected-tags" class="flex flex-wrap gap-2">
         {tags.map((tag) => (
-          <span
-            class="bg-accent flex items-center gap-1 rounded-full px-3 py-1 text-white"
-            id="selected-tag"
-            data-tag={tag}
-          >
+          <span class="bg-accent flex items-center gap-1 rounded-full px-3 py-1 text-white">
             {tag}
+            <button class="remove-tag-button h-4 w-4 cursor-pointer hover:text-gray-200" data-tag={tag}>
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </span>
         ))}
       </div>
@@ -119,73 +118,16 @@ const postCountText =
   }
 </style>
 
-<script is:inline>
-  // Initialize selected tags from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const tagsParam = urlParams.get("tags");
-  const selectedTags = new Set(tagsParam ? tagsParam.split(",") : []);
+<script>
+  const dropdownButton = document.getElementById("dropdown-button");
+  const dropdownMenu = document.getElementById("dropdown-menu");
+  const dropdownArrow = document.getElementById("dropdown-arrow");
 
-  // Update the UI to reflect selected tags
-  function updateSelectedTagsUI() {
-    const selectedTagsContainer = document.getElementById("selected-tags");
-    if (!selectedTagsContainer) return;
+  const selectedTags = new Set(
+    new URLSearchParams(window.location.search).get("tags")?.split(",").filter(Boolean) ?? [],
+  );
 
-    selectedTagsContainer.innerHTML = Array.from(selectedTags)
-      .map(
-        (tag) => `
-            <span
-              class="flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-white"
-            >
-              ${tag}
-              <button
-                class="h-4 w-4 cursor-pointer hover:text-gray-200"
-                onclick="removeTag('${tag}')"
-              >
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </span>
-          `,
-      )
-      .join("");
-
-    // Update checkmarks in dropdown
-    document.querySelectorAll("#dropdown-menu button").forEach((button) => {
-      const tag = button.getAttribute("data-tag");
-      const checkmark = button.querySelector("#checkmark");
-      if (tag && checkmark) {
-        checkmark.style.display = selectedTags.has(tag) ? "block" : "none";
-      }
-    });
-  }
-
-  function toggleDropdown() {
-    const menu = document.getElementById("dropdown-menu");
-    const arrow = document.getElementById("dropdown-arrow");
-    if (menu) {
-      menu.classList.toggle("open");
-      arrow?.classList.toggle("open");
-    }
-  }
-
-  function toggleTag(tag) {
-    if (selectedTags.has(tag)) {
-      selectedTags.delete(tag);
-    } else {
-      selectedTags.add(tag);
-    }
-    updateSelectedTagsUI();
-    updateTags();
-  }
-
-  function removeTag(tag) {
-    selectedTags.delete(tag);
-    updateSelectedTagsUI();
-    updateTags();
-  }
-
-  function updateTags() {
+  function navigateWithSelectedTags() {
     const url = new URL(window.location.href);
     if (selectedTags.size > 0) {
       url.searchParams.set("tags", Array.from(selectedTags).join(","));
@@ -195,33 +137,38 @@ const postCountText =
     window.location.href = url.toString();
   }
 
-  // Close dropdown when clicking outside
+  dropdownButton?.addEventListener("click", () => {
+    dropdownMenu?.classList.toggle("open");
+    dropdownArrow?.classList.toggle("open");
+  });
+
   document.addEventListener("click", (event) => {
-    const dropdown = document.getElementById("dropdown-menu");
-    const button = document.getElementById("dropdown-button");
-    const arrow = document.getElementById("dropdown-arrow");
-    if (!dropdown?.contains(event.target) && !button?.contains(event.target)) {
-      dropdown?.classList.remove("open");
-      arrow?.classList.remove("open");
+    const target = event.target as Node;
+    if (!dropdownMenu?.contains(target) && !dropdownButton?.contains(target)) {
+      dropdownMenu?.classList.remove("open");
+      dropdownArrow?.classList.remove("open");
     }
   });
 
-  // Initialize UI
-  document.addEventListener("DOMContentLoaded", () => {
-    updateSelectedTagsUI();
-
-    document.querySelectorAll("#tag-button").forEach((button) => {
-      button.addEventListener("click", (e) => {
-        const tag = e.currentTarget.getAttribute("data-tag");
-        if (tag) toggleTag(tag);
-      });
+  document.querySelectorAll<HTMLButtonElement>(".tag-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const tag = button.dataset.tag;
+      if (!tag) return;
+      if (selectedTags.has(tag)) {
+        selectedTags.delete(tag);
+      } else {
+        selectedTags.add(tag);
+      }
+      navigateWithSelectedTags();
     });
+  });
 
-    document.querySelectorAll("#selected-tag").forEach((span) => {
-      span.addEventListener("click", (e) => {
-        const tag = e.currentTarget.getAttribute("data-tag");
-        if (tag) removeTag(tag);
-      });
+  document.querySelectorAll<HTMLButtonElement>(".remove-tag-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const tag = button.dataset.tag;
+      if (!tag) return;
+      selectedTags.delete(tag);
+      navigateWithSelectedTags();
     });
   });
 </script>
