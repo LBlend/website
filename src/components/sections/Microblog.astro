@@ -23,50 +23,76 @@ if (numberOfPosts && discordPosts.length > numberOfPosts) {
   discordPosts.length = numberOfPosts;
 }
 
+const escapeHtml = (value: string) =>
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+
+const toSafeHref = (target: string): string | null => {
+  try {
+    const url = new URL(target);
+    return url.protocol === "http:" || url.protocol === "https:" ? escapeHtml(url.href) : null;
+  } catch {
+    return null;
+  }
+};
+
 // TODO: Add list support
 const discordMdToHtml = (post: MicroblogMessage) => {
   const ast = parse(post.content, "extended");
 
+  const renderChildren = (node: SingleASTNode) => node.content.map((c: SingleASTNode) => processNode(c)).join("");
+
   const processNode = (node: SingleASTNode): string => {
     switch (node.type) {
       case "text":
-        return node.content;
+        return escapeHtml(node.content);
       case "strong":
-        return `<strong>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</strong>`;
+        return `<strong>${renderChildren(node)}</strong>`;
       case "em":
-        return `<em>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</em>`;
+        return `<em>${renderChildren(node)}</em>`;
       case "strikethrough":
-        return `<del>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</del>`;
+        return `<del>${renderChildren(node)}</del>`;
       case "spoiler":
-        return `<span class="spoiler">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</span>`;
+        return `<span class="spoiler">${renderChildren(node)}</span>`;
       case "channel":
-        return `<span class="channel">#${node.id}</span>`;
+        return `<span class="channel">#${escapeHtml(node.id)}</span>`;
       case "user":
-        return `<span class="user">@${node.id}</span>`;
+        return `<span class="user">@${escapeHtml(node.id)}</span>`;
       case "url":
-        return `<a href="${node.target}" target="_blank" rel="noopener noreferrer">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</a>`;
-      case "link":
-        return `<a href="${node.target}" target="_blank" rel="noopener noreferrer">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</a>`;
+      case "link": {
+        const href = toSafeHref(node.target);
+        if (!href) {
+          return renderChildren(node);
+        }
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${renderChildren(node)}</a>`;
+      }
       case "br":
         return "<br>";
       case "twemoji":
-        return node.name;
-      case "emoji":
+        return escapeHtml(node.name);
+      case "emoji": {
         const emoji = post.emojis?.find((e) => e.id === node.id);
-        if (emoji) {
-          return `<img src="${emoji.url}" alt="${emoji.name}" class="inline-block h-5 w-5" />`;
+        if (emoji?.url) {
+          return `<img src="${escapeHtml(emoji.url)}" alt="${escapeHtml(emoji.name)}" class="inline-block h-5 w-5" />`;
         }
-        return `:${node.name}:`;
-      case "heading":
-        return `<h${node.level}>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</h${node.level}>`;
+        return `:${escapeHtml(node.name)}:`;
+      }
+      case "heading": {
+        const level = Math.min(Math.max(Number(node.level) || 1, 1), 6);
+        return `<h${level}>${renderChildren(node)}</h${level}>`;
+      }
       case "subtext":
-        return `<span class="subtext">${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</span>`;
+        return `<span class="subtext">${renderChildren(node)}</span>`;
       case "blockQuote":
-        return `<blockquote>${node.content.map((c: SingleASTNode) => processNode(c)).join("")}</blockquote>`;
+        return `<blockquote>${renderChildren(node)}</blockquote>`;
       case "inlineCode":
-        return `<code>${node.content}</code>`;
+        return `<code>${escapeHtml(node.content)}</code>`;
       case "codeBlock":
-        return `<pre><code>${node.content}</code></pre>`;
+        return `<pre><code>${escapeHtml(node.content)}</code></pre>`;
       default:
         return "";
     }
