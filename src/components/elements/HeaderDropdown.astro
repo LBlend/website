@@ -52,6 +52,10 @@ const { label, class: className, ...props } = Astro.props;
     transform: rotate(180deg);
   }
 
+  .dropdown-menu {
+    visibility: hidden;
+  }
+
   .dropdown.open .dropdown-menu {
     opacity: 1;
     visibility: visible;
