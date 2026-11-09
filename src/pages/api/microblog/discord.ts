@@ -11,6 +11,7 @@ import type { APIRoute } from "astro";
 
 const CACHE_KEY = "discordMessages";
 const CACHE_TTL_MS = 5 * 60 * 1000;
+const MESSAGES_PAGE_SIZE = 100;
 
 interface DiscordAttachment {
   filename: string | null;
@@ -87,6 +88,37 @@ function isDiscordRole(role: unknown): role is DiscordRole {
   );
 }
 
+async function fetchAllMessages(channelId: string | undefined, discordToken: string): Promise<DiscordMessage[]> {
+  const messages: DiscordMessage[] = [];
+  let before: string | undefined;
+
+  while (true) {
+    const params = new URLSearchParams({ limit: String(MESSAGES_PAGE_SIZE) });
+    if (before) {
+      params.set("before", before);
+    }
+
+    const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages?${params}`, {
+      headers: {
+        Authorization: `Bot ${discordToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Discord API error (${response.status}): ${errorText}`);
+    }
+
+    const page: DiscordMessage[] = await response.json();
+    messages.push(...page);
+
+    if (page.length < MESSAGES_PAGE_SIZE) {
+      return messages;
+    }
+    before = page[page.length - 1].id;
+  }
+}
+
 export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
   const cached = cache.get<MicroblogMessage[]>(CACHE_KEY);
   if (cached) return cached;
@@ -100,19 +132,7 @@ export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
     const guildId = DISCORD_GUILD_ID;
     const channelId = DISCORD_BLOG_CHANNEL_ID;
 
-    // Fetch messages
-    const messagesResponse = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-      headers: {
-        Authorization: `Bot ${discordToken}`,
-      },
-    });
-
-    if (!messagesResponse.ok) {
-      const errorText = await messagesResponse.text();
-      throw new Error(`Discord API error (${messagesResponse.status}): ${errorText}`);
-    }
-
-    const messages = await messagesResponse.json();
+    const messages = await fetchAllMessages(channelId, discordToken);
 
     // Fetch guild roles
     const rolesResponse = await fetch(`https://discord.com/api/v10/guilds/${guildId}/roles`, {
