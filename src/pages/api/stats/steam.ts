@@ -28,7 +28,7 @@ export async function getSteamData(): Promise<SteamData> {
   }
 
   const data = await res.json();
-  const totalGamingHours = data.response.games.reduce((acc: number, game: { playtime_forever: number }) => {
+  const totalGamingHours = (data.response?.games ?? []).reduce((acc: number, game: { playtime_forever: number }) => {
     if (game.playtime_forever) {
       return acc + game.playtime_forever;
     }
