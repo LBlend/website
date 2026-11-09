@@ -5,8 +5,12 @@ export const prerender = false;
 // See issue #3 on GitHub
 // I just want to commit this for now
 
+import cache from "@api/_cache";
 import { DISCORD_BLOG_CHANNEL_ID, DISCORD_BOT_TOKEN, DISCORD_GUILD_ID } from "astro:env/server";
 import type { APIRoute } from "astro";
+
+const CACHE_KEY = "discordMessages";
+const CACHE_TTL_MS = 5 * 60 * 1000;
 
 interface DiscordAttachment {
   filename: string | null;
@@ -84,6 +88,9 @@ function isDiscordRole(role: unknown): role is DiscordRole {
 }
 
 export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
+  const cached = cache.get<MicroblogMessage[]>(CACHE_KEY);
+  if (cached) return cached;
+
   try {
     const discordToken = DISCORD_BOT_TOKEN;
     if (!discordToken) {
@@ -201,6 +208,7 @@ export async function getDiscordMessages(): Promise<MicroblogMessage[]> {
       };
     });
 
+    cache.set(CACHE_KEY, formattedMessages, CACHE_TTL_MS);
     return formattedMessages;
   } catch (error) {
     console.error("Error fetching Discord messages:", error);
@@ -218,15 +226,12 @@ export const GET: APIRoute = async () => {
         "Content-Type": "application/json",
       },
     });
-  } catch (error) {
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Failed to fetch Discord messages" }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to fetch Discord messages" }), {
+      status: 502,
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
   }
 };

@@ -11,17 +11,15 @@ import { useTranslations } from "@i18n/index";
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
 
-const discordPosts = await getDiscordMessages();
-
 interface Props {
   numberOfPosts?: number;
 }
 
 const { numberOfPosts } = Astro.props;
-const totalNumberOfPosts = discordPosts.length;
-if (numberOfPosts && discordPosts.length > numberOfPosts) {
-  discordPosts.length = numberOfPosts;
-}
+
+const allPosts = await getDiscordMessages().catch((): MicroblogMessage[] => []);
+const totalNumberOfPosts = allPosts.length;
+const discordPosts = numberOfPosts ? allPosts.slice(0, numberOfPosts) : allPosts;
 
 const escapeHtml = (value: string) =>
   value
