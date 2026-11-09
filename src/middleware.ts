@@ -7,21 +7,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   // Skip header-based locale detection during prerendering (headers aren't available)
   if (!context.isPrerendered) {
-    // Check for lang cookie
-    const cookieHeader = context.request.headers.get("cookie");
-
-    if (cookieHeader) {
-      const cookies = Object.fromEntries(cookieHeader.split("; ").map((c) => c.split("=")));
-      if (cookies.lang && isValidLocale(cookies.lang)) {
-        locale = cookies.lang;
-      }
-    }
-
-    // If no cookie, check Accept-Language header
-    if (locale === defaultLocale && !cookieHeader?.includes("lang=")) {
-      const acceptLanguage = context.request.headers.get("accept-language");
-      locale = detectLocaleFromHeader(acceptLanguage);
-    }
+    const langCookie = context.cookies.get("lang")?.value;
+    locale =
+      langCookie && isValidLocale(langCookie)
+        ? langCookie
+        : detectLocaleFromHeader(context.request.headers.get("accept-language"));
   }
 
   // Store locale in locals for access in components
