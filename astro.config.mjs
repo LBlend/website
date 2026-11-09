@@ -41,7 +41,7 @@ export default defineConfig({
       STEAM_API_KEY: secret(),
       STEAM_USER_ID: secret(),
       WAKATIME_URL: secret("https://api.wakatime.com/api/v1/"),
-      WAKATIME_API_KEY: secret(),
+      WAKATIME_ACCESS_TOKEN: secret(),
       WAKATIME_USERNAME: secret(),
     },
   },
