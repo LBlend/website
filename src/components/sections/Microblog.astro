@@ -127,9 +127,9 @@ const discordMdToHtml = (post: MicroblogMessage) => {
           {/* Author and Timestamp */}
           <div class="flex items-center gap-2">
             {/* Tailwind didn't work for some reason so inlinine styling it is */}
-            <author class="font-bold" style={`color: ${post.author.color}`}>
+            <span class="font-bold" style={post.author.color ? `color: ${post.author.color}` : undefined}>
               {post.author.globalName}
-            </author>
+            </span>
             <time class="text-sm text-[#96979e]" data-timestamp={post.timestamp}>
               {new Date(post.timestamp).toISOString()}
             </time>
