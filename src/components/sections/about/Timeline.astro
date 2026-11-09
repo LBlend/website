@@ -1,18 +1,24 @@
 ---
 import BabyIcon from "@assets/icons/logos/baby.svg";
 import SchoolIcon from "@assets/icons/logos/school_generic.svg";
-import certificationsData from "@content/about/certifications.json";
-import educationData from "@content/about/education.json";
-import lifeData from "@content/about/life.json";
-import volunteeringData from "@content/about/volunteering.json";
-import workData from "@content/about/work.json";
 import { useTranslations } from "@i18n/index";
 import { Image } from "astro:assets";
+import {
+  type TimelineCategory,
+  type TimelineEvent,
+  type TimelineRole,
+  assignLanes,
+  createTimeScale,
+  endOf,
+  formatDuration,
+  getCoveredTime,
+  getTimelineEvents,
+} from "./timeline";
 
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
-
-type WithImage = { image?: string };
+const now = new Date();
+const formatDays = (days: number) => t(days === 1 ? "about.durationDay" : "about.durationDays", { count: days });
 
 const images = import.meta.glob<{ default: ImageMetadata }>([
   "/src/assets/icons/logos/**/*.{jpeg,jpg,png,gif,svg,ico,webp}",
@@ -20,121 +26,22 @@ const images = import.meta.glob<{ default: ImageMetadata }>([
   "!/src/assets/icons/logos/school_generic.svg",
 ]);
 
-function getImagePath(path: string | undefined): string | undefined {
-  if (!path) return undefined;
-  if (path.startsWith("/src/assets/icons/")) return path;
-  return `/src/assets/icons/logos/${path}`;
-}
-
-type TimelineEvent = {
-  date: Date;
-  endDate: Date | null;
-  title: string;
-  subtitle: string;
-  description: string;
-  category: "life" | "education" | "work" | "volunteer" | "certification";
-  url?: string;
-  isCurrent?: boolean;
-  isPointInTime?: boolean;
-  image?: string;
-};
-
-const events: TimelineEvent[] = [];
-
-for (const event of lifeData) {
-  events.push({
-    date: new Date(event.date),
-    endDate: null,
-    title: event.title,
-    subtitle: event.subtitle,
-    description: event.description ?? "",
-    category: "life",
-    isPointInTime: event.isPointInTime ?? true,
-    image: getImagePath(event.image),
-  });
-}
-
-for (const edu of educationData) {
-  events.push({
-    date: new Date(edu.start),
-    endDate: edu.end ? new Date(edu.end) : null,
-    title: edu.degree ? `${edu.degree}${edu.field ? " – " + edu.field : ""}` : edu.field,
-    subtitle: edu.school,
-    description: edu.description?.replace(/https?:\/\/\S+/g, "").trim() ?? "",
-    category: "education",
-    url: edu.url ?? undefined,
-    isCurrent: !edu.end,
-    image: getImagePath((edu as WithImage).image),
-  });
-}
-
-for (const job of workData) {
-  for (const role of job.roles) {
-    events.push({
-      date: new Date(role.start),
-      endDate: role.end ? new Date(role.end) : null,
-      title: role.name,
-      subtitle: job.company,
-      description: role.description ?? "",
-      category: "work",
-      url: job.url,
-      isCurrent: !role.end,
-      image: getImagePath((job as WithImage).image),
-    });
-  }
-}
-
-for (const org of volunteeringData) {
-  for (const role of org.roles) {
-    events.push({
-      date: new Date(role.start),
-      endDate: role.end ? new Date(role.end) : null,
-      title: role.name,
-      subtitle: org.org,
-      description: role.description ?? "",
-      category: "volunteer",
-      url: org.url,
-      isCurrent: !role.end,
-      image: getImagePath((org as WithImage).image),
-    });
-  }
-}
-
-for (const cert of certificationsData) {
-  events.push({
-    date: new Date(cert.date),
-    endDate: null,
-    title: cert.name,
-    subtitle: cert.issuer,
-    description: "",
-    category: "certification",
-    url: cert.url ?? undefined,
-    isPointInTime: true,
-    image: getImagePath((cert as WithImage).image),
-  });
-}
-
-function getTimelineEndDate(event: TimelineEvent): Date {
-  return event.endDate ?? event.date;
-}
-
-events.sort((a, b) => {
-  if (Boolean(a.isCurrent) !== Boolean(b.isCurrent)) return a.isCurrent ? -1 : 1;
-  return getTimelineEndDate(b).getTime() - getTimelineEndDate(a).getTime();
-});
+const events = getTimelineEvents();
+const scale = createTimeScale(events, now);
 
 function formatDate(date: Date) {
-  const locale = Astro.locals.locale;
   return date.toLocaleDateString(locale, { month: "short", year: "numeric" });
 }
 
-function formatRange(start: Date, end: Date | null, isCurrent?: boolean, isPointInTime?: boolean) {
-  if (isPointInTime) return formatDate(start);
-  if (isCurrent || !end) return `${formatDate(start)} – ${t("about.present")}`;
-  return `${formatDate(start)} – ${formatDate(end)}`;
+function formatRange(item: TimelineEvent | TimelineRole) {
+  if ("isPointInTime" in item && item.isPointInTime) return formatDate(item.start);
+  if (item.end === null) return `${formatDate(item.start)} – ${t("about.present")}`;
+  const start = formatDate(item.start);
+  const end = formatDate(item.end);
+  return start === end ? start : `${start} – ${end}`;
 }
 
-const categoryMeta: Record<string, { label: string; color: string; icon: string }> = {
+const categoryMeta: Record<TimelineCategory, { label: string; color: string; icon: string }> = {
   life: { label: t("about.categoryLife"), color: "#e879f9", icon: "★" },
   education: { label: t("about.categoryEducation"), color: "#38bdf8", icon: "🎓" },
   work: { label: t("about.categoryWork"), color: "#4ade80", icon: "💼" },
@@ -144,11 +51,12 @@ const categoryMeta: Record<string, { label: string; color: string; icon: string 
 
 const MS_PER_MONTH = 1000 * 60 * 60 * 24 * 30.44;
 const PX_PER_MONTH = 4;
+const SEGMENT_HEIGHT = 8;
+const SEGMENT_GAP = 3;
 
 const margins: number[] = events.map((event, i) => {
   if (i === 0) return 0;
-  const prev = events[i - 1];
-  const monthsGap = (getTimelineEndDate(prev).getTime() - getTimelineEndDate(event).getTime()) / MS_PER_MONTH;
+  const monthsGap = (endOf(events[i - 1], now).getTime() - endOf(event, now).getTime()) / MS_PER_MONTH;
   return Math.max(0, Math.round(monthsGap * PX_PER_MONTH));
 });
 ---
@@ -172,61 +80,134 @@ const margins: number[] = events.map((event, i) => {
   <div class="tl-root relative">
     {events.map((event, i) => {
       const meta = categoryMeta[event.category];
-      const startLeft = i % 2 === 0;
-      const extraMargin = margins[i];
+      const segments = event.roles ?? [event];
+      const { lanes, count: laneCount } = assignLanes(segments, now);
+      const trackHeight = laneCount * SEGMENT_HEIGHT + (laneCount - 1) * SEGMENT_GAP;
       return (
         <div
-          class={`tl-item relative ${startLeft ? "is-left" : "is-right"}`}
-          style={`--accent:${meta.color}; margin-top:${extraMargin}px;`}
+          class={`tl-item relative ${i % 2 === 0 ? "is-left" : "is-right"}`}
+          style={`--accent:${meta.color}; margin-top:${margins[i]}px;`}
           data-category={event.category}
-          data-date={getTimelineEndDate(event).getTime()}
+          data-date={endOf(event, now).getTime()}
         >
           <div class="tl-dot-col">
             <span class="tl-dot block h-3.5 w-3.5 rounded-full transition-transform duration-200" />
           </div>
 
           <div class="tl-card-col fade-in-section">
-            <div class="tl-card relative rounded-lg border border-slate-800 px-4 py-3 transition-colors duration-200">
+            <div class="tl-card relative rounded-lg border border-slate-800 px-4 py-3">
               <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div class="flex-1">
                   <div class="tl-meta mb-1.5 flex flex-wrap items-center gap-2">
                     <span class="tl-badge rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-widest whitespace-nowrap text-(--accent) uppercase">
                       {meta.icon} {meta.label}
                     </span>
-                    <time class="text-xs tracking-wide text-slate-500">
-                      {formatRange(event.date, event.endDate, event.isCurrent, event.isPointInTime)}
-                    </time>
+                    <time class="text-xs tracking-wide text-slate-500">{formatRange(event)}</time>
                   </div>
-                  <h2 class="tl-title mb-0.5 text-base leading-snug font-bold text-slate-100">{event.title}</h2>
-                  <div class="mb-1">
+                  <h3 class="tl-title mb-0.5 text-base leading-snug font-bold text-slate-100">
                     {event.url ? (
-                      <a href={event.url} target="_blank" rel="noopener" class="tl-org-link text-sm">
-                        {event.subtitle} ↗
+                      <a href={event.url} target="_blank" rel="noopener noreferrer" class="non-styled-link">
+                        {event.title}
+                        <span class="tl-external text-xs font-normal" aria-hidden="true">
+                          ↗
+                        </span>
                       </a>
                     ) : (
-                      <span class="text-sm text-slate-400">{event.subtitle}</span>
+                      event.title
                     )}
-                  </div>
+                  </h3>
+                  {event.subtitle && <p class="tl-subtitle text-sm text-slate-400">{event.subtitle}</p>}
                 </div>
 
-                {event.image?.endsWith("school_generic.svg") ? (
-                  <SchoolIcon class="size-8 shrink-0 self-center text-white" />
-                ) : event.image?.endsWith("baby.svg") ? (
-                  <BabyIcon class="size-8 shrink-0 self-center text-white" />
-                ) : event.image && images[event.image] ? (
-                  <Image
-                    src={images[event.image]()}
-                    alt={event.subtitle}
-                    width={48}
-                    height={48}
-                    class="size-12 shrink-0 self-center rounded-lg bg-slate-800 p-1"
+                <div class="flex shrink-0 self-center">
+                  {event.image?.endsWith("school_generic.svg") ? (
+                    <SchoolIcon class="size-8 text-white" />
+                  ) : event.image?.endsWith("baby.svg") ? (
+                    <BabyIcon class="size-8 text-white" />
+                  ) : event.image && images[event.image] ? (
+                    <Image
+                      src={images[event.image]()}
+                      alt={event.title}
+                      width={48}
+                      height={48}
+                      class="size-12 rounded-lg bg-slate-800 p-1"
+                    />
+                  ) : (
+                    <SchoolIcon class="size-8 text-white" />
+                  )}
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <div
+                  class:list={["tl-track relative", laneCount > 1 ? "rounded-md" : "rounded-full"]}
+                  style={`height:${trackHeight}px`}
+                >
+                  <span
+                    class:list={[
+                      "tl-track-compressed absolute top-0 left-0 h-full",
+                      laneCount > 1 ? "rounded-l-md" : "rounded-l-full",
+                    ]}
+                    style={`width:${scale.compressedPercent}%`}
                   />
-                ) : (
-                  <SchoolIcon class="size-8 shrink-0 self-center text-white" />
+                  {scale.ticks.map(({ percent }) => (
+                    <span class="tl-tick absolute top-0 h-full w-px" style={`left:${percent}%`} />
+                  ))}
+                  {event.isPointInTime ? (
+                    <span
+                      class="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--accent)"
+                      style={`left:${scale.toPercent(event.start)}%`}
+                    />
+                  ) : (
+                    segments.map((segment) => (
+                      <span
+                        class="tl-segment absolute rounded-full bg-(--accent) opacity-85"
+                        data-role-id={event.roles ? segment.id : undefined}
+                        style={`top:${lanes.get(segment.id)! * (SEGMENT_HEIGHT + SEGMENT_GAP)}px; height:${SEGMENT_HEIGHT}px; left:${scale.toPercent(segment.start)}%; width:max(4px, ${scale.toPercent(endOf(segment, now)) - scale.toPercent(segment.start)}%)`}
+                      />
+                    ))
+                  )}
+                </div>
+                <div class="relative mt-1 h-3 text-[10px] text-slate-600">
+                  {scale.ticks
+                    .filter(({ label }) => label)
+                    .map(({ year, percent, compressed }) => (
+                      <span
+                        class:list={["absolute -translate-x-1/2", compressed && "hidden sm:inline"]}
+                        style={`left:${percent}%`}
+                      >
+                        {year}
+                      </span>
+                    ))}
+                </div>
+                {!event.isPointInTime && (
+                  <p class="tl-duration mt-2 mb-2 text-xs text-slate-400">
+                    {formatDuration(getCoveredTime(segments, now), locale, formatDays)}
+                  </p>
                 )}
               </div>
-              {event.description && (
-                <p class="mt-1.5 text-sm leading-relaxed whitespace-pre-line text-slate-500">{event.description}</p>
+
+              {event.roles ? (
+                <ul class="mt-3 flex flex-col gap-1 border-t border-slate-800 pt-2">
+                  {event.roles.map((role) => (
+                    <li class="tl-role" data-role-id={role.id}>
+                      <div class="flex flex-wrap items-baseline gap-x-2">
+                        <span class="text-sm font-semibold text-slate-200">{role.title}</span>
+                        <time class="text-xs text-slate-500">{formatRange(role)}</time>
+                        <span class="text-xs text-slate-600">
+                          · {formatDuration(getCoveredTime([role], now), locale, formatDays)}
+                        </span>
+                      </div>
+                      {role.description && (
+                        <p class="text-xs leading-relaxed whitespace-pre-line text-slate-500">{role.description}</p>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                event.description && (
+                  <p class="mt-1.5 text-sm leading-relaxed whitespace-pre-line text-slate-500">{event.description}</p>
+                )
               )}
             </div>
           </div>
@@ -290,15 +271,9 @@ const margins: number[] = events.map((event, i) => {
     .tl-item.is-left .tl-meta {
       flex-direction: row-reverse;
     }
-    .tl-item.is-left .tl-title {
-      text-align: right;
-    }
-    .tl-item.is-left .tl-org-link,
-    .tl-item.is-left .tl-card-col > .tl-card .mb-1 {
-      text-align: right;
-      display: block;
-    }
-    .tl-item.is-left p {
+    .tl-item.is-left .tl-title,
+    .tl-item.is-left .tl-subtitle,
+    .tl-item.is-left .tl-duration {
       text-align: right;
     }
     .tl-item.is-right .tl-card {
@@ -344,15 +319,60 @@ const margins: number[] = events.map((event, i) => {
   .tl-card a {
     cursor: pointer;
   }
-  .tl-item:hover .tl-card {
-    background: rgb(30 41 59); /* slate-800 */
-  }
 
   .tl-badge {
     background: color-mix(in srgb, var(--accent) 12%, transparent);
   }
-  .tl-org-link:hover {
-    color: var(--accent);
+
+  .tl-external {
+    margin-left: 0.2em;
+    -webkit-text-fill-color: var(--color-slate-500);
+  }
+
+  .tl-track {
+    background: rgb(148 163 184 / 0.14);
+  }
+  .tl-track-compressed {
+    background: rgb(0 0 0 / 0.3);
+  }
+  .tl-tick {
+    background: rgb(148 163 184 / 0.25);
+  }
+
+  .tl-segment {
+    transition:
+      opacity 0.15s,
+      box-shadow 0.15s;
+  }
+  .tl-segment[data-role-id] {
+    cursor: pointer;
+  }
+  .tl-segment[data-role-id]::before {
+    content: "";
+    position: absolute;
+    inset: -3px 0;
+  }
+  .tl-card.has-highlight .tl-segment:not(.is-highlighted) {
+    opacity: 0.25;
+  }
+  .tl-segment.is-highlighted {
+    opacity: 1;
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .tl-role {
+    margin-inline: -0.375rem;
+    padding: 0.25rem 0.375rem;
+    border-radius: 0.375rem;
+    transition:
+      background 0.15s,
+      opacity 0.15s;
+  }
+  .tl-card.has-highlight .tl-role:not(.is-highlighted) {
+    opacity: 0.45;
+  }
+  .tl-role.is-highlighted {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
   }
 
   .tl-filter-btn.is-active {
@@ -414,6 +434,23 @@ const margins: number[] = events.map((event, i) => {
         btn.classList.add("is-active");
       }
       applyFilter();
+    });
+  });
+
+  document.querySelectorAll<HTMLElement>(".tl-card").forEach((card) => {
+    const linked = card.querySelectorAll<HTMLElement>("[data-role-id]");
+
+    linked.forEach((element) => {
+      element.addEventListener("mouseenter", () => {
+        card.classList.add("has-highlight");
+        linked.forEach((other) =>
+          other.classList.toggle("is-highlighted", other.dataset.roleId === element.dataset.roleId),
+        );
+      });
+      element.addEventListener("mouseleave", () => {
+        card.classList.remove("has-highlight");
+        linked.forEach((other) => other.classList.remove("is-highlighted"));
+      });
     });
   });
 </script>

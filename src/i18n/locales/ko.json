@@ -100,6 +100,8 @@
     "showLess": "접기",
     "timeline": "타임라인",
     "present": "현재",
+    "durationDay": "{count}일",
+    "durationDays": "{count}일",
     "categoryLife": "생활",
     "categoryEducation": "교육",
     "categoryWork": "직업",

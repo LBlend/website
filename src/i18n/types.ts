@@ -111,6 +111,8 @@ export interface Translations {
     showLess: string;
     timeline: string;
     present: string;
+    durationDay: string;
+    durationDays: string;
     categoryLife: string;
     categoryEducation: string;
     categoryWork: string;

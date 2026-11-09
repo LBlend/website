@@ -100,6 +100,8 @@
     "showLess": "Vis mindre",
     "timeline": "Tidslinje",
     "present": "Nå",
+    "durationDay": "{count} dag",
+    "durationDays": "{count} dager",
     "categoryLife": "Liv",
     "categoryEducation": "Utdanning",
     "categoryWork": "Jobb",
