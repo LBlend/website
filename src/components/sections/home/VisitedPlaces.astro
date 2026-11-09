@@ -67,7 +67,7 @@ const t = useTranslations(locale);
           "KZ",
           "UZ",
           "TJ",
-          "KG"
+          "KG",
         ],
         colors: {
           NO: "2555bb",
@@ -80,18 +80,16 @@ const t = useTranslations(locale);
 
 <section id="visited-places" class="flex flex-col gap-4">
   <h2 class="text-4xl font-bold">{t("visitedPlaces.title")}</h2>
-  <p>
-    {t("visitedPlaces.description")}
-  </p>
+  <p>{t("visitedPlaces.description")}</p>
   <div id="chartdiv" class="h-137.5 w-full"></div>
-  <a href="https://my.flightradar24.com/LBlend" class="mx-auto w-fit lg:mx-0"
-    ><Image
+  <a href="https://my.flightradar24.com/LBlend" class="mx-auto w-fit lg:mx-0">
+    <Image
       src="https://banners-my.flightradar24.com/LBlend.png"
       alt="My Flightdiary.net profile"
       width="320"
       height="70"
-    /></a
-  >
+    />
+  </a>
 </section>
 
 <script is:inline src="https://www.visitedplaces.com/js/common.js"></script>

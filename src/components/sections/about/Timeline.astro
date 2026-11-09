@@ -157,86 +157,82 @@ const margins: number[] = events.map((event, i) => {
   <h2 class="mb-2 text-2xl font-bold tracking-tight text-white">{t("about.timeline")}</h2>
 
   <div class="mb-10 flex flex-wrap justify-center gap-x-2 gap-y-2">
-    {
-      Object.entries(categoryMeta).map(([key, meta]) => (
-        <button
-          class="tl-filter-btn flex cursor-pointer items-center gap-1.5 rounded-full border border-slate-700 px-3 py-1 text-xs tracking-wider text-slate-400 uppercase transition-all duration-200 hover:border-slate-500 hover:text-slate-200"
-          data-filter={key}
-          style={`--btn-accent:${meta.color}`}
-        >
-          <span class="inline-block h-2 w-2 shrink-0 rounded-full bg-(--btn-accent)" />
-          {meta.label}
-        </button>
-      ))
-    }
+    {Object.entries(categoryMeta).map(([key, meta]) => (
+      <button
+        class="tl-filter-btn flex cursor-pointer items-center gap-1.5 rounded-full border border-slate-700 px-3 py-1 text-xs tracking-wider text-slate-400 uppercase transition-all duration-200 hover:border-slate-500 hover:text-slate-200"
+        data-filter={key}
+        style={`--btn-accent:${meta.color}`}
+      >
+        <span class="inline-block h-2 w-2 shrink-0 rounded-full bg-(--btn-accent)" />
+        {meta.label}
+      </button>
+    ))}
   </div>
 
   <div class="tl-root relative">
-    {
-      events.map((event, i) => {
-        const meta = categoryMeta[event.category];
-        const startLeft = i % 2 === 0;
-        const extraMargin = margins[i];
-        return (
-          <div
-            class={`tl-item relative ${startLeft ? "is-left" : "is-right"}`}
-            style={`--accent:${meta.color}; margin-top:${extraMargin}px;`}
-            data-category={event.category}
-            data-date={getTimelineEndDate(event).getTime()}
-          >
-            <div class="tl-dot-col">
-              <span class="tl-dot block h-3.5 w-3.5 rounded-full transition-transform duration-200" />
-            </div>
+    {events.map((event, i) => {
+      const meta = categoryMeta[event.category];
+      const startLeft = i % 2 === 0;
+      const extraMargin = margins[i];
+      return (
+        <div
+          class={`tl-item relative ${startLeft ? "is-left" : "is-right"}`}
+          style={`--accent:${meta.color}; margin-top:${extraMargin}px;`}
+          data-category={event.category}
+          data-date={getTimelineEndDate(event).getTime()}
+        >
+          <div class="tl-dot-col">
+            <span class="tl-dot block h-3.5 w-3.5 rounded-full transition-transform duration-200" />
+          </div>
 
-            <div class="tl-card-col fade-in-section">
-              <div class="tl-card relative rounded-lg border border-slate-800 px-4 py-3 transition-colors duration-200">
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div class="flex-1">
-                    <div class="tl-meta mb-1.5 flex flex-wrap items-center gap-2">
-                      <span class="tl-badge rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-widest whitespace-nowrap text-(--accent) uppercase">
-                        {meta.icon} {meta.label}
-                      </span>
-                      <time class="text-xs tracking-wide text-slate-500">
-                        {formatRange(event.date, event.endDate, event.isCurrent, event.isPointInTime)}
-                      </time>
-                    </div>
-                    <h2 class="tl-title mb-0.5 text-base leading-snug font-bold text-slate-100">{event.title}</h2>
-                    <div class="mb-1">
-                      {event.url ? (
-                        <a href={event.url} target="_blank" rel="noopener" class="tl-org-link text-sm">
-                          {event.subtitle} ↗
-                        </a>
-                      ) : (
-                        <span class="text-sm text-slate-400">{event.subtitle}</span>
-                      )}
-                    </div>
+          <div class="tl-card-col fade-in-section">
+            <div class="tl-card relative rounded-lg border border-slate-800 px-4 py-3 transition-colors duration-200">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="flex-1">
+                  <div class="tl-meta mb-1.5 flex flex-wrap items-center gap-2">
+                    <span class="tl-badge rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-widest whitespace-nowrap text-(--accent) uppercase">
+                      {meta.icon} {meta.label}
+                    </span>
+                    <time class="text-xs tracking-wide text-slate-500">
+                      {formatRange(event.date, event.endDate, event.isCurrent, event.isPointInTime)}
+                    </time>
                   </div>
-
-                  {event.image?.endsWith("school_generic.svg") ? (
-                    <SchoolIcon class="size-8 shrink-0 self-center text-white" />
-                  ) : event.image?.endsWith("baby.svg") ? (
-                    <BabyIcon class="size-8 shrink-0 self-center text-white" />
-                  ) : event.image && images[event.image] ? (
-                    <Image
-                      src={images[event.image]()}
-                      alt={event.subtitle}
-                      width={48}
-                      height={48}
-                      class="size-12 shrink-0 self-center rounded-lg bg-slate-800 p-1"
-                    />
-                  ) : (
-                    <SchoolIcon class="size-8 shrink-0 self-center text-white" />
-                  )}
+                  <h2 class="tl-title mb-0.5 text-base leading-snug font-bold text-slate-100">{event.title}</h2>
+                  <div class="mb-1">
+                    {event.url ? (
+                      <a href={event.url} target="_blank" rel="noopener" class="tl-org-link text-sm">
+                        {event.subtitle} ↗
+                      </a>
+                    ) : (
+                      <span class="text-sm text-slate-400">{event.subtitle}</span>
+                    )}
+                  </div>
                 </div>
-                {event.description && (
-                  <p class="mt-1.5 text-sm leading-relaxed whitespace-pre-line text-slate-500">{event.description}</p>
+
+                {event.image?.endsWith("school_generic.svg") ? (
+                  <SchoolIcon class="size-8 shrink-0 self-center text-white" />
+                ) : event.image?.endsWith("baby.svg") ? (
+                  <BabyIcon class="size-8 shrink-0 self-center text-white" />
+                ) : event.image && images[event.image] ? (
+                  <Image
+                    src={images[event.image]()}
+                    alt={event.subtitle}
+                    width={48}
+                    height={48}
+                    class="size-12 shrink-0 self-center rounded-lg bg-slate-800 p-1"
+                  />
+                ) : (
+                  <SchoolIcon class="size-8 shrink-0 self-center text-white" />
                 )}
               </div>
+              {event.description && (
+                <p class="mt-1.5 text-sm leading-relaxed whitespace-pre-line text-slate-500">{event.description}</p>
+              )}
             </div>
           </div>
-        );
-      })
-    }
+        </div>
+      );
+    })}
   </div>
 </section>
 

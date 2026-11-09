@@ -136,22 +136,18 @@ const groupedTracks = data.lovedtracks.track.reduce((acc: Record<string, Track[]
 <div class="flex w-full flex-col gap-8 p-6">
   <h3 class="text-center text-4xl font-bold lg:text-left lg:text-2xl">{t("recentlyLikedSongs.title")}</h3>
   <div class="flex flex-col gap-8">
-    {
-      groupedTracks && Object.keys(groupedTracks).length === 0 && (
-        <p class="text-center text-gray-500">{t("recentlyLikedSongs.fetchError")}</p>
-      )
-    }
-    {
-      Object.entries(groupedTracks).map(([time, tracks]) => (
-        <div class="flex flex-col gap-4">
-          <h2 class="border-b border-gray-700 text-center font-semibold">{time}</h2>
-          <div class="flex flex-col gap-6">
-            {tracks.map((track: Track) => (
-              <Song track={track} />
-            ))}
-          </div>
+    {groupedTracks && Object.keys(groupedTracks).length === 0 && (
+      <p class="text-center text-gray-500">{t("recentlyLikedSongs.fetchError")}</p>
+    )}
+    {Object.entries(groupedTracks).map(([time, tracks]) => (
+      <div class="flex flex-col gap-4">
+        <h2 class="border-b border-gray-700 text-center font-semibold">{time}</h2>
+        <div class="flex flex-col gap-6">
+          {tracks.map((track: Track) => (
+            <Song track={track} />
+          ))}
         </div>
-      ))
-    }
+      </div>
+    ))}
   </div>
 </div>

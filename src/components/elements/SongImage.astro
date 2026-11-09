@@ -46,10 +46,8 @@ try {
 }
 ---
 
-{
-  typeof imageSrc === "string" ? (
-    <img src={imageSrc} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
-  ) : (
-    <Image src={imageSrc} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
-  )
-}
+{typeof imageSrc === "string" ? (
+  <img src={imageSrc} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
+) : (
+  <Image src={imageSrc} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
+)}

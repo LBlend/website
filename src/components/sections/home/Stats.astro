@@ -54,18 +54,17 @@ const disclaimerLines = t("stats.disclaimer").split("\n");
   </div>
   <div class="text-center font-light italic">
     <p>
-      {
-        disclaimerLines.map((line, i) => (
-          <>
-            {line}
-            {i < disclaimerLines.length - 1 && <br />}
-          </>
-        ))
-      }
+      {disclaimerLines.map((line, i) => (
+        <>
+          {line}
+          {i < disclaimerLines.length - 1 && <br />}
+        </>
+      ))}
     </p>
   </div>
 </section>
 <script
   is:inline
   type="module"
-  src="https://cdn.jsdelivr.net/gh/lekoala/formidable-elements@master/dist/count-up.min.js"></script>
+  src="https://cdn.jsdelivr.net/gh/lekoala/formidable-elements@master/dist/count-up.min.js"
+></script>

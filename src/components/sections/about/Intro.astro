@@ -28,29 +28,37 @@ const t = useTranslations(locale);
         class="fade-in-section w-full rounded-xl object-cover md:w-64"
       />
       <div class="grid w-full gap-4 divide-y-2 divide-gray-700 border-b-2 border-gray-700">
-        <p class="flex items-center gap-2"><UserIcon class="size-5" /> {t("about.name")}</p>
-        <p class="flex items-center gap-2"><BirthdayIcon class="size-5" /> {t("about.birthday")}</p>
-        <p class="flex items-center gap-2"><BabyIcon class="size-5" /> {t("about.location")}</p>
-        <p class="flex items-center gap-2"><GenderIcon class="size-5" /> {t("about.sex")}</p>
-        <p class="flex items-center gap-2"><HeightIcon class="size-5" /> {t("about.height")}</p>
-        <p class="flex items-center gap-2"><GraduationIcon class="size-5" /> {t("about.education")}</p>
+        <p class="flex items-center gap-2">
+          <UserIcon class="size-5" /> {t("about.name")}
+        </p>
+        <p class="flex items-center gap-2">
+          <BirthdayIcon class="size-5" /> {t("about.birthday")}
+        </p>
+        <p class="flex items-center gap-2">
+          <BabyIcon class="size-5" /> {t("about.location")}
+        </p>
+        <p class="flex items-center gap-2">
+          <GenderIcon class="size-5" /> {t("about.sex")}
+        </p>
+        <p class="flex items-center gap-2">
+          <HeightIcon class="size-5" /> {t("about.height")}
+        </p>
+        <p class="flex items-center gap-2">
+          <GraduationIcon class="size-5" /> {t("about.education")}
+        </p>
       </div>
     </div>
   </div>
 
   <div class="flex flex-wrap justify-center gap-4">
     <a href="mailto:leander@furumo.eu" class="non-styled-link link-button">
-      <div
-        class="bg-backgroundlight flex items-center gap-2 rounded-xl border border-gray-700 px-5 py-2 font-medium text-gray-300 transition-colors hover:bg-slate-800"
-      >
+      <div class="bg-backgroundlight flex items-center gap-2 rounded-xl border border-gray-700 px-5 py-2 font-medium text-gray-300 transition-colors hover:bg-slate-800">
         <Email class="size-5" />
         {t("about.emailMe")}
       </div>
     </a>
     <a id="call-btn" href="tel:22225555" class="non-styled-link link-button relative">
-      <div
-        class="bg-backgroundlight flex items-center gap-2 rounded-xl border border-gray-700 px-5 py-2 font-medium text-gray-300 transition-colors hover:bg-slate-800"
-      >
+      <div class="bg-backgroundlight flex items-center gap-2 rounded-xl border border-gray-700 px-5 py-2 font-medium text-gray-300 transition-colors hover:bg-slate-800">
         <PhoneIcon class="size-5" />
         {t("about.callMe")}
       </div>

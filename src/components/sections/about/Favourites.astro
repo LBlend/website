@@ -38,97 +38,95 @@ const categoryMeta: Record<CategoryKey, { label: string; color: string }> = {
   <p>{t("about.favouritesDesc")}</p>
 
   <ul class="flex flex-wrap justify-center gap-4 md:grid md:grid-cols-5">
-    {
-      favouritesData.map((fav) => {
-        const meta = categoryMeta[fav.category as CategoryKey];
-        const mentions = fav.honorableMentions as HonorableMention[];
+    {favouritesData.map((fav) => {
+      const meta = categoryMeta[fav.category as CategoryKey];
+      const mentions = fav.honorableMentions as HonorableMention[];
 
-        const topImagePath = getImagePath(fav.top.image || undefined);
-        const topResolvedImage = topImagePath ? images[topImagePath] : undefined;
+      const topImagePath = getImagePath(fav.top.image || undefined);
+      const topResolvedImage = topImagePath ? images[topImagePath] : undefined;
 
-        const mentionLayers = mentions.map((mention) => {
-          const path = getImagePath(mention.image || undefined);
-          return { mention, resolvedImage: path ? images[path] : undefined };
-        });
+      const mentionLayers = mentions.map((mention) => {
+        const path = getImagePath(mention.image || undefined);
+        return { mention, resolvedImage: path ? images[path] : undefined };
+      });
 
-        return (
-          <li
-            class="fav-card fade-in-section bg-backgroundlight flex w-[calc(50%-0.5rem)] flex-col overflow-hidden rounded-xl border border-slate-800 sm:w-[calc(33.333%-0.667rem)] md:w-auto"
-            style={`--accent:${meta.color}`}
-          >
-            <div class="relative aspect-square w-full shrink-0 overflow-hidden">
-              <div class="fav-layer is-active absolute inset-0">
-                {topResolvedImage ? (
+      return (
+        <li
+          class="fav-card fade-in-section bg-backgroundlight flex w-[calc(50%-0.5rem)] flex-col overflow-hidden rounded-xl border border-slate-800 sm:w-[calc(33.333%-0.667rem)] md:w-auto"
+          style={`--accent:${meta.color}`}
+        >
+          <div class="relative aspect-square w-full shrink-0 overflow-hidden">
+            <div class="fav-layer is-active absolute inset-0">
+              {topResolvedImage ? (
+                <Image
+                  src={topResolvedImage()}
+                  alt={fav.top.name}
+                  width={300}
+                  height={300}
+                  class="h-full w-full object-cover object-center"
+                />
+              ) : (
+                <div class="h-full w-full bg-[linear-gradient(135deg,color-mix(in_srgb,var(--accent)_20%,#0f172a),color-mix(in_srgb,var(--accent)_8%,#0f172a))]" />
+              )}
+            </div>
+
+            {/* Layers 1..n: honorable mention images */}
+            {mentionLayers.map(({ mention, resolvedImage }) => (
+              <div class="fav-layer absolute inset-0">
+                {resolvedImage ? (
                   <Image
-                    src={topResolvedImage()}
-                    alt={fav.top.name}
+                    src={resolvedImage()}
+                    alt={mention.name}
                     width={300}
                     height={300}
-                    class="h-full w-full object-cover object-center"
+                    class="h-full! w-full object-cover object-center"
                   />
                 ) : (
-                  <div class="h-full w-full bg-[linear-gradient(135deg,color-mix(in_srgb,var(--accent)_20%,#0f172a),color-mix(in_srgb,var(--accent)_8%,#0f172a))]" />
+                  <div class="h-full w-full bg-[linear-gradient(315deg,color-mix(in_srgb,var(--accent)_20%,#0f172a),color-mix(in_srgb,var(--accent)_8%,#0f172a))]" />
                 )}
               </div>
+            ))}
 
-              {/* Layers 1..n: honorable mention images */}
-              {mentionLayers.map(({ mention, resolvedImage }) => (
-                <div class="fav-layer absolute inset-0">
-                  {resolvedImage ? (
-                    <Image
-                      src={resolvedImage()}
-                      alt={mention.name}
-                      width={300}
-                      height={300}
-                      class="h-full! w-full object-cover object-center"
-                    />
-                  ) : (
-                    <div class="h-full w-full bg-[linear-gradient(315deg,color-mix(in_srgb,var(--accent)_20%,#0f172a),color-mix(in_srgb,var(--accent)_8%,#0f172a))]" />
-                  )}
-                </div>
-              ))}
+            <div class="absolute top-2 left-2 rounded-full bg-[color-mix(in_srgb,var(--accent)_20%,#0f172a)] px-2.5 py-0.5 text-xs font-semibold tracking-widest text-(--accent) uppercase">
+              {meta.label}
+            </div>
+          </div>
 
-              <div class="absolute top-2 left-2 rounded-full bg-[color-mix(in_srgb,var(--accent)_20%,#0f172a)] px-2.5 py-0.5 text-xs font-semibold tracking-widest text-(--accent) uppercase">
-                {meta.label}
-              </div>
+          {/* Text body */}
+          <div class="flex flex-1 flex-col gap-2 p-3">
+            {/* Display area: fixed height so it never causes layout shift */}
+            <div class="h-14 overflow-hidden">
+              <p class="fav-display-name line-clamp-2 text-sm leading-tight font-bold text-slate-100">
+                {fav.top.name || "—"}
+              </p>
+              <p class="fav-display-subtitle text-xs text-slate-500">{fav.top.subtitle}</p>
             </div>
 
-            {/* Text body */}
-            <div class="flex flex-1 flex-col gap-2 p-3">
-              {/* Display area: fixed height so it never causes layout shift */}
-              <div class="h-14 overflow-hidden">
-                <p class="fav-display-name line-clamp-2 text-sm leading-tight font-bold text-slate-100">
-                  {fav.top.name || "—"}
-                </p>
-                <p class="fav-display-subtitle text-xs text-slate-500">{fav.top.subtitle}</p>
-              </div>
-
-              {/* Full list: top pick + mentions — truncated to prevent wrapping */}
-              <ul class="flex flex-col gap-0.5 border-t border-slate-800 pt-2">
+            {/* Full list: top pick + mentions — truncated to prevent wrapping */}
+            <ul class="flex flex-col gap-0.5 border-t border-slate-800 pt-2">
+              <li
+                class="fav-mention is-active cursor-default truncate text-xs transition-colors duration-150"
+                data-layer="0"
+                data-name={fav.top.name || "—"}
+                data-subtitle={fav.top.subtitle || ""}
+              >
+                {fav.top.name || "—"}
+              </li>
+              {mentions.map((mention, i) => (
                 <li
-                  class="fav-mention is-active cursor-default truncate text-xs transition-colors duration-150"
-                  data-layer="0"
-                  data-name={fav.top.name || "—"}
-                  data-subtitle={fav.top.subtitle || ""}
+                  class="fav-mention cursor-default truncate text-xs transition-colors duration-150"
+                  data-layer={i + 1}
+                  data-name={(mention as HonorableMention).name}
+                  data-subtitle={(mention as HonorableMention).subtitle || ""}
                 >
-                  {fav.top.name || "—"}
+                  {(mention as HonorableMention).name}
                 </li>
-                {mentions.map((mention, i) => (
-                  <li
-                    class="fav-mention cursor-default truncate text-xs transition-colors duration-150"
-                    data-layer={i + 1}
-                    data-name={(mention as HonorableMention).name}
-                    data-subtitle={(mention as HonorableMention).subtitle || ""}
-                  >
-                    {(mention as HonorableMention).name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </li>
-        );
-      })
-    }
+              ))}
+            </ul>
+          </div>
+        </li>
+      );
+    })}
   </ul>
 </section>
 

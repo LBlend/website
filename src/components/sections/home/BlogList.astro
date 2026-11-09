@@ -22,23 +22,23 @@ const latestPosts = posts.slice(0, 5);
     <RssSubscribe />
   </div>
 
-  {
-    latestPosts.map((post) => (
-      <article>
-        <div class="align-center flex items-center gap-2 text-xs font-light">
-          <span>
-            <FormattedDate date={post.data.pubDate} />
-          </span>
-          <span class="inline-block h-1 w-1 rounded bg-gray-500 opacity-75" />
-          <p>{t("common.minRead", { time: Math.round(readingTime(post.body ?? "").minutes) })}</p>
-        </div>
-        <h3 class="text-xl font-extrabold">
-          <a class="non-styled-link" href={`/blog/${post.id}`}>
-            {post.data.title}
-          </a>
-        </h3>
-      </article>
-    ))
-  }
-  <a href="/blog" class="mt-4 w-fit">{t("blog.viewAllPosts")}</a>
+  {latestPosts.map((post) => (
+    <article>
+      <div class="align-center flex items-center gap-2 text-xs font-light">
+        <span>
+          <FormattedDate date={post.data.pubDate} />
+        </span>
+        <span class="inline-block h-1 w-1 rounded bg-gray-500 opacity-75" />
+        <p>{t("common.minRead", { time: Math.round(readingTime(post.body ?? "").minutes) })}</p>
+      </div>
+      <h3 class="text-xl font-extrabold">
+        <a class="non-styled-link" href={`/blog/${post.id}`}>
+          {post.data.title}
+        </a>
+      </h3>
+    </article>
+  ))}
+  <a href="/blog" class="mt-4 w-fit">
+    {t("blog.viewAllPosts")}
+  </a>
 </section>

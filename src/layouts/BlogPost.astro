@@ -24,13 +24,11 @@ const { title, description, pubDate, updatedDate, tags, headings } = Astro.props
         <div class="title">
           <div class="date">
             <FormattedDate date={pubDate} />
-            {
-              updatedDate && (
-                <div class="last-updated-on">
-                  Last updated on <FormattedDate date={updatedDate} />
-                </div>
-              )
-            }
+            {updatedDate && (
+              <div class="last-updated-on">
+                Last updated on <FormattedDate date={updatedDate} />
+              </div>
+            )}
           </div>
           <h1>{title}</h1>
           <p class="description">{description}</p>
@@ -38,15 +36,13 @@ const { title, description, pubDate, updatedDate, tags, headings } = Astro.props
         </div>
         <TableOfContentsMobile headings={headings} />
         <slot />
-        {
-          tags && (
-            <div class="mt-12 flex flex-wrap gap-4">
-              {tags.map((tag) => (
-                <BlogTag tag={tag} />
-              ))}
-            </div>
-          )
-        }
+        {tags && (
+          <div class="mt-12 flex flex-wrap gap-4">
+            {tags.map((tag) => (
+              <BlogTag tag={tag} />
+            ))}
+          </div>
+        )}
       </div>
     </article>
     <aside class="toc-sidebar">

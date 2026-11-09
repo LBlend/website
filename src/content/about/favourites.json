@@ -35,7 +35,8 @@
       "image": "breaking_bad.jpg"
     },
     "honorableMentions": [
-      { "name": "Pachinko", "image": "pachinko.jpg" }]
+      { "name": "Pachinko", "image": "pachinko.jpg" }
+    ]
   },
   {
     "category": "game",

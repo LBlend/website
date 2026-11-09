@@ -17,18 +17,14 @@ const passionLines = t("intro.passions").split("\n");
     <p>
       <Fragment set:html={t("intro.ageText", { age: `<span id="age">?</span>` })} />
     </p>
+    <p>{t("intro.welcome")}</p>
     <p>
-      {t("intro.welcome")}
-    </p>
-    <p>
-      {
-        passionLines.map((line, i) => (
-          <>
-            {line}
-            {i < passionLines.length - 1 && <br />}
-          </>
-        ))
-      }
+      {passionLines.map((line, i) => (
+        <>
+          {line}
+          {i < passionLines.length - 1 && <br />}
+        </>
+      ))}
     </p>
     <p>
       {t("intro.location")}{" "}

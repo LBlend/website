@@ -10,22 +10,20 @@ const { headings } = Astro.props;
 const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 ---
 
-{
-  tocHeadings.length > 0 && (
-    <nav class="toc" aria-label="Table of contents">
-      <p class="mb-3 font-semibold text-gray-200">On this page</p>
-      <ul>
-        {tocHeadings.map((heading) => (
-          <li class={`list-none ${heading.depth === 3 ? "toc-depth-3" : ""}`}>
-            <a href={`#${heading.slug}`} class="toc-link">
-              {heading.text}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  )
-}
+{tocHeadings.length > 0 && (
+  <nav class="toc" aria-label="Table of contents">
+    <p class="mb-3 font-semibold text-gray-200">On this page</p>
+    <ul>
+      {tocHeadings.map((heading) => (
+        <li class={`list-none ${heading.depth === 3 ? "toc-depth-3" : ""}`}>
+          <a href={`#${heading.slug}`} class="toc-link">
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
 
 <script>
   function initToc() {

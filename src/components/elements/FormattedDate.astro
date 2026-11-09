@@ -8,11 +8,9 @@ const locale = Astro.locals.locale;
 ---
 
 <time datetime={date.toISOString()} title={date.toLocaleDateString(locale)}>
-  {
-    date.toLocaleDateString(locale, {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    })
-  }
+  {date.toLocaleDateString(locale, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  })}
 </time>

@@ -43,7 +43,9 @@ const i18nData = JSON.stringify({
     </a>
   </div>
   <div class="flex items-center justify-stretch gap-6">
-    <a href="/pgp.asc" class="text-xs">{t("footer.pgpKey")}</a>
+    <a href="/pgp.asc" class="text-xs">
+      {t("footer.pgpKey")}
+    </a>
     <span class="h-4 border border-gray-600"></span>
     <div
       class="flex items-center justify-center gap-1 text-xs text-gray-400 opacity-70"
@@ -53,9 +55,7 @@ const i18nData = JSON.stringify({
       <button id="xmr-button">
         <Copy class="size-4 cursor-pointer" id="xmr-copy" />
       </button>
-      <span id="xmr-address">
-        {t("footer.enableJs")}
-      </span>
+      <span id="xmr-address">{t("footer.enableJs")}</span>
     </div>
   </div>
 

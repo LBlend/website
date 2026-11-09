@@ -57,56 +57,48 @@ const postCountText =
           id="dropdown-menu"
           class="bg-backgroundlight absolute z-50 min-w-50 rounded-md border border-gray-700/30 shadow-lg transition-all duration-200"
         >
-          {
-            allTags.map((tag) => (
-              <button
-                class="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-700/10"
-                id="tag-button"
-                data-tag={tag}
-              >
-                {tag}
-                {tags.includes(tag) && <CheckmarkSVG id="checkmark" class="text-accent h-4 w-4" />}
-              </button>
-            ))
-          }
+          {allTags.map((tag) => (
+            <button
+              class="flex w-full items-center justify-between px-3 py-2 hover:bg-gray-700/10"
+              id="tag-button"
+              data-tag={tag}
+            >
+              {tag}
+              {tags.includes(tag) && <CheckmarkSVG id="checkmark" class="text-accent h-4 w-4" />}
+            </button>
+          ))}
         </div>
       </div>
 
       <div id="selected-tags" class="flex flex-wrap gap-2">
-        {
-          tags.map((tag) => (
-            <span
-              class="bg-accent flex items-center gap-1 rounded-full px-3 py-1 text-white"
-              id="selected-tag"
-              data-tag={tag}
-            >
-              {tag}
-            </span>
-          ))
-        }
+        {tags.map((tag) => (
+          <span
+            class="bg-accent flex items-center gap-1 rounded-full px-3 py-1 text-white"
+            id="selected-tag"
+            data-tag={tag}
+          >
+            {tag}
+          </span>
+        ))}
       </div>
     </div>
 
-    <p class="fade-in-section text-center">
-      {postCountText}
-    </p>
+    <p class="fade-in-section text-center">{postCountText}</p>
 
     <section class="flex max-w-4xl flex-col items-center justify-around gap-12">
-      {
-        filteredPosts.map((post) => (
-          <article class="fade-in-section flex w-full flex-col">
-            <p class="text-accent text-sm">
-              {t("common.minRead", { time: Math.round(readingTime(post.body ?? "").minutes) })}
-            </p>
-            <a href={`/blog/${post.id}/`}>
-              <h2 class="text-2xl font-bold">{post.data.title}</h2>
-            </a>
-            <p class="pt-2 text-sm">
-              <FormattedDate date={post.data.pubDate} />
-            </p>
-          </article>
-        ))
-      }
+      {filteredPosts.map((post) => (
+        <article class="fade-in-section flex w-full flex-col">
+          <p class="text-accent text-sm">
+            {t("common.minRead", { time: Math.round(readingTime(post.body ?? "").minutes) })}
+          </p>
+          <a href={`/blog/${post.id}/`}>
+            <h2 class="text-2xl font-bold">{post.data.title}</h2>
+          </a>
+          <p class="pt-2 text-sm">
+            <FormattedDate date={post.data.pubDate} />
+          </p>
+        </article>
+      ))}
     </section>
   </main>
 </DefaultPage>

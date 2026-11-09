@@ -79,78 +79,77 @@ const discordMdToHtml = (post: MicroblogMessage) => {
 <section id="microblog" class="grid grid-cols-1 gap-4 rounded-2xl bg-[#323339] py-6 shadow-lg/30" data-locale={locale}>
   {/* Header */}
   <div class="border-b border-[#3e3f45] pb-4 pl-4 md:pl-10">
-    <h2 class="text-2xl text-[#dcdddf]"><span class="mr-4 text-[#9b9ca3]">#</span>{t("microblog.title")}</h2>
+    <h2 class="text-2xl text-[#dcdddf]">
+      <span class="mr-4 text-[#9b9ca3]">#</span>
+      {t("microblog.title")}
+    </h2>
   </div>
   {/* Posts */}
   <div class="flex flex-col gap-8 px-4 py-4 md:px-10">
     {discordPosts.length === 0 && <p class="text-gray-400">{t("microblog.noPosts")}</p>}
 
-    {
-      discordPosts.map((post: MicroblogMessage) => (
-        <article class="discord flex items-start gap-4 md:gap-6">
-          {/* Avatar */}
-          <Image
-            src={post.author.avatarUrl}
-            alt={post.author.globalName}
-            loading="lazy"
-            width={48}
-            height={48}
-            class="h-12 w-12 shrink-0 rounded-full"
-          />
-          <div class="min-w-0 flex-1">
-            {/* Author and Timestamp */}
-            <div class="flex items-center gap-2">
-              {/* Tailwind didn't work for some reason so inlinine styling it is */}
-              <author class="font-bold" style={`color: ${post.author.color}`}>
-                {post.author.globalName}
-              </author>
-              <time class="text-sm text-[#96979e]" data-timestamp={post.timestamp}>
-                {new Date(post.timestamp).toISOString()}
-              </time>
-            </div>
-            {/* Content */}
-            <p class="wrap-break-words text-[#dddee0]" set:html={discordMdToHtml(post)} />
-            {/* Attachments */}
-            {post.attachments && post.attachments.length > 0 && (
-              <div class="mt-2 grid grid-cols-2 gap-1 md:grid-cols-3 [&>*:first-child:nth-child(odd)]:col-span-2 md:[&>*:first-child:nth-child(odd)]:col-span-1">
-                {post.attachments.map((attachment) => (
-                  <div class="aspect-square rounded-lg">
-                    {attachment.contentType?.startsWith("image/") && (
-                      <a href={attachment.url} target="_blank" rel="noopener noreferrer">
-                        <Image
-                          src={attachment.url}
-                          alt={attachment.filename}
-                          width={256}
-                          height={256}
-                          class="h-full w-full object-cover"
-                        />
-                      </a>
-                    )}
-                    {attachment.contentType?.startsWith("video/") && (
-                      <div class="relative aspect-square">
-                        <video src={attachment.url} controls class="absolute inset-0 h-full w-full object-contain" />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
+    {discordPosts.map((post: MicroblogMessage) => (
+      <article class="discord flex items-start gap-4 md:gap-6">
+        {/* Avatar */}
+        <Image
+          src={post.author.avatarUrl}
+          alt={post.author.globalName}
+          loading="lazy"
+          width={48}
+          height={48}
+          class="h-12 w-12 shrink-0 rounded-full"
+        />
+        <div class="min-w-0 flex-1">
+          {/* Author and Timestamp */}
+          <div class="flex items-center gap-2">
+            {/* Tailwind didn't work for some reason so inlinine styling it is */}
+            <author class="font-bold" style={`color: ${post.author.color}`}>
+              {post.author.globalName}
+            </author>
+            <time class="text-sm text-[#96979e]" data-timestamp={post.timestamp}>
+              {new Date(post.timestamp).toISOString()}
+            </time>
           </div>
-        </article>
-      ))
-    }
+          {/* Content */}
+          <p class="wrap-break-words text-[#dddee0]" set:html={discordMdToHtml(post)} />
+          {/* Attachments */}
+          {post.attachments && post.attachments.length > 0 && (
+            <div class="mt-2 grid grid-cols-2 gap-1 md:grid-cols-3 [&>*:first-child:nth-child(odd)]:col-span-2 md:[&>*:first-child:nth-child(odd)]:col-span-1">
+              {post.attachments.map((attachment) => (
+                <div class="aspect-square rounded-lg">
+                  {attachment.contentType?.startsWith("image/") && (
+                    <a href={attachment.url} target="_blank" rel="noopener noreferrer">
+                      <Image
+                        src={attachment.url}
+                        alt={attachment.filename}
+                        width={256}
+                        height={256}
+                        class="h-full w-full object-cover"
+                      />
+                    </a>
+                  )}
+                  {attachment.contentType?.startsWith("video/") && (
+                    <div class="relative aspect-square">
+                      <video src={attachment.url} controls class="absolute inset-0 h-full w-full object-contain" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </article>
+    ))}
   </div>
   {/* View all link */}
-  {
-    Astro.url.pathname !== "/microblog" &&
-    discordPosts.length > 0 &&
-    numberOfPosts !== undefined &&
-    totalNumberOfPosts > numberOfPosts ? (
-      <div class="mt-8 text-center">
-        <a href="/microblog">{t("microblog.viewAll")}</a>
-      </div>
-    ) : null
-  }
+  {Astro.url.pathname !== "/microblog" &&
+  discordPosts.length > 0 &&
+  numberOfPosts !== undefined &&
+  totalNumberOfPosts > numberOfPosts ? (
+    <div class="mt-8 text-center">
+      <a href="/microblog">{t("microblog.viewAll")}</a>
+    </div>
+  ) : null}
 </section>
 
 <script>

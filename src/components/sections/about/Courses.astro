@@ -38,66 +38,19 @@ const sortedSemesters = Object.keys(coursesBySemester)
   <div class="relative">
     <!-- Preview: first semester only, faded out at the bottom -->
     <div id="courses-preview" class="pointer-events-none relative max-h-64 overflow-hidden">
-      {
-        (() => {
-          const firstSem = sortedSemesters[0];
-          return (
-            <div class="grid gap-4">
-              <h3 class="text-xl font-semibold text-gray-300">{t("about.semester", { num: firstSem })}</h3>
-              <ul class="flex flex-wrap gap-4">
-                {coursesBySemester[firstSem].map((course) => {
-                  const CardTag = course.link ? "a" : "div";
-                  const cardProps = course.link
-                    ? { href: course.link, target: "_blank", rel: "noopener noreferrer" }
-                    : {};
-                  return (
-                    <li class="flex w-full sm:w-auto">
-                      <CardTag
-                        {...cardProps}
-                        class="course-card bg-backgroundlight flex w-full items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3 transition-colors outline-none hover:bg-slate-800 sm:w-auto"
-                      >
-                        {course.school === "University of Oslo" ? (
-                          <img src={uioUrl} alt="University of Oslo" class="h-8 w-10 shrink-0 rounded-sm" />
-                        ) : course.school === "Yonsei Univeristy" ? (
-                          <img src={yonseiUrl} alt="Yonsei University" class="h-8 w-10 shrink-0 rounded-sm" />
-                        ) : (
-                          <SchoolIcon class="h-8 w-10 shrink-0 rounded-sm" />
-                        )}
-                        <div>
-                          <p class="font-medium text-white">
-                            {course.code} - {course.name}
-                          </p>
-                          <p class="text-xs text-gray-400">
-                            {course.school} • {t("about.ects", { num: course.ects })}
-                          </p>
-                        </div>
-                      </CardTag>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          );
-        })()
-      }
-      <!-- Fade overlay -->
-      <div class="from-background absolute inset-x-0 bottom-0 h-24 bg-linear-to-t to-transparent"></div>
-    </div>
-
-    <!-- Full content -->
-    <div id="courses-full" class="hidden flex-col gap-8">
-      {
-        sortedSemesters.map((semNum) => (
+      {(() => {
+        const firstSem = sortedSemesters[0];
+        return (
           <div class="grid gap-4">
-            <h3 class="text-xl font-semibold text-gray-300">{t("about.semester", { num: semNum })}</h3>
+            <h3 class="text-xl font-semibold text-gray-300">{t("about.semester", { num: firstSem })}</h3>
             <ul class="flex flex-wrap gap-4">
-              {coursesBySemester[semNum].map((course) => {
+              {coursesBySemester[firstSem].map((course) => {
                 const CardTag = course.link ? "a" : "div";
                 const cardProps = course.link
                   ? { href: course.link, target: "_blank", rel: "noopener noreferrer" }
                   : {};
                 return (
-                  <li class="fade-in-section flex w-full sm:w-auto">
+                  <li class="flex w-full sm:w-auto">
                     <CardTag
                       {...cardProps}
                       class="course-card bg-backgroundlight flex w-full items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3 transition-colors outline-none hover:bg-slate-800 sm:w-auto"
@@ -123,8 +76,49 @@ const sortedSemesters = Object.keys(coursesBySemester)
               })}
             </ul>
           </div>
-        ))
-      }
+        );
+      })()}
+      <!-- Fade overlay -->
+      <div class="from-background absolute inset-x-0 bottom-0 h-24 bg-linear-to-t to-transparent"></div>
+    </div>
+
+    <!-- Full content -->
+    <div id="courses-full" class="hidden flex-col gap-8">
+      {sortedSemesters.map((semNum) => (
+        <div class="grid gap-4">
+          <h3 class="text-xl font-semibold text-gray-300">{t("about.semester", { num: semNum })}</h3>
+          <ul class="flex flex-wrap gap-4">
+            {coursesBySemester[semNum].map((course) => {
+              const CardTag = course.link ? "a" : "div";
+              const cardProps = course.link ? { href: course.link, target: "_blank", rel: "noopener noreferrer" } : {};
+              return (
+                <li class="fade-in-section flex w-full sm:w-auto">
+                  <CardTag
+                    {...cardProps}
+                    class="course-card bg-backgroundlight flex w-full items-center gap-3 rounded-2xl border border-slate-800 px-5 py-3 transition-colors outline-none hover:bg-slate-800 sm:w-auto"
+                  >
+                    {course.school === "University of Oslo" ? (
+                      <img src={uioUrl} alt="University of Oslo" class="h-8 w-10 shrink-0 rounded-sm" />
+                    ) : course.school === "Yonsei Univeristy" ? (
+                      <img src={yonseiUrl} alt="Yonsei University" class="h-8 w-10 shrink-0 rounded-sm" />
+                    ) : (
+                      <SchoolIcon class="h-8 w-10 shrink-0 rounded-sm" />
+                    )}
+                    <div>
+                      <p class="font-medium text-white">
+                        {course.code} - {course.name}
+                      </p>
+                      <p class="text-xs text-gray-400">
+                        {course.school} • {t("about.ects", { num: course.ects })}
+                      </p>
+                    </div>
+                  </CardTag>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
     </div>
 
     <!-- Toggle button -->
