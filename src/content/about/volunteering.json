@@ -55,6 +55,12 @@
     "image": "edb.svg",
     "roles": [
       {
+        "name": "Volunteer",
+        "description": "",
+        "start": "2024-02-22",
+        "end": "2025-01-17"
+      },
+      {
         "name": "Leader",
         "description": "EDB-gjengen is responsible for IT at The Norwegian Students' Society. Tasks include development of new systems, managing and maintaining networks and servers as well as miscellaneous other IT-related matters.",
         "start": "2025-01-17",
