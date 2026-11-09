@@ -49,7 +49,7 @@ const { decimal, separator } = separators[locale as keyof typeof separators] || 
         decimalPlaces: Number(element.dataset.decimalPlaces),
         separator: element.dataset.separator,
         decimal: element.dataset.decimal,
-        suffix: element.dataset.suffix,
+        suffix: element.dataset.suffix ?? "",
       }).start();
     });
   });
