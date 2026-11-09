@@ -40,7 +40,6 @@
     "prettier-plugin-tailwindcss": "^0.8.1"
   },
   "overrides": {
-    "lodash": "4.17.23",
     "fast-xml-parser": ">=5.5.7",
     "yaml": ">=2.8.3"
   }
