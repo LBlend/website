@@ -138,27 +138,33 @@ const discordMdToHtml = (post: MicroblogMessage) => {
           <p class="wrap-break-words text-[#dddee0]" set:html={discordMdToHtml(post)} />
           {/* Attachments */}
           {post.attachments && post.attachments.length > 0 && (
-            <div class="mt-2 grid grid-cols-2 gap-1 md:grid-cols-3 [&>*:first-child:nth-child(odd)]:col-span-2 md:[&>*:first-child:nth-child(odd)]:col-span-1">
-              {post.attachments.map((attachment) => (
-                <div class="aspect-square rounded-lg">
-                  {attachment.contentType?.startsWith("image/") && (
-                    <a href={attachment.url} target="_blank" rel="noopener noreferrer">
-                      <Image
+            <div class="mt-2 grid grid-cols-2 gap-1 md:grid-cols-3 [&>*:first-child:nth-last-child(odd)]:col-span-2 md:[&>*:first-child:nth-last-child(odd)]:col-span-1">
+              {post.attachments.map((attachment, _, all) => {
+                // A lone attachment keeps its natural aspect ratio; multiple attachments become square tiles
+                const isTile = all.length > 1;
+                return (
+                  <div class:list={["overflow-hidden rounded-lg", { "aspect-square": isTile }]}>
+                    {attachment.contentType?.startsWith("image/") && (
+                      <a href={attachment.url} target="_blank" rel="noopener noreferrer" class="block h-full w-full">
+                        <Image
+                          src={attachment.url}
+                          alt={attachment.filename}
+                          width={256}
+                          height={256}
+                          class:list={["w-full", isTile ? "h-full object-cover" : "h-auto"]}
+                        />
+                      </a>
+                    )}
+                    {attachment.contentType?.startsWith("video/") && (
+                      <video
                         src={attachment.url}
-                        alt={attachment.filename}
-                        width={256}
-                        height={256}
-                        class="h-full w-full object-cover"
+                        controls
+                        class:list={["w-full", isTile ? "h-full object-contain" : "h-auto"]}
                       />
-                    </a>
-                  )}
-                  {attachment.contentType?.startsWith("video/") && (
-                    <div class="relative aspect-square">
-                      <video src={attachment.url} controls class="absolute inset-0 h-full w-full object-contain" />
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
