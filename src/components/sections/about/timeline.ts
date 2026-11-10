@@ -93,7 +93,7 @@ export function getTimelineEvents(): TimelineEvent[] {
       description: event.description ?? "",
       image: getImagePath(event.image),
       start: new Date(event.date),
-      end: null,
+      end: toDate((event as { end?: string }).end),
       isPointInTime: event.isPointInTime ?? true,
     });
   });
