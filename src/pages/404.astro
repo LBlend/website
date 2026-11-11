@@ -15,7 +15,7 @@ const t = useTranslations(locale);
 <DefaultPage title={t("notFound.title")} description="A dead end">
   <main class="flex flex-col items-center justify-center gap-8">
     <h1 class="text-center text-6xl font-bold">{t("notFound.title")}</h1>
-    <Image src={Despair} alt="Emoji of despair" width={256} height={256} loading="eager" />
+    <Image src={Despair} alt="Emoji of despair" height={256} loading="eager" class="h-auto max-w-full" />
     <p class="text-center">{t("notFound.message")}</p>
   </main>
 </DefaultPage>
