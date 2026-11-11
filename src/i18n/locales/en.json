@@ -36,7 +36,13 @@
   },
   "visitedPlaces": {
     "title": "Visited Places",
-    "description": "Like everyone else, I like traveling (shocking, I know). I have a far-fetched dream of visiting every country. Here is a map to track my progress."
+    "description": "Like everyone else, I like traveling (shocking, I know). I have a far-fetched dream of visiting every country. Here is a map to track my progress.",
+    "mapLabel": "World map highlighting the countries I have visited",
+    "visitedList": "Countries I have visited",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "resetZoom": "Reset zoom",
+    "zoomHint": "Use Ctrl + scroll to zoom the map"
   },
   "stats": {
     "title": "Stats",

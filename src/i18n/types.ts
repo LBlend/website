@@ -48,6 +48,12 @@ export interface Translations {
   visitedPlaces: {
     title: string;
     description: string;
+    mapLabel: string;
+    visitedList: string;
+    zoomIn: string;
+    zoomOut: string;
+    resetZoom: string;
+    zoomHint: string;
   };
   stats: {
     title: string;
