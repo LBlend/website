@@ -1,11 +1,10 @@
 ---
-import { LASTFM_API_KEY, LASTFM_URL, LASTFM_USERNAME } from "astro:env/server";
 import { formatDistance } from "date-fns";
 import { ko, nb } from "date-fns/locale";
 
-import cache from "@api/_cache";
 import Song from "@elements/Song.astro";
 import { useTranslations } from "@i18n/index";
+import { getRecentlyLikedSongs, type LikedSong } from "@lib/music/recent";
 
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
@@ -13,122 +12,11 @@ const t = useTranslations(locale);
 const dateFnsLocales = { en: undefined, no: nb, ko: ko };
 const dateFnsLocale = dateFnsLocales[locale];
 
-export interface LastFMResponse {
-  lovedtracks: Lovedtracks;
-}
+const songs = await getRecentlyLikedSongs(1000);
 
-export interface Lovedtracks {
-  track: Track[];
-  "@attr": Attr;
-}
-
-export interface Attr {
-  perPage: string;
-  totalPages: string;
-  page: string;
-  total: string;
-  user: string;
-}
-
-export interface Track {
-  artist: Artist;
-  date: DateClass;
-  mbid: string;
-  url: string;
-  name: string;
-  image: Image[];
-  streamable: Streamable;
-}
-
-export interface Artist {
-  url: string;
-  name: string;
-  mbid: string;
-}
-
-export interface DateClass {
-  uts: string;
-  "#text": string;
-}
-
-export interface Image {
-  size: Size;
-  "#text": string;
-}
-
-export type Size = "extralarge" | "large" | "medium" | "small";
-
-export interface Streamable {
-  fulltrack: string;
-  "#text": string;
-}
-
-async function getLovedTracks(): Promise<LastFMResponse> {
-  const cacheKey = "lastfmTracks";
-  const cached = cache.get<LastFMResponse>(cacheKey);
-  if (cached) return cached;
-
-  const emptyResponse = {
-    lovedtracks: {
-      track: [],
-      "@attr": { perPage: "0", totalPages: "0", page: "0", total: "0", user: "" },
-    },
-  };
-
-  try {
-    const apiKey = LASTFM_API_KEY;
-    if (!apiKey) {
-      console.warn("LastFM API key not configured");
-      return emptyResponse;
-    }
-
-    const params = new URLSearchParams({
-      method: "user.getlovedtracks",
-      format: "json",
-      api_key: apiKey,
-      user: LASTFM_USERNAME ?? "",
-      limit: "1000",
-    });
-
-    // Add timeout to the fetch request
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
-    const res = await fetch(`${LASTFM_URL}?` + params, {
-      method: "GET",
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!res.ok) {
-      console.warn("Failed to fetch loved tracks", res.status, res.statusText);
-      return emptyResponse;
-    }
-
-    const data = await res.json();
-
-    // Cache for 10 minutes
-    cache.set(cacheKey, data, 10 * 60 * 1000);
-    return data;
-  } catch (error) {
-    console.warn("LastFM API error:", error);
-    return emptyResponse;
-  }
-}
-
-const data = await getLovedTracks();
-
-const groupedTracks = data.lovedtracks.track.reduce((acc: Record<string, Track[]>, track: Track) => {
-  const date = new Date(Number(track.date.uts) * 1000);
-  const distance = formatDistance(date, new Date(), { addSuffix: true, locale: dateFnsLocale });
-
-  if (!acc[distance]) {
-    acc[distance] = [];
-  }
-
-  acc[distance].push(track);
-
+const groupedTracks = songs.reduce((acc: Record<string, LikedSong[]>, song) => {
+  const distance = formatDistance(song.likedAt, new Date(), { addSuffix: true, locale: dateFnsLocale });
+  (acc[distance] ??= []).push(song);
   return acc;
 }, {});
 ---
@@ -136,15 +24,13 @@ const groupedTracks = data.lovedtracks.track.reduce((acc: Record<string, Track[]
 <div class="flex w-full flex-col gap-8 p-6">
   <h3 class="text-center text-4xl font-bold lg:text-left lg:text-2xl">{t("recentlyLikedSongs.title")}</h3>
   <div class="flex flex-col gap-8">
-    {groupedTracks && Object.keys(groupedTracks).length === 0 && (
-      <p class="text-center text-gray-500">{t("recentlyLikedSongs.fetchError")}</p>
-    )}
+    {songs.length === 0 && <p class="text-center text-gray-500">{t("recentlyLikedSongs.fetchError")}</p>}
     {Object.entries(groupedTracks).map(([time, tracks]) => (
       <div class="flex flex-col gap-4">
         <h2 class="border-b border-gray-700 text-center font-semibold">{time}</h2>
         <div class="flex flex-col gap-6">
-          {tracks.map((track: Track) => (
-            <Song track={track} />
+          {tracks.map((song) => (
+            <Song song={song} />
           ))}
         </div>
       </div>

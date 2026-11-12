@@ -1,23 +1,26 @@
 ---
 import SongImage from "@elements/SongImage.astro";
-import type { Track } from "@sections/home/RecentlyLikedSongs.astro";
+import type { LikedSong } from "@lib/music/recent";
 
 interface Props {
-  track: Track;
+  song: LikedSong;
 }
 
-const { track } = Astro.props;
+const { song } = Astro.props;
+
+const withRomanized = (original: string, romanized: string | null) =>
+  romanized && romanized !== original ? `${original} (${romanized})` : original;
 ---
 
 <article class="liked-song flex flex-col gap-2">
   <div class="flex items-center gap-4">
-    <SongImage artist={track.artist.name} track={track.name} />
+    <SongImage track={song.title} coverUrl={song.coverUrl} />
     <div class="overflow-hidden">
-      <p class="truncate font-bold" title={track.name}>
-        {track.name}
+      <p class="truncate font-bold" title={withRomanized(song.title, song.titleRomanized)}>
+        {song.title}
       </p>
-      <p class="truncate font-light" title={track.artist.name}>
-        {track.artist.name}
+      <p class="truncate font-light" title={withRomanized(song.artist, song.artistRomanized)}>
+        {song.artist}
       </p>
     </div>
   </div>
