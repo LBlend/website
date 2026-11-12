@@ -9,55 +9,56 @@ import type { Locale } from "@i18n/index";
 
 export const HOME = "NO";
 
-// ISO 3166-1 alpha-2 codes
-export const VISITED = [
-  "DK",
-  "SE",
-  "ES",
-  "GI",
-  "FR",
-  "TH",
-  "IE",
-  "US",
-  "CO",
-  "MX",
-  "GB",
-  "HU",
-  "IT",
-  "JP",
-  "PL",
-  "PT",
-  "HR",
-  "GR",
-  "VA",
-  "KR",
-  "TW",
-  "HK",
-  "VN",
-  "FI",
-  "NL",
-  "DE",
-  "CZ",
-  "AT",
-  "SK",
-  "SI",
-  "CH",
-  "LI",
-  "LU",
-  "BE",
-  "MO",
-  "CN",
-  "ME",
-  "AL",
-  "MK",
-  "TR",
-  "GE",
-  "AZ",
-  "KZ",
-  "UZ",
-  "TJ",
-  "KG",
-];
+type Visit = number | `${number}/${number}`;
+
+export const VISITED: Record<string, Visit[]> = {
+  DK: [],
+  SE: [],
+  ES: [],
+  GI: [],
+  FR: [],
+  TH: ["2008/2009"],
+  IE: [2009],
+  US: [2010, 2014],
+  CO: [2010],
+  MX: [2012, 2013],
+  GB: [2012],
+  HU: [2014],
+  IT: [2018, 2022, 2026],
+  JP: [2019, 2023, 2025],
+  PL: [2019, 2024, 2025],
+  PT: [2021],
+  HR: [2022, 2026],
+  GR: [2022, 2026],
+  VA: [2022],
+  KR: [2023],
+  TW: [2023],
+  HK: [2023, 2026],
+  VN: [2023],
+  FI: [2024, 2025],
+  NL: [2025],
+  DE: [2025, 2026],
+  CZ: [2025, 2026],
+  AT: [2025, 2026],
+  SK: [2025],
+  SI: [2025, 2026],
+  CH: [2025],
+  LI: [2025],
+  LU: [2025],
+  BE: [2025],
+  MO: [2026],
+  CN: [2026],
+  ME: [2026],
+  AL: [2026],
+  MK: [2026],
+  TR: [2026],
+  GE: [2026],
+  AZ: [2026],
+  KZ: [2026],
+  UZ: [2026],
+  TJ: [2026],
+  KG: [2026],
+};
 
 // Places too small to be included in the 110m world atlas, drawn as dots instead. [longitude, latitude]
 const SMALL_PLACES: Record<string, [number, number]> = {
@@ -94,7 +95,32 @@ export const SPHERE = path({ type: "Sphere" }) ?? "";
 type Status = "home" | "visited" | "unvisited";
 
 const statusOf = (code: string | undefined): Status =>
-  code === HOME ? "home" : code && VISITED.includes(code) ? "visited" : "unvisited";
+  code === HOME ? "home" : code && Object.hasOwn(VISITED, code) ? "visited" : "unvisited";
+
+// Two regional indicator symbols, which most platforms render as the country's flag
+const flagOf = (code: string) =>
+  String.fromCodePoint(...[...code.toUpperCase()].map((char) => 0x1f1e6 + char.charCodeAt(0) - 65));
+
+const startYear = (visit: Visit) => (typeof visit === "number" ? visit : Number(visit.split("/")[0]));
+
+// [2024, "2008/2009", 2025] -> "2008–2009, 2024, 2025"
+const formatYears = (visits: Visit[]) =>
+  [...new Set(visits)]
+    .sort((a, b) => startYear(a) - startYear(b))
+    .map((visit) => String(visit).replace("/", "–"))
+    .join(", ");
+
+// Catch entries that are out of order according to their years
+Object.entries(VISITED).reduce<{ code: string; year: number } | undefined>((previous, [code, years]) => {
+  if (years.length === 0) return previous;
+  const year = Math.min(...years.map(startYear));
+  if (previous && year < previous.year) {
+    console.warn(
+      `VisitedPlaces: "${code}" (${year}) is listed after "${previous.code}" (${previous.year}), but VISITED should be in the order of first visit`,
+    );
+  }
+  return previous && previous.year > year ? previous : { code, year };
+}, undefined);
 
 const topo = topology as unknown as Topology<{ countries: GeometryCollection<{ name: string }> }>;
 const features = (feature(topo, topo.objects.countries) as { features: Feature<Geometry, { name: string }>[] })
@@ -108,7 +134,7 @@ const shapes = features.map((f) => {
 
 const drawnCodes = new Set(shapes.map((s) => s.code));
 
-const dots = [...VISITED, HOME]
+const dots = [...Object.keys(VISITED), HOME]
   .filter((code) => !drawnCodes.has(code))
   .flatMap((code) => {
     const coordinates = SMALL_PLACES[code];
@@ -130,6 +156,15 @@ export function getMap(locale: Locale) {
   return {
     countries: shapes.map((s) => ({ ...s, name: nameOf(s.code, s.fallbackName) })),
     dots: dots.map((d) => ({ ...d, name: nameOf(d.code, d.code) })),
-    visitedNames: VISITED.map((code) => nameOf(code, code)).sort((a, b) => a.localeCompare(b, locale)),
+    // Alphabetical, with `firstVisit` being the position in VISITED
+    visited: Object.entries(VISITED)
+      .map(([code, years], firstVisit) => ({
+        code,
+        firstVisit,
+        flag: flagOf(code),
+        name: nameOf(code, code),
+        years: formatYears(years),
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name, locale)),
   };
 }

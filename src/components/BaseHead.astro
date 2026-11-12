@@ -56,3 +56,14 @@ const fullTitle = title === SITE_TITLE ? SITE_TITLE : `${title} | ${SITE_TITLE}`
 <meta property="twitter:title" content={fullTitle} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:creator" content="Leander Furumo" />
+
+<script>
+  // Windows has no flag emoji, so Chromium there shows "DK" instead of 🇩🇰. This loads a flag-only font
+  // (self-hosted, Twemoji, CC-BY-4.0) on those browsers. Other browsers download nothing.
+  import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
+  import flagFontUrl from "country-flag-emoji-polyfill/dist/TwemojiCountryFlags.woff2?url";
+
+  if (polyfillCountryFlagEmojis("Twemoji Country Flags", flagFontUrl)) {
+    document.documentElement.classList.add("flag-emoji-polyfill");
+  }
+</script>

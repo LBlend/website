@@ -50,6 +50,9 @@ export interface Translations {
     description: string;
     mapLabel: string;
     visitedList: string;
+    sortBy: string;
+    sortName: string;
+    sortFirstVisit: string;
     zoomIn: string;
     zoomOut: string;
     resetZoom: string;

@@ -18,6 +18,7 @@
     "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.3.5",
     "astro": "^7.4.8",
+    "country-flag-emoji-polyfill": "^0.1.10",
     "countup.js": "^2.10.1",
     "d3-geo": "^3.1.2",
     "d3-selection": "^3.0.1",

@@ -30,7 +30,8 @@
 }
 
 @theme {
-  --font-nunito: "Nunito", sans-serif;
+  /* Only defined on browsers without flag emoji (Chromium on Windows), see BaseHead.astro */
+  --font-nunito: "Twemoji Country Flags", "Nunito", sans-serif;
   --color-background: var(--background);
   --color-backgroundlight: var(--backgroundlight);
   --color-text: var(--text);
@@ -216,4 +217,10 @@ hr {
 .fade-in-section.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Twemoji flags sit on the baseline, so their center is 0.046em above the center of the line. Native emoji are fine */
+.flag-emoji-polyfill .flag-emoji {
+  position: relative;
+  top: 0.046em;
 }

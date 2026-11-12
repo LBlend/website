@@ -8,7 +8,7 @@ import { HEIGHT, SPHERE, WIDTH, getMap } from "./visitedPlaces";
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
 
-const { countries, dots, visitedNames } = getMap(locale);
+const { countries, dots, visited } = getMap(locale);
 
 const DOT_RADIUS = 3;
 ---
@@ -83,11 +83,53 @@ const DOT_RADIUS = 3;
       </button>
     </div>
   </div>
-  <ul class="sr-only" aria-label={t("visitedPlaces.visitedList")}>
-    {visitedNames.map((name) => (
-      <li>{name}</li>
-    ))}
-  </ul>
+  <details class="group overflow-hidden rounded-lg border border-gray-700/30">
+    <summary class="flex cursor-pointer list-none items-center justify-between bg-gray-700/50 px-4 py-3 font-semibold select-none [&::-webkit-details-marker]:hidden">
+      <span>{t("visitedPlaces.visitedList", { count: visited.length })}</span>
+      <svg
+        viewBox="0 0 24 24"
+        class="size-4 transition-transform group-open:rotate-180"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </summary>
+    <fieldset class="flex flex-wrap items-center gap-2 px-4 pt-3 text-sm">
+      <legend class="sr-only">{t("visitedPlaces.sortBy")}</legend>
+      <span aria-hidden="true" class="text-gray-400">
+        {t("visitedPlaces.sortBy")}
+      </span>
+      {[
+        ["name", t("visitedPlaces.sortName")],
+        ["firstVisit", t("visitedPlaces.sortFirstVisit")],
+      ].map(([value, label], i) => (
+        <label class="cursor-pointer rounded-full border border-gray-700 px-3 py-1 transition-colors hover:border-gray-500 has-checked:border-transparent has-checked:bg-gray-700 has-focus-visible:outline-2 has-focus-visible:outline-gray-400">
+          <input type="radio" name="visited-sort" value={value} checked={i === 0} class="sr-only" data-visited-sort />
+          {label}
+        </label>
+      ))}
+    </fieldset>
+    <ul class="gap-x-8 px-4 py-3 sm:columns-2" data-visited-list>
+      {visited.map((country, i) => (
+        <li
+          class="flex break-inside-avoid items-baseline gap-2 py-1"
+          data-name-order={i}
+          data-first-visit={country.firstVisit}
+        >
+          <span aria-hidden="true" class="flag-emoji">
+            {country.flag}
+          </span>
+          <span>{country.name}</span>
+          {country.years && (
+            <span class="ml-auto text-sm whitespace-nowrap text-gray-400 tabular-nums">{country.years}</span>
+          )}
+        </li>
+      ))}
+    </ul>
+  </details>
   <a href="https://my.flightradar24.com/LBlend" class="mx-auto w-fit lg:mx-0">
     <Image
       src="https://banners-my.flightradar24.com/LBlend.png"
@@ -135,6 +177,20 @@ const DOT_RADIUS = 3;
     fill: #4a78d6;
   }
 </style>
+
+<script>
+  // Visited list sorting. Moves the elements rather than using CSS `order`, so screen readers get the same order
+  document.querySelectorAll<HTMLInputElement>("[data-visited-sort]").forEach((input) => {
+    input.addEventListener("change", () => {
+      const list = input.closest("details")?.querySelector<HTMLElement>("[data-visited-list]");
+      if (!list) return;
+      const key = input.value === "firstVisit" ? "firstVisit" : "nameOrder";
+      const items = [...list.children] as HTMLElement[];
+      items.sort((a, b) => Number(a.dataset[key]) - Number(b.dataset[key]));
+      list.append(...items);
+    });
+  });
+</script>
 
 <script>
   import { select } from "d3-selection";

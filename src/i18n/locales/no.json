@@ -37,12 +37,15 @@
   "visitedPlaces": {
     "title": "Besøkte steder",
     "description": "Som de fleste, liker jeg å reise (ja, skikkelig kontroversielt). Jeg har en fjern drøm om å besøke alle land i verden. Her er et kart over de jeg har besøkt så langt.",
-    "mapLabel": "Verdenskart som viser landene jeg har besøkt",
-    "visitedList": "Land jeg har besøkt",
+    "mapLabel": "Verdenskart som viser stedene jeg har besøkt",
+    "visitedList": "Steder jeg har besøkt ({count})",
     "zoomIn": "Zoom inn",
     "zoomOut": "Zoom ut",
     "resetZoom": "Tilbakestill zoom",
-    "zoomHint": "Bruk Ctrl + rulling for å zoome i kartet"
+    "zoomHint": "Bruk Ctrl + rulling for å zoome i kartet",
+    "sortBy": "Sorter etter",
+    "sortName": "Navn",
+    "sortFirstVisit": "Først besøkt"
   },
   "stats": {
     "title": "Statistikk",
