@@ -16,7 +16,7 @@ export const VISITED: Record<string, Visit[]> = {
   SE: [],
   ES: [],
   GI: [],
-  FR: [],
+  FR: [2006],
   TH: ["2008/2009"],
   IE: [2009],
   US: [2010, 2014],
