@@ -1,63 +1,13 @@
 export const prerender = false;
 
-import { getAnilistData } from "./anilist";
-import { getDawarichData } from "./dawarich";
-import { getOsuData } from "./osu";
-import { getSimklData } from "./simkl";
-import { getSteamData } from "./steam";
-import { getWakatimeData } from "./wakatime";
-
-// Create a timeout wrapper for API calls
-async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, fallback: T): Promise<T> {
-  let timeoutId: ReturnType<typeof setTimeout> | undefined;
-  const timeoutPromise = new Promise<T>((_, reject) => {
-    timeoutId = setTimeout(() => reject(new Error("Timeout")), timeoutMs);
-  });
-
-  try {
-    return await Promise.race([promise, timeoutPromise]);
-  } catch (error) {
-    console.warn("API call failed or timed out:", error);
-    return fallback;
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
-
-export async function getAllStats() {
-  // Run all API calls in parallel with 5-second timeout
-  const [osuData, wakatimeData, anilistData, steamData, simklData, dawarichData] = await Promise.all([
-    withTimeout(getOsuData(), 5000, { playTime: 0 }),
-    withTimeout(getWakatimeData(), 5000, { programmingHours: 0 }),
-    withTimeout(getAnilistData(), 5000, { animeDaysWatched: 0 }),
-    withTimeout(getSteamData(), 5000, { gamingHours: 0 }),
-    withTimeout(getSimklData(), 5000, {
-      movies: { hoursWatched: 0, completedCount: 0 },
-      shows: { hoursWatched: 0, completedCount: 0 },
-    }),
-    withTimeout(getDawarichData(), 5000, { distanceThisYearKm: 0 }),
-  ]);
-
-  const finalData = {
-    osu: osuData,
-    wakatime: wakatimeData,
-    anilist: anilistData,
-    steam: steamData,
-    simkl: simklData,
-    dawarich: dawarichData,
-  };
-
-  return finalData;
-}
+import { getStats } from "@lib/stats";
 
 export async function GET() {
-  const allStats = await getAllStats();
-
-  return new Response(JSON.stringify(allStats), {
+  return new Response(JSON.stringify(await getStats()), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
-      "Cache-Control": "public, max-age=3600", // Cache for 1 hour
+      "Cache-Control": "public, max-age=3600",
     },
   });
 }

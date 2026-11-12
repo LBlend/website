@@ -13,6 +13,7 @@
       "@elements/*": ["./src/components/elements/*"],
       "@i18n/*": ["./src/i18n/*"],
       "@layouts/*": ["./src/layouts/*"],
+      "@lib/*": ["./src/lib/*"],
       "@sections/*": ["./src/components/sections/*"],
       "@styles/*": ["./src/styles/*"]
     }

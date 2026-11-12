@@ -1,10 +1,10 @@
 ---
-import { getAllStats } from "@api/stats/all";
 import Stat from "@elements/Stat.astro";
 import { useTranslations } from "@i18n/index";
+import { getStats } from "@lib/stats";
 const locale = Astro.locals.locale;
 const t = useTranslations(locale);
-const data = await getAllStats();
+const data = await getStats();
 const disclaimerLines = t("stats.disclaimer").split("\n");
 ---
 
