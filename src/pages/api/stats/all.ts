@@ -1,6 +1,7 @@
 export const prerender = false;
 
 import { getAnilistData } from "./anilist";
+import { getDawarichData } from "./dawarich";
 import { getOsuData } from "./osu";
 import { getSimklData } from "./simkl";
 import { getSteamData } from "./steam";
@@ -25,7 +26,7 @@ async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, fallback: 
 
 export async function getAllStats() {
   // Run all API calls in parallel with 5-second timeout
-  const [osuData, wakatimeData, anilistData, steamData, simklData] = await Promise.all([
+  const [osuData, wakatimeData, anilistData, steamData, simklData, dawarichData] = await Promise.all([
     withTimeout(getOsuData(), 5000, { playTime: 0 }),
     withTimeout(getWakatimeData(), 5000, { programmingHours: 0 }),
     withTimeout(getAnilistData(), 5000, { animeDaysWatched: 0 }),
@@ -34,6 +35,7 @@ export async function getAllStats() {
       movies: { hoursWatched: 0, completedCount: 0 },
       shows: { hoursWatched: 0, completedCount: 0 },
     }),
+    withTimeout(getDawarichData(), 5000, { distanceThisYearKm: 0 }),
   ]);
 
   const finalData = {
@@ -42,6 +44,7 @@ export async function getAllStats() {
     anilist: anilistData,
     steam: steamData,
     simkl: simklData,
+    dawarich: dawarichData,
   };
 
   return finalData;

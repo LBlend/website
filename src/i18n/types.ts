@@ -69,6 +69,8 @@ export interface Translations {
     playingGames: string;
     clickingCircles: string;
     programming: string;
+    movingAround: string;
+    km: string;
     days: string;
     hours: string;
   };

@@ -22,6 +22,8 @@ export default defineConfig({
     schema: {
       ANILIST_URL: secret("https://graphql.anilist.co/"),
       ANILIST_USERNAME: secret(),
+      DAWARICH_URL: secret("https://location.furumo.eu/"),
+      DAWARICH_API_KEY: secret(),
       DISCORD_BOT_TOKEN: secret(),
       DISCORD_GUILD_ID: secret(),
       DISCORD_BLOG_CHANNEL_ID: secret(),

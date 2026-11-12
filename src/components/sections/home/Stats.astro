@@ -51,6 +51,15 @@ const disclaimerLines = t("stats.disclaimer").split("\n");
         locale={locale}
       />
     </div>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-12">
+      <Stat
+        stat={data.dawarich.distanceThisYearKm}
+        text={t("stats.movingAround")}
+        suffix={t("stats.km")}
+        decimalPlaces={0}
+        locale={locale}
+      />
+    </div>
   </div>
   <div class="text-center font-light italic">
     <p>
