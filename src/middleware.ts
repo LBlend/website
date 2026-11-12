@@ -1,5 +1,6 @@
 import { defineMiddleware } from "astro:middleware";
 
+import { startScheduler } from "@lib/jobs/scheduler";
 import { defaultLocale, detectLocaleFromHeader, isValidLocale } from "./i18n";
 
 export const onRequest = defineMiddleware(async (context, next) => {
@@ -7,6 +8,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   // Skip header-based locale detection during prerendering (headers aren't available)
   if (!context.isPrerendered) {
+    // Not during prerendering, or the timer would keep `astro build` from exiting
+    startScheduler();
     const langCookie = context.cookies.get("lang")?.value;
     locale =
       langCookie && isValidLocale(langCookie)

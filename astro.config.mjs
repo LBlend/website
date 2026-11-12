@@ -20,6 +20,8 @@ export default defineConfig({
 
   env: {
     schema: {
+      DATABASE_URL: secret(),
+      SCHEDULER_ENABLED: envField.boolean({ context: "server", access: "secret", optional: true }),
       ANILIST_URL: secret("https://graphql.anilist.co/"),
       ANILIST_USERNAME: secret(),
       DAWARICH_URL: secret("https://location.furumo.eu/"),
