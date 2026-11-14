@@ -178,7 +178,9 @@ export function youtubeHint(raw: YoutubeRaw): TrackHint | null {
   const { thumbnails = {} } = video.snippet;
   const base = {
     durationSec: parseIsoDuration(video.contentDetails.duration),
-    coverUrl: (thumbnails.maxres ?? thumbnails.standard ?? thumbnails.high ?? thumbnails.medium)?.url,
+    coverUrls: [thumbnails.maxres, thumbnails.standard, thumbnails.high, thumbnails.medium].flatMap((t) =>
+      t ? [t.url] : [],
+    ),
   };
 
   const provided = parseProvidedDescription(video.snippet.description);

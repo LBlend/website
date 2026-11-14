@@ -56,7 +56,8 @@ export async function getRecordingsByIsrc(isrc: string, signal: AbortSignal): Pr
     );
     return data.recordings ?? [];
   } catch (error) {
-    if (error instanceof HttpError && error.status === 404) return [];
+    // 400 means MusicBrainz considers the ISRC malformed, which some Deezer tracks have
+    if (error instanceof HttpError && (error.status === 400 || error.status === 404)) return [];
     throw error;
   }
 }

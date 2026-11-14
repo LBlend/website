@@ -1,5 +1,6 @@
 import type { Tx } from "@lib/db/client";
 import { saveImageFromUrl } from "@lib/images";
+import { HttpError } from "@lib/sources/source";
 import * as deezer from "./deezer";
 import * as musicbrainz from "./musicbrainz";
 
@@ -11,7 +12,7 @@ export interface TrackHint {
   strictDuration?: boolean;
   isrc?: string;
   releaseDate?: string;
-  coverUrl?: string;
+  coverUrls?: string[];
 }
 
 export class NoMatchError extends Error {}
@@ -385,7 +386,16 @@ export async function createYoutubeTrack(
     }
   }
 
-  const coverImageId = hint.coverUrl ? await saveImageFromUrl(tx, hint.coverUrl, signal, { square: true }) : null;
+  let coverImageId: string | null = null;
+  // YouTube sometimes lists thumbnail sizes that don't exist
+  for (const url of hint.coverUrls ?? []) {
+    try {
+      coverImageId = await saveImageFromUrl(tx, url, signal, { square: true });
+      break;
+    } catch (error) {
+      if (!(error instanceof HttpError && error.status === 404)) throw error;
+    }
+  }
   const [row] = await tx<{ id: string }[]>`
     insert into music.tracks (title, duration_ms, album_id, cover_image_id, metadata_source, youtube_video_id)
     values (
