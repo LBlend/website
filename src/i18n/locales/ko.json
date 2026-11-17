@@ -139,7 +139,9 @@
   },
   "recentlyLikedSongs": {
     "title": "최근에 좋아한 노래",
-    "fetchError": "노래를 로드하지 못했어요"
+    "fetchError": "노래를 로드하지 못했어요",
+    "currentFavourite": "현재 최애곡",
+    "pastFavourite": "예전 최애곡"
   },
   "photos": {
     "title": "사진",

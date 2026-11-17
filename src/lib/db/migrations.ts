@@ -189,6 +189,16 @@ const MIGRATIONS: { name: string; sql: string }[] = [
       left join youtube_liked yl on yl.track_id = t.id;
     `,
   },
+  {
+    name: "0003_favourites",
+    sql: `
+      create table music.favourites (
+        track_id bigint primary key references music.tracks (id) on delete cascade,
+        current  boolean not null default false
+      );
+      create unique index favourites_one_current_idx on music.favourites (current) where current;
+    `,
+  },
 ];
 
 export async function migrate(sql: Sql) {

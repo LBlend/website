@@ -139,7 +139,9 @@
   },
   "recentlyLikedSongs": {
     "title": "Recently liked songs",
-    "fetchError": "Failed fetching songs"
+    "fetchError": "Failed fetching songs",
+    "currentFavourite": "Current favourite",
+    "pastFavourite": "Past favourite"
   },
   "photos": {
     "title": "Photos",

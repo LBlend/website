@@ -139,7 +139,9 @@
   },
   "recentlyLikedSongs": {
     "title": "Nylig likte sanger",
-    "fetchError": "Kunne ikke hente sangene!"
+    "fetchError": "Kunne ikke hente sangene!",
+    "currentFavourite": "Nåværende favoritt",
+    "pastFavourite": "Tidligere favoritt"
   },
   "photos": {
     "title": "Bilder",

@@ -1,5 +1,6 @@
 ---
 import SongImage from "@elements/SongImage.astro";
+import { useTranslations } from "@i18n/index";
 import type { LikedSong } from "@lib/music/recent";
 
 interface Props {
@@ -7,12 +8,31 @@ interface Props {
 }
 
 const { song } = Astro.props;
+const t = useTranslations(Astro.locals.locale);
 
 const withRomanized = (original: string, romanized: string | null) =>
   romanized && romanized !== original ? `${original} (${romanized})` : original;
 ---
 
-<article class="liked-song flex flex-col gap-2">
+<article
+  class:list={[
+    "liked-song flex flex-col gap-2",
+    // The negative margin cancels the border and padding, so the cover lines up with the other songs
+    song.favourite && "-mx-3 rounded-r-lg border-l-4 py-2 pr-2 pl-2",
+    song.favourite === "current" && "border-yellow-400 bg-yellow-400/12",
+    song.favourite === "past" && "border-gray-500 bg-gray-500/10",
+  ]}
+>
+  {song.favourite === "current" && (
+    <span class="w-fit rounded-full bg-yellow-400/15 px-2 text-xs font-bold text-yellow-300">
+      ★ {t("recentlyLikedSongs.currentFavourite")}
+    </span>
+  )}
+  {song.favourite === "past" && (
+    <span class="w-fit rounded-full bg-gray-700/60 px-2 text-xs text-gray-300">
+      ☆ {t("recentlyLikedSongs.pastFavourite")}
+    </span>
+  )}
   <a href={song.url} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-4">
     <SongImage track={song.title} coverUrl={song.coverUrl} />
     <div class="overflow-hidden">

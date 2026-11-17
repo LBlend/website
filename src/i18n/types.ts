@@ -151,6 +151,8 @@ export interface Translations {
   recentlyLikedSongs: {
     title: string;
     fetchError: string;
+    currentFavourite: string;
+    pastFavourite: string;
   };
   photos: {
     title: string;

@@ -446,6 +446,16 @@ export async function mergeTrack(tx: Tx, fromId: string, intoId: string) {
     from music.track_overrides where track_id = ${fromId}
     on conflict (track_id) do nothing
   `;
+  // Deleted before the insert, or two current favourites would exist for a moment
+  const [favourite] = await tx<{ current: boolean }[]>`
+    delete from music.favourites where track_id = ${fromId} returning current
+  `;
+  if (favourite) {
+    await tx`
+      insert into music.favourites (track_id, current) values (${intoId}, ${favourite.current})
+      on conflict (track_id) do update set current = music.favourites.current or excluded.current
+    `;
+  }
   await tx`update music.playlist_entries set track_id = ${intoId} where track_id = ${fromId}`;
   await tx`delete from music.tracks where id = ${fromId}`;
 }

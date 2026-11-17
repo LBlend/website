@@ -8,6 +8,7 @@ export interface LikedSong {
   likedAt: Date;
   coverUrl: string | null;
   url: string | null;
+  favourite: "current" | "past" | null;
 }
 
 export async function getRecentlyLikedSongs(limit: number): Promise<LikedSong[]> {
@@ -24,6 +25,7 @@ export async function getRecentlyLikedSongs(limit: number): Promise<LikedSong[]>
         thumbnail_sha256: string | null;
         youtube_video_id: string | null;
         spotify_id: string | null;
+        favourite: "current" | "past" | null;
       }[]
     >`
       select d.title, d.title_romanized, d.artist_credit, d.artist_credit_romanized, d.liked_at,
@@ -37,10 +39,12 @@ export async function getRecentlyLikedSongs(limit: number): Promise<LikedSong[]>
                 limit 1),
                d.youtube_video_id
              ) as youtube_video_id,
-             d.spotify_id
+             d.spotify_id,
+             case when f.current then 'current' when f.track_id is not null then 'past' end as favourite
       from music.display_tracks d
       left join images cover on cover.id = d.cover_image_id
       left join images thumbnail on thumbnail.id = cover.thumbnail_id
+      left join music.favourites f on f.track_id = d.id
       where d.liked
       order by d.liked_at desc
       limit ${limit}
@@ -57,6 +61,7 @@ export async function getRecentlyLikedSongs(limit: number): Promise<LikedSong[]>
         : row.spotify_id
           ? `https://open.spotify.com/track/${row.spotify_id}`
           : null,
+      favourite: row.favourite,
     }));
   } catch (error) {
     console.warn("[music] failed to read liked songs", error);
