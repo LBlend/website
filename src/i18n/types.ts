@@ -34,6 +34,7 @@ export interface Translations {
   };
   footer: {
     pgpKey: string;
+    status: string;
     copiedXmr: string;
     enableJs: string;
   };

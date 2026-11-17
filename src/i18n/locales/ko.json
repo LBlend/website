@@ -24,6 +24,7 @@
   },
   "footer": {
     "pgpKey": "PGP 키",
+    "status": "서버 상태",
     "copiedXmr": "XMR 복사 완료!",
     "enableJs": "Javascript 활성화해 주세요. 지금은 현대예요! 데이터를 훔치는 데 사용하지 않겠어요 :)"
   },

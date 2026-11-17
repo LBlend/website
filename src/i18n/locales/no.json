@@ -24,6 +24,7 @@
   },
   "footer": {
     "pgpKey": "PGP-nøkkel",
+    "status": "Serverstatus",
     "copiedXmr": "XMR kopiert!",
     "enableJs": "Vennligst aktiver Javascript. Jeg kommer ikke til å bruke det til å stjele dataene dine :)"
   },

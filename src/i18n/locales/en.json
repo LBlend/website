@@ -24,6 +24,7 @@
   },
   "footer": {
     "pgpKey": "PGP Key",
+    "status": "Server Status",
     "copiedXmr": "Copied XMR!",
     "enableJs": "Please enable Javascript. We are living in CURRENT YEAR. I won't use it to steal your data :)"
   },
