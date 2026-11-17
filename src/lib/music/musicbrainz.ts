@@ -42,8 +42,8 @@ async function get<T>(path: string, signal: AbortSignal): Promise<T> {
       );
     } catch (error) {
       // MusicBrainz answers 503 when throttling, including when its servers are busy for everyone
-      if (!(error instanceof HttpError && error.status === 503) || attempt === 4) throw error;
-      await sleep(2000 * attempt);
+      if (!(error instanceof HttpError && error.status === 503) || attempt === 5) throw error;
+      await sleep(3000 * attempt);
     }
   }
 }
@@ -62,8 +62,31 @@ export async function getRecordingsByIsrc(isrc: string, signal: AbortSignal): Pr
   }
 }
 
+const phrase = (value: string) => `"${value.replaceAll("\\", "").replaceAll('"', '\\"')}"`;
+
+export async function searchRecordingIsrcs(title: string, artist: string, signal: AbortSignal): Promise<string[]> {
+  const search = async (artistQuery: string) => {
+    const params = new URLSearchParams({
+      query: `recording:${phrase(title)} AND ${artistQuery}`,
+      fmt: "json",
+      limit: "5",
+    });
+    const data = await get<{ recordings?: { score: number; isrcs?: string[] }[] }>(`/recording?${params}`, signal);
+    // Lower scores are other versions, e.g. "レオ -オーケストラアレンジver.-"
+    return [...new Set((data.recordings ?? []).filter((r) => r.score >= 98).flatMap((r) => r.isrcs ?? []))];
+  };
+  const byName = await search(`artist:${phrase(artist)}`);
+  if (byName.length > 0) return byName;
+
+  // The credit can be in another script than the hint, e.g. "Yuuri" is credited as 優里; artist search also matches aliases
+  const params = new URLSearchParams({ query: phrase(artist), fmt: "json", limit: "3" });
+  const data = await get<{ artists?: { id: string; score: number }[] }>(`/artist?${params}`, signal);
+  const ids = (data.artists ?? []).filter((a) => a.score >= 85).map((a) => `arid:${a.id}`);
+  return ids.length > 0 ? search(`(${ids.join(" OR ")})`) : [];
+}
+
 export async function searchArtistNames(name: string, signal: AbortSignal): Promise<string[]> {
-  const params = new URLSearchParams({ query: `artist:"${name}"`, fmt: "json", limit: "3" });
+  const params = new URLSearchParams({ query: `artist:${phrase(name)}`, fmt: "json", limit: "3" });
   const data = await get<{ artists?: { score: number; name: string; aliases?: MusicBrainzAlias[] }[] }>(
     `/artist?${params}`,
     signal,

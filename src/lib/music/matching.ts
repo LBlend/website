@@ -33,6 +33,7 @@ export function normalize(value: string): string {
     .normalize("NFKC")
     .toLowerCase()
     .replace(FEATURING, "")
+    .replaceAll("$", "s")
     .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim();
 }
@@ -72,15 +73,22 @@ function artistMatches(hint: TrackHint, candidate: deezer.DeezerSearchTrack) {
   });
 }
 
+// Version tags Deezer adds to the main version, e.g. "Years (Radio Edit)" or "(Remastered 2021)"
+const VERSION_TAG =
+  /\s*[([](?:\d{4}\s+)?(?:remaster(?:ed)?(?:\s+\d{4})?|original version|original mix|radio edit|single version|album version)[)\]]/gi;
+
 function pickCandidate(hint: TrackHint, candidates: deezer.DeezerSearchTrack[]) {
   const title = normalize(hint.title);
   const maxDiff = hint.strictDuration ? 7 : 15;
-  const matching = candidates.filter(
+  const plausible = candidates.filter(
     (candidate) =>
-      normalize(candidate.title) === title &&
       artistMatches(hint, candidate) &&
       (hint.durationSec === undefined || Math.abs(candidate.duration - hint.durationSec) <= maxDiff),
   );
+  const exact = plausible.filter((candidate) => normalize(candidate.title) === title);
+  const matching = exact.length
+    ? exact
+    : plausible.filter((candidate) => normalize(candidate.title.replace(VERSION_TAG, "")) === title);
   const album = hint.album && normalize(hint.album);
   return matching.find((candidate) => album && normalize(candidate.album.title) === album) ?? matching[0];
 }
@@ -114,6 +122,14 @@ async function findDeezerTrack(hint: TrackHint, signal: AbortSignal): Promise<de
       const aliasTrack = await search(expanded, alias);
       if (aliasTrack) return aliasTrack;
     }
+  }
+
+  // Deezer lists many Asian songs under romanized titles only; MusicBrainz knows the original title's ISRCs
+  const isrcs = await musicbrainz.searchRecordingIsrcs(title, hint.artists[0], signal);
+  for (const isrc of isrcs.slice(0, 5)) {
+    const isrcTrack = await deezer.getTrackByIsrc(isrc, signal);
+    const durationOk = hint.durationSec === undefined || Math.abs((isrcTrack?.duration ?? 0) - hint.durationSec) <= 15;
+    if (isrcTrack && durationOk) return isrcTrack;
   }
   throw new NoMatchError(`No confident Deezer match for "${hint.artists.join(", ")} - ${hint.title}"`);
 }
@@ -182,6 +198,8 @@ async function upsertArtist(tx: Tx, credit: Credit, signal: AbortSignal): Promis
     select id, name_romanized, musicbrainz_id from music.artists
     where (${credit.mbid ?? null}::uuid is not null and musicbrainz_id = ${credit.mbid ?? null}::uuid)
        or (${credit.deezerId ?? null}::bigint is not null and deezer_id = ${credit.deezerId ?? null}::bigint)
+    -- Deezer can have several pages for one artist; the row that already has the MBID must win
+    order by musicbrainz_id = ${credit.mbid ?? null}::uuid desc nulls last
     limit 1
   `;
   const gainsMbid = Boolean(credit.mbid) && (!existing || !existing.musicbrainz_id);
@@ -420,7 +438,7 @@ export async function mergeTrack(tx: Tx, fromId: string, intoId: string) {
   await tx`
     insert into music.likes (track_id, liked_at, created_at)
     select ${intoId}, liked_at, created_at from music.likes where track_id = ${fromId}
-    on conflict (track_id) do nothing
+    on conflict (track_id) do update set liked_at = coalesce(music.likes.liked_at, excluded.liked_at)
   `;
   await tx`
     insert into music.track_overrides (track_id, title, title_romanized, artist_credit, artist_credit_romanized, cover_image_id)

@@ -51,7 +51,8 @@ export const getAlbum = (id: number, signal: AbortSignal) => get<DeezerAlbum>(`/
 
 export async function searchTracks(query: string, signal: AbortSignal): Promise<DeezerSearchTrack[]> {
   const result = await get<{ data: DeezerSearchTrack[] }>(
-    `/search?` + new URLSearchParams({ q: query, limit: "15" }),
+    // Brackets and quotes make Deezer return nothing
+    `/search?` + new URLSearchParams({ q: query.replace(/[[\](){}"]/g, " "), limit: "15" }),
     signal,
   );
   return result?.data ?? [];
