@@ -70,7 +70,7 @@
     "viewAll": "View all"
   },
   "swimming": {
-    "title": "Swimming records",
+    "title": "Swimming Records",
     "pageTitle": "Swimming",
     "description": "All records of my competitive swimming participations",
     "onlyBestTimes": "Only show personal bests",
@@ -148,7 +148,7 @@
     "anime": "Anime"
   },
   "recentlyLikedSongs": {
-    "title": "Recently liked songs",
+    "title": "Recently Liked Songs",
     "fetchError": "Failed fetching songs",
     "currentFavourite": "Current favourite",
     "pastFavourite": "Past favourite",
