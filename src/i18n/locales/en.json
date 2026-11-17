@@ -141,7 +141,8 @@
     "title": "Recently liked songs",
     "fetchError": "Failed fetching songs",
     "currentFavourite": "Current favourite",
-    "pastFavourite": "Past favourite"
+    "pastFavourite": "Past favourite",
+    "unknownDate": "Before I kept track"
   },
   "photos": {
     "title": "Photos",

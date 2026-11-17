@@ -5,7 +5,7 @@ export interface LikedSong {
   titleRomanized: string | null;
   artist: string;
   artistRomanized: string | null;
-  likedAt: Date;
+  likedAt: Date | null;
   coverUrl: string | null;
   url: string | null;
   favourite: "current" | "past" | null;
@@ -21,7 +21,7 @@ export async function getRecentlyLikedSongs(limit: number): Promise<LikedSong[]>
         title_romanized: string | null;
         artist_credit: string | null;
         artist_credit_romanized: string | null;
-        liked_at: Date;
+        liked_at: Date | null;
         thumbnail_sha256: string | null;
         youtube_video_id: string | null;
         spotify_id: string | null;
@@ -46,7 +46,7 @@ export async function getRecentlyLikedSongs(limit: number): Promise<LikedSong[]>
       left join images thumbnail on thumbnail.id = cover.thumbnail_id
       left join music.favourites f on f.track_id = d.id
       where d.liked
-      order by d.liked_at desc
+      order by d.liked_at desc nulls last, d.added_at desc
       limit ${limit}
     `;
     return rows.map((row) => ({

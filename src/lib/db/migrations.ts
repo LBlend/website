@@ -199,6 +199,59 @@ const MIGRATIONS: { name: string; sql: string }[] = [
       create unique index favourites_one_current_idx on music.favourites (current) where current;
     `,
   },
+  {
+    name: "0004_unknown_liked_dates",
+    sql: `
+      -- Liked before the date was tracked, so liked_at is null instead of a playlist added date
+      alter table music.likes add column date_unknown boolean not null default false;
+
+      create or replace view music.display_tracks as
+      with entries as (
+        select track_id, min(added_at) as first_added_at, bool_or(removed_at is null) as in_playlist
+        from music.playlist_entries
+        where track_id is not null
+        group by track_id
+      ),
+      credits as (
+        select ta.track_id,
+               string_agg(ar.name || ta.join_phrase, '' order by ta.position) as artist_credit,
+               string_agg(coalesce(ar.name_romanized, ar.name) || ta.join_phrase, '' order by ta.position)
+                 as artist_credit_romanized
+        from music.track_artists ta
+        join music.artists ar on ar.id = ta.artist_id
+        group by ta.track_id
+      ),
+      youtube_liked as (
+        select distinct e.track_id
+        from music.playlist_entries e
+        join music.youtube_likes yl on yl.video_id = e.media_id
+        where e.source = 'youtube' and e.track_id is not null
+      )
+      select t.id,
+             coalesce(o.title, t.title)                                         as title,
+             coalesce(o.title_romanized, t.title_romanized)                     as title_romanized,
+             coalesce(o.artist_credit, c.artist_credit)                         as artist_credit,
+             coalesce(o.artist_credit_romanized, c.artist_credit_romanized)     as artist_credit_romanized,
+             al.title                                                           as album_title,
+             e.first_added_at                                                   as added_at,
+             e.in_playlist,
+             l.track_id is not null or yl.track_id is not null                  as liked,
+             case when l.date_unknown then null
+                  when l.track_id is not null or yl.track_id is not null
+               then coalesce(l.liked_at, e.first_added_at) end                  as liked_at,
+             coalesce(o.cover_image_id, t.cover_image_id, al.cover_image_id)    as cover_image_id,
+             t.metadata_source,
+             t.youtube_video_id,
+             t.spotify_id
+      from music.tracks t
+      join entries e on e.track_id = t.id
+      left join music.albums al on al.id = t.album_id
+      left join credits c on c.track_id = t.id
+      left join music.track_overrides o on o.track_id = t.id
+      left join music.likes l on l.track_id = t.id
+      left join youtube_liked yl on yl.track_id = t.id;
+    `,
+  },
 ];
 
 export async function migrate(sql: Sql) {

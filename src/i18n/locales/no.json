@@ -141,7 +141,8 @@
     "title": "Nylig likte sanger",
     "fetchError": "Kunne ikke hente sangene!",
     "currentFavourite": "Nåværende favoritt",
-    "pastFavourite": "Tidligere favoritt"
+    "pastFavourite": "Tidligere favoritt",
+    "unknownDate": "Før jeg førte oversikt"
   },
   "photos": {
     "title": "Bilder",

@@ -153,6 +153,7 @@ export interface Translations {
     fetchError: string;
     currentFavourite: string;
     pastFavourite: string;
+    unknownDate: string;
   };
   photos: {
     title: string;

@@ -15,8 +15,10 @@ const dateFnsLocale = dateFnsLocales[locale];
 const songs = await getRecentlyLikedSongs(1000);
 
 const groupedTracks = songs.reduce((acc: Record<string, LikedSong[]>, song) => {
-  const distance = formatDistance(song.likedAt, new Date(), { addSuffix: true, locale: dateFnsLocale });
-  (acc[distance] ??= []).push(song);
+  const heading = song.likedAt
+    ? formatDistance(song.likedAt, new Date(), { addSuffix: true, locale: dateFnsLocale })
+    : t("recentlyLikedSongs.unknownDate");
+  (acc[heading] ??= []).push(song);
   return acc;
 }, {});
 ---

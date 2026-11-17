@@ -436,9 +436,13 @@ export async function createYoutubeTrack(
 export async function mergeTrack(tx: Tx, fromId: string, intoId: string) {
   if (fromId === intoId) return;
   await tx`
-    insert into music.likes (track_id, liked_at, created_at)
-    select ${intoId}, liked_at, created_at from music.likes where track_id = ${fromId}
-    on conflict (track_id) do update set liked_at = coalesce(music.likes.liked_at, excluded.liked_at)
+    insert into music.likes (track_id, liked_at, date_unknown, created_at)
+    select ${intoId}, liked_at, date_unknown, created_at from music.likes where track_id = ${fromId}
+    on conflict (track_id) do update set
+      liked_at = coalesce(music.likes.liked_at, excluded.liked_at),
+      -- A date set by hand on either song beats an unknown one
+      date_unknown = (music.likes.date_unknown or excluded.date_unknown)
+        and coalesce(music.likes.liked_at, excluded.liked_at) is null
   `;
   await tx`
     insert into music.track_overrides (track_id, title, title_romanized, artist_credit, artist_credit_romanized, cover_image_id)
