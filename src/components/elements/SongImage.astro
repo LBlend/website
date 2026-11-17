@@ -1,61 +1,26 @@
 ---
 import PlaceholderSongImage from "@assets/images/placeholder_song.jpg";
-import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
-import { LASTFM_API_KEY, LASTFM_URL, LASTFM_USERNAME } from "astro:env/server";
-
-import cache from "@api/_cache";
 
 interface Props {
-  artist: string;
   track: string;
+  coverUrl: string | null;
 }
 
-const { artist, track } = Astro.props;
-
-interface TrackImage {
-  src: string | null;
-  name: string | null;
-}
-
-const cacheKey = `lastfmTrackImage:${artist}:${track}`;
-let trackImage = cache.get<TrackImage>(cacheKey);
-
-if (!trackImage) {
-  try {
-    const params = new URLSearchParams({
-      method: "track.getInfo",
-      format: "json",
-      api_key: LASTFM_API_KEY || "",
-      artist: artist,
-      track: track,
-      username: LASTFM_USERNAME || "",
-    });
-
-    const res = await fetch(`${LASTFM_URL}?` + params);
-
-    if (res.ok) {
-      const trackData = await res.json();
-      const images = trackData?.track?.album?.image || [];
-      trackImage = {
-        src: images.find((img: { size: string }) => img.size === "medium")?.["#text"] || null,
-        name: trackData?.track?.name ?? null,
-      };
-      cache.set(cacheKey, trackImage, 24 * 60 * 60 * 1000);
-    } else {
-      console.warn(`Failed to fetch track info for ${artist} - ${track}: ${res.status} ${res.statusText}`);
-    }
-  } catch (error) {
-    console.warn(`Error fetching track info for ${artist} - ${track}:`, error);
-  }
-}
-
-const imageSrc: ImageMetadata | string = trackImage?.src ?? PlaceholderSongImage;
-const altText = `Cover for ${trackImage?.name ?? track}`;
+const { track, coverUrl } = Astro.props;
+const altText = `Cover for ${track}`;
 ---
 
-{typeof imageSrc === "string" ? (
-  <img src={imageSrc} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
+{coverUrl ? (
+  <img
+    src={coverUrl}
+    alt={altText}
+    width={64}
+    height={64}
+    loading="lazy"
+    decoding="async"
+    class="min-h-64px min-w-64px rounded-sm"
+  />
 ) : (
-  <Image src={imageSrc} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
+  <Image src={PlaceholderSongImage} alt={altText} width={64} height={64} class="min-h-64px min-w-64px rounded-sm" />
 )}

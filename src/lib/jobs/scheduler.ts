@@ -61,7 +61,7 @@ async function runIfDue(sql: Sql, job: Job) {
     const [{ fresh, retrying }] = await tx<{ fresh: boolean; retrying: boolean }[]>`
       select
         coalesce(bool_or(ok and started_at > now() - ${job.intervalMs - TICK_MS / 2}::float8 * interval '1 millisecond'), false) as fresh,
-        coalesce(bool_or(started_at > now() - ${RETRY_MS}::float8 * interval '1 millisecond'), false) as retrying
+        coalesce(bool_or(not ok and started_at > now() - ${Math.min(job.intervalMs, RETRY_MS) - TICK_MS / 2}::float8 * interval '1 millisecond'), false) as retrying
       from job_runs
       where job = ${job.name}
         and started_at > now() - ${Math.max(job.intervalMs, RETRY_MS)}::float8 * interval '1 millisecond'
@@ -69,7 +69,7 @@ async function runIfDue(sql: Sql, job: Job) {
     if (fresh || retrying) return;
 
     try {
-      await tx.savepoint((sp) => job.run(sp, AbortSignal.timeout(TIMEOUT_MS)));
+      await tx.savepoint((sp) => job.run(sp, AbortSignal.timeout(job.timeoutMs ?? TIMEOUT_MS)));
       await tx`insert into job_runs (job, ok) values (${job.name}, true)`;
     } catch (error) {
       const status = error instanceof HttpError ? error.status : null;
