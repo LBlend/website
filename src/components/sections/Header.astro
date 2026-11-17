@@ -14,7 +14,7 @@ const locale = Astro.locals.locale;
 const t = useTranslations(locale);
 ---
 
-<header class="m-0 mb-8 px-4 py-2 lg:px-20">
+<header class="m-0 mb-8 px-0 py-2 sm:px-4 lg:px-20">
   <nav class="flex items-center justify-center sm:justify-between">
     <a href="/" class="hidden sm:block">
       <Image
@@ -46,6 +46,11 @@ const t = useTranslations(locale);
     color: var(--text);
     border-bottom: 4px solid transparent;
     text-decoration: none;
+  }
+  @media (max-width: 399px) {
+    nav a {
+      padding-inline: 0.3em;
+    }
   }
   nav a.active {
     text-decoration: none;
