@@ -1,6 +1,7 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
+import nunitoSansUrl from "@assets/fonts/NunitoSans.woff2?url";
 import { SITE_TITLE } from "@consts";
 import "@styles/global.css";
 
@@ -28,8 +29,7 @@ const fullTitle = title === SITE_TITLE ? SITE_TITLE : `${title} | ${SITE_TITLE}`
 <meta name="generator" content={Astro.generator} />
 
 <!-- Font preloads -->
-<link rel="preload" href="/fonts/NunitoSans.ttf" as="font" type="font/truetype" crossorigin />
-<link rel="preload" href="/fonts/NunitoSans-Italic.ttf" as="font" type="font/truetype" crossorigin />
+<link rel="preload" href={nunitoSansUrl} as="font" type="font/woff2" crossorigin />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
