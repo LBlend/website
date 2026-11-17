@@ -83,7 +83,10 @@
     "country": "Country",
     "poolLength": "Pool Length",
     "partialDistance": "Partial Distance?",
-    "yes": "Yes"
+    "yes": "Yes",
+    "event": "Event",
+    "pool": "{length}m pool",
+    "split": "Split"
   },
   "about": {
     "title": "About",

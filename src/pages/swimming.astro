@@ -39,7 +39,7 @@ const data = parsed.data.map((row) => [
 <DefaultPage title={t("swimming.pageTitle")} description={t("swimming.description")}>
   <main class="flex flex-col items-center justify-center gap-8 px-4">
     <h1 class="text-6xl font-bold">{t("swimming.title")}</h1>
-    <div class="fade-in-section">
+    <div class="fade-in-section max-w-full">
       <SwimmingTable data={data} />
     </div>
   </main>

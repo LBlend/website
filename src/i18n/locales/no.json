@@ -83,7 +83,10 @@
     "country": "Land",
     "poolLength": "Bassenglengde",
     "partialDistance": "Deldistanse?",
-    "yes": "Ja"
+    "yes": "Ja",
+    "event": "Øvelse",
+    "pool": "{length}m basseng",
+    "split": "Mellomtid"
   },
   "about": {
     "title": "Om meg",

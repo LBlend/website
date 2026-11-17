@@ -95,6 +95,9 @@ export interface Translations {
     poolLength: string;
     partialDistance: string;
     yes: string;
+    event: string;
+    pool: string;
+    split: string;
   };
   about: {
     title: string;

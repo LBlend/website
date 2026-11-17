@@ -83,7 +83,10 @@
     "country": "국가",
     "poolLength": "수영장 길이",
     "partialDistance": "부분 거리?",
-    "yes": "예"
+    "yes": "예",
+    "event": "종목",
+    "pool": "{length}m 수영장",
+    "split": "구간 기록"
   },
   "about": {
     "title": "소개",

@@ -22,6 +22,9 @@ const i18nData = JSON.stringify({
   poolLength: t("swimming.poolLength"),
   partialDistance: t("swimming.partialDistance"),
   yes: t("swimming.yes"),
+  event: t("swimming.event"),
+  pool: t("swimming.pool"),
+  split: t("swimming.split"),
 });
 ---
 
@@ -48,7 +51,8 @@ const i18nData = JSON.stringify({
 </div>
 
 <script>
-  import { Grid } from "gridjs";
+  import type { Config, Row as GridRow } from "gridjs";
+  import { Grid, html } from "gridjs";
 
   type Row = [number, string, number, string, string, string, number, number];
 
@@ -61,6 +65,8 @@ const i18nData = JSON.stringify({
     const i18n: Record<string, string> = JSON.parse(wrapper.dataset.i18n || "{}");
     const data: string[][] = JSON.parse(wrapper.dataset.rows || "[]");
     let gridInstance: Grid | null = null;
+    // The full table needs roughly 1200px, and the page container is max-w-7xl (1280px)
+    const compactQuery = window.matchMedia("(max-width: 1279px)");
 
     // Remove tabindex from th elements to fix accessibility audit warning
     // Grid.js adds tabindex for sortable headers, but th elements should not have tabindex
@@ -119,22 +125,37 @@ const i18nData = JSON.stringify({
         dataToShow = getBestTimes(dataToShow);
       }
 
-      const columns = [
-        {
-          name: i18n.distance || "Distance",
-          formatter: (cell: unknown) => `${cell}m`,
-        },
-        i18n.stroke || "Stroke",
+      const compact = compactQuery.matches;
+
+      const columns: NonNullable<Config["columns"]> = [
+        compact
+          ? {
+              name: i18n.event || "Event",
+              formatter: (cell: unknown, row: GridRow) => {
+                const [, stroke, , , city, , poolLength, isPartial] = row.cells.map((c) => c.data);
+                const details = [i18n.pool.replace("{length}", String(poolLength)), city];
+                if (isPartial === 1) details.push(i18n.split);
+                return html(
+                  `<div>${cell}m ${stroke}</div><div class="text-xs opacity-60">${details.join(" · ")}</div>`,
+                );
+              },
+            }
+          : {
+              name: i18n.distance || "Distance",
+              formatter: (cell) => `${cell}m`,
+            },
+        { name: i18n.stroke || "Stroke", hidden: compact },
         {
           name: i18n.time || "Time",
-          formatter: (cell: unknown) => formatTime(Number(cell)),
+          formatter: (cell) => formatTime(Number(cell)),
         },
         i18n.date || "Date",
-        i18n.city || "City",
-        i18n.country || "Country",
+        { name: i18n.city || "City", hidden: compact },
+        { name: i18n.country || "Country", hidden: compact },
         {
           name: i18n.poolLength || "Pool Length",
-          formatter: (cell: unknown) => `${cell}m`,
+          formatter: (cell) => `${cell}m`,
+          hidden: compact,
         },
       ];
 
@@ -142,7 +163,8 @@ const i18nData = JSON.stringify({
       if (showPartials) {
         columns.push({
           name: i18n.partialDistance || "Partial Distance?",
-          formatter: (cell: unknown) => (cell === 1 ? i18n.yes || "Yes" : ""),
+          formatter: (cell) => (cell === 1 ? i18n.yes || "Yes" : ""),
+          hidden: compact,
         });
       }
       // Adjust data to match columns
@@ -155,7 +177,8 @@ const i18nData = JSON.stringify({
         data: adjustedData,
         sort: true,
         pagination: { limit: 20 },
-        search: true,
+        search: { ignoreHiddenColumns: false },
+        autoWidth: false,
       });
 
       gridInstance.render(wrapper!);
@@ -168,8 +191,22 @@ const i18nData = JSON.stringify({
       createGrid(bestTimesToggle!.checked, showPartialsToggle!.checked);
     }
     bestTimesToggle.addEventListener("change", updateGrid);
+    compactQuery.addEventListener("change", updateGrid);
     showPartialsToggle.addEventListener("change", updateGrid);
   }
 
   initTable();
 </script>
+
+<style is:global>
+  #wrapper table.gridjs-table {
+    table-layout: auto;
+  }
+
+  @media (max-width: 1279px) {
+    #wrapper .gridjs-th,
+    #wrapper .gridjs-td {
+      padding: 8px 10px;
+    }
+  }
+</style>
