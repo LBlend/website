@@ -148,6 +148,16 @@ export interface Translations {
   common: {
     minRead: string;
   };
+  recentlyLikedMedia: {
+    title: string;
+    orderNote: string;
+    scrollLeft: string;
+    scrollRight: string;
+    fetchError: string;
+    movie: string;
+    show: string;
+    anime: string;
+  };
   recentlyLikedSongs: {
     title: string;
     fetchError: string;

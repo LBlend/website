@@ -43,6 +43,7 @@ export default defineConfig({
       SIMKL_URL: secret("https://api.simkl.com/"),
       SIMKL_CLIENT_ID: secret(),
       SIMKL_USER_ID: secret(),
+      SIMKL_ACCESS_TOKEN: secret(),
       STEAM_URL: secret("https://api.steampowered.com/"),
       STEAM_API_KEY: secret(),
       STEAM_USER_ID: secret(),

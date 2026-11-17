@@ -1,7 +1,103 @@
 ---
+import { useTranslations } from "@i18n/index";
+import { getLikedMedia } from "@lib/media/liked";
+
+const t = useTranslations(Astro.locals.locale);
+const media = await getLikedMedia(30);
 ---
 
-<div class="flex flex-col" slot="media">
-  <h2 class="text-4xl font-bold">Recently liked movies & shows</h2>
-  <p>Coming soon™</p>
-</div>
+<section class="flex flex-col gap-4">
+  <h2 class="text-4xl font-bold">{t("recentlyLikedMedia.title")}</h2>
+  {media.length === 0 && <p class="text-gray-500">{t("recentlyLikedMedia.fetchError")}</p>}
+  <div class="relative" data-media-row>
+    <!-- Contained, so the row scrolls instead of widening the page -->
+    <ul class="flex snap-x gap-4 overflow-x-auto pb-3 [contain:inline-size] [scrollbar-width:thin]">
+      {media.map((item) => (
+        <li class="w-32 shrink-0 snap-start">
+          <a href={item.url} target="_blank" rel="noopener noreferrer" class="group flex flex-col gap-2">
+            {item.poster ? (
+              <img
+                src={item.poster.src}
+                srcset={`${item.poster.src} 1x, ${item.poster.src2x} 2x`}
+                alt=""
+                loading="lazy"
+                class="aspect-2/3 w-full rounded-lg object-cover shadow-lg/40"
+              />
+            ) : (
+              <div class="bg-backgroundlight aspect-2/3 w-full rounded-lg shadow-lg/40" />
+            )}
+            <span class="line-clamp-2 text-sm font-bold group-hover:underline" title={item.title}>
+              {item.title}
+            </span>
+            <span class="-mt-2 text-xs text-gray-400">
+              {[item.year, t(`recentlyLikedMedia.${item.kind}`)].filter(Boolean).join(" · ")}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    {[
+      { direction: -1, label: t("recentlyLikedMedia.scrollLeft"), side: "left-1", path: "M15 18l-6-6 6-6" },
+      { direction: 1, label: t("recentlyLikedMedia.scrollRight"), side: "right-1", path: "M9 18l6-6-6-6" },
+    ].map(({ direction, label, side, path }) => (
+      <button
+        type="button"
+        data-scroll={direction}
+        aria-label={label}
+        hidden
+        class:list={[
+          "absolute top-[76px] flex size-10 cursor-pointer items-center justify-center rounded-full bg-black/70 text-white shadow-lg/40 transition hover:bg-black/90",
+          side,
+        ]}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="size-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d={path} />
+        </svg>
+      </button>
+    ))}
+  </div>
+  {media.length > 0 && <p class="text-sm font-light text-gray-400 italic">{t("recentlyLikedMedia.orderNote")}</p>}
+</section>
+
+<script>
+  for (const row of document.querySelectorAll<HTMLElement>("[data-media-row]")) {
+    const list = row.querySelector("ul")!;
+    const buttons = row.querySelectorAll<HTMLButtonElement>("[data-scroll]");
+    const update = () => {
+      for (const button of buttons) {
+        const atEnd =
+          button.dataset.scroll === "-1"
+            ? list.scrollLeft <= 1
+            : list.scrollLeft + list.clientWidth >= list.scrollWidth - 1;
+        button.hidden = atEnd;
+      }
+    };
+    for (const button of buttons) {
+      button.addEventListener("click", () => {
+        list.scrollBy({ left: Number(button.dataset.scroll) * list.clientWidth * 0.8, behavior: "smooth" });
+      });
+    }
+    list.addEventListener("scroll", update, { passive: true });
+    new ResizeObserver(update).observe(list);
+  }
+</script>
+
+<style>
+  /* Keep the text styling instead of the global link colour and hover gradient */
+  a {
+    color: inherit;
+  }
+  a:hover {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+</style>

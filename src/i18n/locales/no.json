@@ -137,6 +137,16 @@
   "common": {
     "minRead": "{time} min lesning"
   },
+  "recentlyLikedMedia": {
+    "title": "Likte filmer og serier",
+    "orderNote": "Rekkefølgen er ikke nøyaktig, siden jeg ikke har loggført noe før ganske nylig. Mye av dette husker jeg ikke engang når jeg så på det.",
+    "scrollLeft": "Bla til venstre",
+    "scrollRight": "Bla til høyre",
+    "fetchError": "Kunne ikke hente filmer og serier",
+    "movie": "Film",
+    "show": "Serie",
+    "anime": "Anime"
+  },
   "recentlyLikedSongs": {
     "title": "Nylig likte sanger",
     "fetchError": "Kunne ikke hente sangene!",

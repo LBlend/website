@@ -137,6 +137,16 @@
   "common": {
     "minRead": "{time}분 읽기"
   },
+  "recentlyLikedMedia": {
+    "title": "좋아한 영화와 드라마",
+    "orderNote": "최근에야 기록하기 시작해서 순서가 정확하지 않아요. 언제 봤는지 기억도 안 나요.",
+    "scrollLeft": "왼쪽으로 스크롤",
+    "scrollRight": "오른쪽으로 스크롤",
+    "fetchError": "영화와 드라마를 로드하지 못했어요",
+    "movie": "영화",
+    "show": "드라마",
+    "anime": "애니"
+  },
   "recentlyLikedSongs": {
     "title": "최근에 좋아한 노래",
     "fetchError": "노래를 로드하지 못했어요",

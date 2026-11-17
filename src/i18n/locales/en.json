@@ -137,6 +137,16 @@
   "common": {
     "minRead": "{time} min read"
   },
+  "recentlyLikedMedia": {
+    "title": "Liked Movies & Shows",
+    "orderNote": "The order isn't accurate, since I only started tracking recently. For a lot of these I don't even remember when I watched them.",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right",
+    "fetchError": "Failed fetching movies and shows",
+    "movie": "Movie",
+    "show": "Show",
+    "anime": "Anime"
+  },
   "recentlyLikedSongs": {
     "title": "Recently liked songs",
     "fetchError": "Failed fetching songs",

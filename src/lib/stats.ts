@@ -6,7 +6,7 @@ type Sources = typeof sources;
 export type StatName = keyof Sources;
 export type Stats = { [K in StatName]: Sources[K]["fallback"] };
 
-async function getLatestPayloads(names: string[]): Promise<Map<string, unknown>> {
+export async function getLatestPayloads(names: string[]): Promise<Map<string, unknown>> {
   const sql = getDb();
   if (!sql) return new Map();
   try {
