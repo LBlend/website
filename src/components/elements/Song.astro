@@ -13,15 +13,29 @@ const withRomanized = (original: string, romanized: string | null) =>
 ---
 
 <article class="liked-song flex flex-col gap-2">
-  <div class="flex items-center gap-4">
+  <a href={song.url} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-4">
     <SongImage track={song.title} coverUrl={song.coverUrl} />
     <div class="overflow-hidden">
-      <p class="truncate font-bold" title={withRomanized(song.title, song.titleRomanized)}>
+      <p
+        class:list={["truncate font-bold", song.url && "group-hover:underline"]}
+        title={withRomanized(song.title, song.titleRomanized)}
+      >
         {song.title}
       </p>
       <p class="truncate font-light" title={withRomanized(song.artist, song.artistRomanized)}>
         {song.artist}
       </p>
     </div>
-  </div>
+  </a>
 </article>
+
+<style>
+  /* Keep the song's own text styling instead of the global link colour and hover gradient */
+  a {
+    color: inherit;
+  }
+  a:hover {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+</style>

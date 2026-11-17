@@ -7,6 +7,7 @@ export interface LikedSong {
   artistRomanized: string | null;
   likedAt: Date;
   coverUrl: string | null;
+  url: string | null;
 }
 
 export async function getRecentlyLikedSongs(limit: number): Promise<LikedSong[]> {
@@ -21,10 +22,22 @@ export async function getRecentlyLikedSongs(limit: number): Promise<LikedSong[]>
         artist_credit_romanized: string | null;
         liked_at: Date;
         thumbnail_sha256: string | null;
+        youtube_video_id: string | null;
+        spotify_id: string | null;
       }[]
     >`
       select d.title, d.title_romanized, d.artist_credit, d.artist_credit_romanized, d.liked_at,
-             coalesce(thumbnail.sha256, cover.sha256) as thumbnail_sha256
+             coalesce(thumbnail.sha256, cover.sha256) as thumbnail_sha256,
+             -- Prefer the video that was liked, then the one still in the playlist
+             coalesce(
+               (select e.media_id from music.playlist_entries e
+                where e.track_id = d.id and e.source = 'youtube'
+                order by exists (select 1 from music.youtube_likes yl where yl.video_id = e.media_id) desc,
+                         e.removed_at is null desc, e.added_at
+                limit 1),
+               d.youtube_video_id
+             ) as youtube_video_id,
+             d.spotify_id
       from music.display_tracks d
       left join images cover on cover.id = d.cover_image_id
       left join images thumbnail on thumbnail.id = cover.thumbnail_id
@@ -39,6 +52,11 @@ export async function getRecentlyLikedSongs(limit: number): Promise<LikedSong[]>
       artistRomanized: row.artist_credit_romanized,
       likedAt: row.liked_at,
       coverUrl: row.thumbnail_sha256 ? `/api/images/${row.thumbnail_sha256}` : null,
+      url: row.youtube_video_id
+        ? `https://music.youtube.com/watch?v=${row.youtube_video_id}`
+        : row.spotify_id
+          ? `https://open.spotify.com/track/${row.spotify_id}`
+          : null,
     }));
   } catch (error) {
     console.warn("[music] failed to read liked songs", error);
