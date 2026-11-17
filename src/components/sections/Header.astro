@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 
-import meCartoon from "@assets/images/me_cartoon.svg";
+import meCartoon from "@assets/images/me_cartoon_small.png";
 
 import HeaderDropdown from "@elements/HeaderDropdown.astro";
 import HeaderDropdownLink from "@elements/HeaderDropdownLink.astro";
@@ -17,7 +17,14 @@ const t = useTranslations(locale);
 <header class="m-0 mb-8 px-4 py-2 lg:px-20">
   <nav class="flex items-center justify-center sm:justify-between">
     <a href="/" class="hidden sm:block">
-      <Image src={meCartoon} alt="Cartoon drawing of Leander Furumo" width={48} class="icon-link" loading="eager" />
+      <Image
+        src={meCartoon}
+        alt="Cartoon drawing of Leander Furumo"
+        width={48}
+        densities={[1, 2]}
+        class="icon-link"
+        loading="eager"
+      />
     </a>
     <div class="flex items-center">
       <HeaderLink href="/">{t("nav.home")}</HeaderLink>
